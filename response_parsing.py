@@ -1,0 +1,49 @@
+from xml.etree import ElementTree as et
+
+XML_NAMESPACES = {
+    "chkl": "http://www.sap.com/abapxml/checklist",
+    "atom": "http://www.w3.org/2005/Atom",
+    "adtcore": "http://www.sap.com/adt/core",
+    "exc": "http://www.sap.com/abapxml/types/communicationframework",
+    "asx": "http://www.sap.com/abapxml",
+}
+
+
+def _strip_namespace(name: str) -> str:
+    if name.startswith("{"):
+        return name.split("}", 1)[1]
+    if ":" in name:
+        return name.split(":", 1)[1]
+    return name
+
+
+def _et_to_attributes_dict(element: et.Element | None) -> dict[str, str]:
+    cleaned = (
+        {_strip_namespace(key): value for key, value in element.attrib.items()}
+        if element is not None
+        else {}
+    )
+    return cleaned
+
+
+def find_xml_elements_attributes(xml_text: str, tag_name: str) -> list[dict[str, str]]:
+    root = et.fromstring(xml_text)
+    elements = root.findall(tag_name, XML_NAMESPACES)
+    processed_elements = []
+    for element in elements:
+        cleaned = _et_to_attributes_dict(element)
+        processed_elements.append(cleaned)
+    return processed_elements
+
+
+def find_xml_element_attributes(xml_text: str, tag_name: str) -> dict[str, str]:
+    root = et.fromstring(xml_text)
+    element = root.find(tag_name, XML_NAMESPACES)
+    element = _et_to_attributes_dict(element)
+    return element
+
+
+def find_xml_element_text(xml_text: str, tag_name: str):
+    root = et.fromstring(xml_text)
+    el = root.find(tag_name, XML_NAMESPACES)
+    return "".join(el.itertext()).strip() if el is not None else ""
