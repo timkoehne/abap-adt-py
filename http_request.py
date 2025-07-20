@@ -6,17 +6,19 @@ class HttpRequestParameters(TypedDict):
     host: str
     csrf_token: str
     statefulness: Literal["stateless", "stateful"]
-    requst_number: int
+    request_number: int
     session: requests.Session
 
-def _request(
+
+def request(
     http_request_parameters: HttpRequestParameters,
-    url: str,
+    uri: str,
+    method: Literal["GET", "POST", "PUT"],
+    body: str,
     params: dict,
-    method: Literal["GET", "POST", "PUT"] = "GET",
-    body: str = "",
     content_type: str = "application/xml",
 ) -> requests.Response:
+    
     config = {
         "params": params,
         "headers": {
@@ -26,7 +28,7 @@ def _request(
             "X-sap-adt-sessiontype": http_request_parameters["statefulness"],
             "content-type": content_type,
         },
-        "url": url,
+        "url": http_request_parameters["host"] + uri,
         "data": body,
     }
 

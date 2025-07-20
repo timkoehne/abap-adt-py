@@ -1,20 +1,17 @@
-from typing import List, Literal
+from typing import Literal
 import requests
 from requests.auth import HTTPBasicAuth
 
-# from api.login import login
-# from api.unit_test import UnitTestAlert, UnittestFlags, run_unit_test
-from http_request import HttpRequestParameters, _request
-import http_request
-from response_parsing import (
-    find_xml_element_attributes,
-    find_xml_element_text,
-    find_xml_elements_attributes,
-)
+from api.activation import activate
+from api.locking import lock, unlock
+from api.login import login
+from api.objectcontent import get_object_source, set_object_source
+from api.search import search_object
+from http_request import HttpRequestParameters
 
 
 class AdtClient:
-    sap_host: str = ""
+    sap_host: str
     csrf_token: str = "fetch"
     request_number: int = 0
     statefulness: Literal["stateless", "stateful"] = "stateless"
@@ -33,130 +30,55 @@ class AdtClient:
             "host": self.sap_host,
             "csrf_token": self.csrf_token,
             "statefulness": self.statefulness,
-            "requst_number": self.request_number,
+            "request_number": self.request_number,
             "session": self.session,
         }
         self.request_number += 1
         return http_request_parameters
 
     def login(self) -> bool:
-        url = f"http://{self.sap_host}/sap/bc/adt/compatibility/graph"
         http_request_parameters = self.build_request_parameters()
-        response = _request(http_request_parameters, url, params={})
-
-        csrf_token = response.headers.get("x-csrf-token")
-        if csrf_token is not None:
+        csrf_token = login(http_request_parameters)
+        if csrf_token:
             self.csrf_token = csrf_token
-
-        if response.status_code == 200:
             return True
         else:
-            raise Exception(f"{response.status_code} - Login failed.\n{response.text}")
+            raise Exception("Login failed.")
 
     def search_object(self, query: str, max_results: int = 1) -> list[dict[str, str]]:
-        url = f"http://{self.sap_host}/sap/bc/adt/repository/informationsystem/search"
-        params = {"operation": "quickSearch", "query": query, "maxResults": max_results}
-        
         http_request_parameters = self.build_request_parameters()
-        response = _request(http_request_parameters, url, params=params)
-        elements = find_xml_elements_attributes(
-            response.text, "adtcore:objectReference"
-        )
+        elements = search_object(http_request_parameters, query, max_results)
         return elements
 
     def get_object_source(
         self, object_uri: str, version: Literal["active", "inactive"] = "active"
     ) -> str:
-        url = f"http://{self.sap_host}{object_uri}"
-
-        params = {}
-        if version:
-            params["version"] = version
-
         http_request_parameters = self.build_request_parameters()
-        response = _request(http_request_parameters, url, params=params)
-
-        if response.status_code == 200:
-            return response.text
-        else:
-            raise Exception(
-                f"{response.status_code} - Failed to get object source.\n{response.text}"
-            )
+        response = get_object_source(http_request_parameters, object_uri, version)
+        return response
 
     def activate(self, object_name: str, object_uri: str) -> bool:
-        url = f"http://{self.sap_host}/sap/bc/adt/activation"
-
-        params = {"method": "activate", "preauditRequested": "true"}
-        body = f"""
-        <?xml version="1.0" encoding="UTF-8"?>
-        <adtcore:objectReferences xmlns:adtcore="http://www.sap.com/adt/core">
-            <adtcore:objectReference adtcore:uri="{object_uri}" adtcore:name="{object_name}"/>
-        </adtcore:objectReferences>
-        """
-
         http_request_parameters = self.build_request_parameters()
-        response = _request(http_request_parameters, url, params=params, body=body, method="POST")
-
-        properties = find_xml_element_attributes(response.text, "chkl:properties")
-        if (
-            properties["activationExecuted"] == "true"
-            or properties["generationExecuted"] == "true"
-        ):
-            return True
-        else:
-            msg_elements = find_xml_elements_attributes(response.text, "msg")
-            raise Exception(
-                f"{response.status_code} - Activation failed.\n{msg_elements}"
-            )
+        response = activate(http_request_parameters, object_name, object_uri)
+        return response
 
     def lock(self, object_uri: str) -> str:
         self.statefulness = "stateful"
-        url = f"http://{self.sap_host}{object_uri}"
-        params = {"_action": "LOCK", "accessMode": "MODIFY"}
-        
         http_request_parameters = self.build_request_parameters()
-        response = _request(http_request_parameters, url, params=params, method="POST")
-
-        if response.status_code == 200:
-            lock_handle = find_xml_element_text(response.text, ".//LOCK_HANDLE")
-            return lock_handle
-        else:
-            raise Exception(
-                f"{response.status_code} Failed to lock {object_uri}.\n{response.text}"
-            )
+        response = lock(http_request_parameters, object_uri)
+        return response
 
     def unlock(self, object_uri: str, lock_handle: str) -> bool:
-        url = f"http://{self.sap_host}{object_uri}"
-        params = {"_action": "UNLOCK", "lockHandle": lock_handle}
         http_request_parameters = self.build_request_parameters()
-        response = _request(http_request_parameters, url, params=params, method="POST")
-
-        if response.status_code == 200:
-            self.statefulness = "stateless"
-            return True
-        else:
-            raise Exception(
-                f"{response.status_code} Failed to unlock {object_uri}\n{response.text}"
-            )
+        response = unlock(http_request_parameters, object_uri, lock_handle)
+        self.statefulness = "stateless"
+        return response
 
     def set_object_source(
         self, object_uri: str, source_code: str, lock_handle: str
     ) -> bool:
-        url = f"http://{self.sap_host}{object_uri}"
-        params = {"lockHandle": lock_handle}
         http_request_parameters = self.build_request_parameters()
-        response = _request(
-            http_request_parameters,
-            url,
-            params=params,
-            body=source_code,
-            method="PUT",
-            content_type="text/plain; charset=utf-8",
+        response = set_object_source(
+            http_request_parameters, object_uri, source_code, lock_handle
         )
-
-        if response.status_code == 200:
-            return True
-        else:
-            raise Exception(
-                f"{response.status_code} - Failed to set source code for {object_uri}\n{response.text}"
-            )
+        return response
