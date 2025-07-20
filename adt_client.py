@@ -1,11 +1,15 @@
-from typing import Literal
+from typing import List, Literal
 import requests
 from requests.auth import HTTPBasicAuth
-import xml.etree.ElementTree as et
+
+# from api.login import login
+# from api.unit_test import UnitTestAlert, UnittestFlags, run_unit_test
+from http_request import HttpRequestParameters, _request
+import http_request
 from response_parsing import (
+    find_xml_element_attributes,
     find_xml_element_text,
     find_xml_elements_attributes,
-    find_xml_element_attributes,
 )
 
 
@@ -24,41 +28,21 @@ class AdtClient:
         self.client = client
         self.language = language
 
-    def _request(
-        self,
-        url: str,
-        params: dict,
-        method: Literal["GET", "POST", "PUT"] = "GET",
-        body: str = "",
-        content_type: str = "application/xml",
-    ) -> requests.Response:
-        config = {
-            "params": params,
-            "headers": {
-                "Accept": "*/*",
-                "Cache-Control": "no-cache",
-                "x-csrf-token": self.csrf_token,
-                "X-sap-adt-sessiontype": self.statefulness,
-                "content-type": content_type,
-            },
-            "url": url,
-            "data": body,
+    def build_request_parameters(self) -> HttpRequestParameters:
+        http_request_parameters: HttpRequestParameters = {
+            "host": self.sap_host,
+            "csrf_token": self.csrf_token,
+            "statefulness": self.statefulness,
+            "requst_number": self.request_number,
+            "session": self.session,
         }
         self.request_number += 1
-
-        if method == "POST":
-            response = self.session.post(**config)
-        elif method == "GET":
-            response = self.session.get(**config)
-        elif method == "PUT":
-            response = self.session.put(**config)
-        else:
-            raise ValueError(f"Unsupported method: {method}")
-        return response
+        return http_request_parameters
 
     def login(self) -> bool:
         url = f"http://{self.sap_host}/sap/bc/adt/compatibility/graph"
-        response = self._request(url, params={})
+        http_request_parameters = self.build_request_parameters()
+        response = _request(http_request_parameters, url, params={})
 
         csrf_token = response.headers.get("x-csrf-token")
         if csrf_token is not None:
@@ -72,7 +56,9 @@ class AdtClient:
     def search_object(self, query: str, max_results: int = 1) -> list[dict[str, str]]:
         url = f"http://{self.sap_host}/sap/bc/adt/repository/informationsystem/search"
         params = {"operation": "quickSearch", "query": query, "maxResults": max_results}
-        response = self._request(url, params=params)
+        
+        http_request_parameters = self.build_request_parameters()
+        response = _request(http_request_parameters, url, params=params)
         elements = find_xml_elements_attributes(
             response.text, "adtcore:objectReference"
         )
@@ -87,7 +73,8 @@ class AdtClient:
         if version:
             params["version"] = version
 
-        response = self._request(url, params=params)
+        http_request_parameters = self.build_request_parameters()
+        response = _request(http_request_parameters, url, params=params)
 
         if response.status_code == 200:
             return response.text
@@ -107,7 +94,8 @@ class AdtClient:
         </adtcore:objectReferences>
         """
 
-        response = self._request(url, params=params, body=body, method="POST")
+        http_request_parameters = self.build_request_parameters()
+        response = _request(http_request_parameters, url, params=params, body=body, method="POST")
 
         properties = find_xml_element_attributes(response.text, "chkl:properties")
         if (
@@ -125,7 +113,9 @@ class AdtClient:
         self.statefulness = "stateful"
         url = f"http://{self.sap_host}{object_uri}"
         params = {"_action": "LOCK", "accessMode": "MODIFY"}
-        response = self._request(url, params=params, method="POST")
+        
+        http_request_parameters = self.build_request_parameters()
+        response = _request(http_request_parameters, url, params=params, method="POST")
 
         if response.status_code == 200:
             lock_handle = find_xml_element_text(response.text, ".//LOCK_HANDLE")
@@ -138,7 +128,8 @@ class AdtClient:
     def unlock(self, object_uri: str, lock_handle: str) -> bool:
         url = f"http://{self.sap_host}{object_uri}"
         params = {"_action": "UNLOCK", "lockHandle": lock_handle}
-        response = self._request(url, params=params, method="POST")
+        http_request_parameters = self.build_request_parameters()
+        response = _request(http_request_parameters, url, params=params, method="POST")
 
         if response.status_code == 200:
             self.statefulness = "stateless"
@@ -153,7 +144,9 @@ class AdtClient:
     ) -> bool:
         url = f"http://{self.sap_host}{object_uri}"
         params = {"lockHandle": lock_handle}
-        response = self._request(
+        http_request_parameters = self.build_request_parameters()
+        response = _request(
+            http_request_parameters,
             url,
             params=params,
             body=source_code,
