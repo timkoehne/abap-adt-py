@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import List, Literal
 import requests
 from requests.auth import HTTPBasicAuth
 
@@ -7,6 +7,7 @@ from api.locking import lock, unlock
 from api.login import login
 from api.objectcontent import get_object_source, set_object_source
 from api.search import search_object
+from api.unittest import UnitTestAlert, UnittestFlags, run_unit_test
 from http_request import HttpRequestParameters
 
 
@@ -81,4 +82,11 @@ class AdtClient:
         response = set_object_source(
             http_request_parameters, object_uri, source_code, lock_handle
         )
+        return response
+
+    def run_unit_test(
+        self, object_uri: str, unit_test_flags: UnittestFlags = UnittestFlags()
+    ) -> List[UnitTestAlert]:
+        http_request_parameters = self.build_request_parameters()
+        response = run_unit_test(http_request_parameters, object_uri, unit_test_flags)
         return response

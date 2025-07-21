@@ -1,12 +1,5 @@
 from xml.etree import ElementTree as et
-
-XML_NAMESPACES = {
-    "chkl": "http://www.sap.com/abapxml/checklist",
-    "atom": "http://www.w3.org/2005/Atom",
-    "adtcore": "http://www.sap.com/adt/core",
-    "exc": "http://www.sap.com/abapxml/types/communicationframework",
-    "asx": "http://www.sap.com/abapxml",
-}
+from api.xml_namespaces import XML_NAMESPACES
 
 
 def _strip_namespace(name: str) -> str:
