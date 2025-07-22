@@ -2,7 +2,9 @@ from typing import List, Literal
 import requests
 from requests.auth import HTTPBasicAuth
 
+from api.create import create
 from api.activate import activate
+from api.create import ObjectTypes
 from api.delete import delete
 from api.lock import lock, unlock
 from api.login import login
@@ -21,6 +23,7 @@ class AdtClient:
     def __init__(
         self, sap_host: str, username: str, password: str, client: str, language: str
     ):
+        self.username = username
         self.session = requests.Session()
         self.session.auth = HTTPBasicAuth(username, password)
         self.sap_host = sap_host
@@ -95,4 +98,18 @@ class AdtClient:
     def delete(self, object_uri: str, lock_handle: str) -> bool:
         http_request_parameters = self.build_request_parameters()
         response = delete(http_request_parameters, object_uri, lock_handle)
+        return response
+
+    def create(
+        self, object_type: ObjectTypes, name: str, package: str, description: str
+    ) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = create(
+            http_request_parameters,
+            object_type,
+            name,
+            package,
+            description,
+            self.username,
+        )
         return response
