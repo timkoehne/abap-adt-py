@@ -2,10 +2,10 @@ from typing import List, Literal
 import requests
 from requests.auth import HTTPBasicAuth
 
-from api.activation import activate
-from api.locking import lock, unlock
+from api.activate import activate
+from api.lock import lock, unlock
 from api.login import login
-from api.objectcontent import get_object_source, set_object_source
+from api.content import get_object_source, set_object_source
 from api.search import search_object
 from api.unittest import UnitTestAlert, UnittestFlags, run_unit_test
 from http_request import HttpRequestParameters
