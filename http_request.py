@@ -13,7 +13,7 @@ class HttpRequestParameters(TypedDict):
 def request(
     http_request_parameters: HttpRequestParameters,
     uri: str,
-    method: Literal["GET", "POST", "PUT"],
+    method: Literal["GET", "POST", "PUT", "DELETE"],
     body: str,
     params: dict,
     content_type: str = "application/xml",
@@ -39,6 +39,8 @@ def request(
         response = session.get(**config)
     elif method == "PUT":
         response = session.put(**config)
+    elif method == "DELETE":
+        response = session.delete(**config)
     else:
         raise ValueError(f"Unsupported method: {method}")
     return response

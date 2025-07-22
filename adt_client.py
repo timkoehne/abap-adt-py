@@ -3,6 +3,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 from api.activate import activate
+from api.delete import delete
 from api.lock import lock, unlock
 from api.login import login
 from api.content import get_object_source, set_object_source
@@ -89,4 +90,9 @@ class AdtClient:
     ) -> List[UnitTestAlert]:
         http_request_parameters = self.build_request_parameters()
         response = run_unit_test(http_request_parameters, object_uri, unit_test_flags)
+        return response
+
+    def delete(self, object_uri: str, lock_handle: str) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = delete(http_request_parameters, object_uri, lock_handle)
         return response
