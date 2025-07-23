@@ -73,3 +73,29 @@ def create(
         raise Exception(
             f"{response.status_code} - Failed to create object {name}\n{response.text}"
         )
+
+
+def create_test_class_include(
+    http_request_parameters: HttpRequestParameters, class_name: str, lock_handle: str
+) -> bool:
+
+    body = f"""
+        <?xml version="1.0" encoding="UTF-8"?>
+        <class:abapClassInclude xmlns:class="http://www.sap.com/adt/oo/classes"
+            xmlns:adtcore="http://www.sap.com/adt/core" adtcore:name="{class_name}" class:includeType="testclasses"/>
+        """
+
+    response = request(
+        http_request_parameters=http_request_parameters,
+        uri=f"/sap/bc/adt/oo/classes/{class_name}/includes",
+        method="POST",
+        body=body,
+        params={"lockHandle": lock_handle},
+    )
+
+    if response.status_code == 201:
+        return True
+    else:
+        raise Exception(
+            f"{response.status_code} - Failed to create testclass for {class_name}\n{response.text}"
+        )
