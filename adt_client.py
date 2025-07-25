@@ -101,14 +101,14 @@ class AdtClient:
         return response
 
     def create(
-        self, object_type: ObjectTypes, name: str, package: str, description: str
+        self, object_type: ObjectTypes, name: str, parent: str, description: str
     ) -> bool:
         http_request_parameters = self.build_request_parameters()
         response = create(
             http_request_parameters,
             object_type,
             name,
-            package,
+            parent,
             description,
             self.username,
         )
