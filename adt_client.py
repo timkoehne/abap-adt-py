@@ -2,6 +2,7 @@ from typing import List, Literal
 import requests
 from requests.auth import HTTPBasicAuth
 
+from api.prettyprint import PrettyPrintSettings, prettyprint, set_pretty_printer_settings
 from api.create import create, create_test_class_include
 from api.activate import activate
 from api.create import ObjectTypes
@@ -117,4 +118,14 @@ class AdtClient:
     def create_test_class_include(self, class_name: str, lock_handle: str) -> bool:
         http_request_parameters = self.build_request_parameters()
         response = create_test_class_include(http_request_parameters, class_name, lock_handle)
+        return response
+    
+    def prettyprint(self, src: str) -> str:
+        http_request_parameters = self.build_request_parameters()
+        response = prettyprint(http_request_parameters, src)
+        return response
+    
+    def prettyprint_settings(self, settings: PrettyPrintSettings) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = set_pretty_printer_settings(http_request_parameters, settings)
         return response
