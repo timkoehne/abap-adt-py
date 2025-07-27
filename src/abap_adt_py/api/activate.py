@@ -1,5 +1,5 @@
-from http_request import HttpRequestParameters, request
-from response_parsing import find_xml_element_attributes, find_xml_elements_attributes
+from ..http_request import HttpRequestParameters, request
+from ..response_parsing import find_xml_element_attributes, find_xml_elements_attributes
 
 
 def activate(
@@ -21,7 +21,6 @@ def activate(
         method="POST",
         content_type="application/xml",
     )
-
     properties = find_xml_element_attributes(response.text, "chkl:properties")
     if (
         properties["activationExecuted"] == "true"

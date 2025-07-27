@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "abap-adt-py"
+version = "0.1.1"
+description = "A Python library for interacting with SAP systems using the ADT (ABAP Development Tools) protocol."
+readme = "README.md"
+license = "MIT"
+authors = [
+  { name = "Tim Köhne", email = "20153452+timkoehne@users.noreply.github.com" }
+]
+requires-python = ">=3.7"
+dependencies = [
+  "requests>=2.25",
+  "typing-extensions>=4.7.1",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/timkoehne/abap-adt-py"
+"Bug Tracker" = "https://github.com/timkoehne/abap-adt-py/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]

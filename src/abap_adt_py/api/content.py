@@ -1,5 +1,5 @@
-from typing import Literal
-from http_request import HttpRequestParameters, request
+from ..compat_typing import Literal
+from ..http_request import HttpRequestParameters, request
 
 
 def get_object_source(

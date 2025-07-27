@@ -1,5 +1,5 @@
-from typing import Literal, TypedDict
 import requests
+from .compat_typing import Literal, TypedDict
 
 
 class HttpRequestParameters(TypedDict):
@@ -18,7 +18,7 @@ def request(
     params: dict,
     content_type: str = "application/xml",
 ) -> requests.Response:
-    
+
     config = {
         "params": params,
         "headers": {

@@ -1,4 +1,4 @@
-from http_request import HttpRequestParameters, request
+from ..http_request import HttpRequestParameters, request
 
 
 def login(http_request_parameters: HttpRequestParameters) -> str:

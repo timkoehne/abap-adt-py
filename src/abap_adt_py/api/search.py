@@ -1,10 +1,11 @@
-from http_request import HttpRequestParameters, request
-from response_parsing import find_xml_elements_attributes
+from ..http_request import HttpRequestParameters, request
+from ..response_parsing import find_xml_elements_attributes
+from ..compat_typing import List, Dict
 
 
 def search_object(
     http_request_parameters: HttpRequestParameters, query: str, max_results: int = 1
-) -> list[dict[str, str]]:
+) -> List[Dict[str, str]]:
 
     response = request(
         http_request_parameters=http_request_parameters,

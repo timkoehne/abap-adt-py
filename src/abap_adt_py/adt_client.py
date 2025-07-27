@@ -1,18 +1,18 @@
-from typing import List, Literal
 import requests
 from requests.auth import HTTPBasicAuth
 
-from api.prettyprint import PrettyPrintSettings, prettyprint, set_pretty_printer_settings
-from api.create import create, create_test_class_include
-from api.activate import activate
-from api.create import ObjectTypes
-from api.delete import delete
-from api.lock import lock, unlock
-from api.login import login
-from api.content import get_object_source, set_object_source
-from api.search import search_object
-from api.unittest import UnitTestAlert, UnittestFlags, run_unit_test
-from http_request import HttpRequestParameters
+from .compat_typing import Literal, List, Dict
+from .api.prettyprint import PrettyPrintSettings, prettyprint, set_pretty_printer_settings
+from .api.create import create, create_test_class_include
+from .api.activate import activate
+from .api.create import ObjectTypes
+from .api.delete import delete
+from .api.lock import lock, unlock
+from .api.login import login
+from .api.content import get_object_source, set_object_source
+from .api.search import search_object
+from .api.unittest import UnitTestAlert, UnittestFlags, run_unit_test
+from .http_request import HttpRequestParameters
 
 
 class AdtClient:
@@ -51,7 +51,7 @@ class AdtClient:
         else:
             raise Exception("Login failed.")
 
-    def search_object(self, query: str, max_results: int = 1) -> list[dict[str, str]]:
+    def search_object(self, query: str, max_results: int = 1) -> List[Dict[str, str]]:
         http_request_parameters = self.build_request_parameters()
         elements = search_object(http_request_parameters, query, max_results)
         return elements

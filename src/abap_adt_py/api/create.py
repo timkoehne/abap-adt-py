@@ -1,5 +1,5 @@
-from typing import Dict, Literal, TypeAlias, TypedDict
-from http_request import HttpRequestParameters, request
+from ..compat_typing import Literal, TypeAlias, Dict, TypedDict
+from ..http_request import HttpRequestParameters, request
 
 
 class CreateableTypeDetails(TypedDict):

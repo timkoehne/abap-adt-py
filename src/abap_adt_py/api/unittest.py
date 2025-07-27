@@ -1,8 +1,8 @@
 import xml.etree.ElementTree as et
-from typing import List, TypedDict
 
-from api.xml_namespaces import XML_NAMESPACES
-from http_request import HttpRequestParameters, request
+from ..compat_typing import List, TypedDict
+from ..api.xml_namespaces import XML_NAMESPACES
+from ..http_request import HttpRequestParameters, request
 
 
 class UnittestFlags:

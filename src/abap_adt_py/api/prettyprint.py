@@ -1,6 +1,5 @@
-import re
-from typing import Literal, TypedDict, NotRequired
-from http_request import HttpRequestParameters, request
+from ..compat_typing import Literal, NotRequired, TypedDict
+from ..http_request import HttpRequestParameters, request
 
 
 class PrettyPrintSettings(TypedDict):

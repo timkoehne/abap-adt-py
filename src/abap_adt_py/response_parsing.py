@@ -1,5 +1,6 @@
 from xml.etree import ElementTree as et
-from api.xml_namespaces import XML_NAMESPACES
+from .compat_typing import Optional, Dict, List
+from .api.xml_namespaces import XML_NAMESPACES
 
 
 def _strip_namespace(name: str) -> str:
@@ -10,7 +11,7 @@ def _strip_namespace(name: str) -> str:
     return name
 
 
-def _et_to_attributes_dict(element: et.Element | None) -> dict[str, str]:
+def _et_to_attributes_dict(element: Optional[et.Element]) -> Dict[str, str]:
     cleaned = (
         {_strip_namespace(key): value for key, value in element.attrib.items()}
         if element is not None
@@ -19,7 +20,7 @@ def _et_to_attributes_dict(element: et.Element | None) -> dict[str, str]:
     return cleaned
 
 
-def find_xml_elements_attributes(xml_text: str, tag_name: str) -> list[dict[str, str]]:
+def find_xml_elements_attributes(xml_text: str, tag_name: str) -> List[Dict[str, str]]:
     root = et.fromstring(xml_text)
     elements = root.findall(tag_name, XML_NAMESPACES)
     processed_elements = []
@@ -29,7 +30,7 @@ def find_xml_elements_attributes(xml_text: str, tag_name: str) -> list[dict[str,
     return processed_elements
 
 
-def find_xml_element_attributes(xml_text: str, tag_name: str) -> dict[str, str]:
+def find_xml_element_attributes(xml_text: str, tag_name: str) -> Dict[str, str]:
     root = et.fromstring(xml_text)
     element = root.find(tag_name, XML_NAMESPACES)
     element = _et_to_attributes_dict(element)

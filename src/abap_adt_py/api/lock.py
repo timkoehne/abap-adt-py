@@ -1,5 +1,5 @@
-from http_request import HttpRequestParameters, request
-from response_parsing import find_xml_element_text
+from ..http_request import HttpRequestParameters, request
+from ..response_parsing import find_xml_element_text
 
 
 def lock(http_request_parameters: HttpRequestParameters, object_uri: str) -> str:
