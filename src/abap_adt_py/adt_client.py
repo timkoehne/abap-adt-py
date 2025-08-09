@@ -2,7 +2,7 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 from .compat_typing import Literal, List, Dict
-from .api.syntax import SyntaxCheckResult, syntaxcheck
+from .api.syntax import SyntaxCheckResult, syntax_check
 from .api.prettyprint import (
     PrettyPrintSettings,
     prettyprint,
@@ -137,13 +137,15 @@ class AdtClient:
         response = set_pretty_printer_settings(http_request_parameters, settings)
         return response
 
-    def syntaxcheck(
+    def syntax_check(
         self,
-        source_uri: str,
+        object_uri: str,
         include_uri: str,
         src: str,
         version: Literal["active", "inactive"] = "active",
     ) -> List[SyntaxCheckResult]:
         http_request_parameters = self.build_request_parameters()
-        response = syntaxcheck(http_request_parameters, source_uri, include_uri, src, version)
+        response = syntax_check(
+            http_request_parameters, object_uri, include_uri, src, version
+        )
         return response
