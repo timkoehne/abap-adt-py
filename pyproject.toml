@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "abap-adt-py"
-version = "0.1.1"
+version = "0.1.2"
 description = "A Python library for interacting with SAP systems using the ADT (ABAP Development Tools) protocol."
 readme = "README.md"
 license = "MIT"

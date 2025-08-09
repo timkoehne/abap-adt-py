@@ -4,7 +4,7 @@ from abap_adt_py.api.prettyprint import PrettyPrintSettings
 
 if __name__ == "__main__":
 
-    # Test Report
+    # test report
     report_name = "z_test"
     report_uri = "/sap/bc/adt/programs/programs/z_test"
 
@@ -18,7 +18,9 @@ if __name__ == "__main__":
     )
 
     # login
-    response = client.login()
+    client.login()
+    
+    # search
     results: list = client.search_object(report_name, 50)
     print(results)
 

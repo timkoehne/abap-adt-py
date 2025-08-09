@@ -42,6 +42,8 @@ client = AdtClient(
 
 # login
 response = client.login()
+
+# search
 results: list = client.search_object(report_name, 50)
 print(results)
 

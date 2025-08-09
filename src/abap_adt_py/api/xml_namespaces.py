@@ -5,4 +5,5 @@ XML_NAMESPACES = {
     "exc": "http://www.sap.com/abapxml/types/communicationframework",
     "asx": "http://www.sap.com/abapxml",
     "aunit": "http://www.sap.com/adt/aunit",
+    "chkrun": "http://www.sap.com/adt/checkrun"
 }
