@@ -3,6 +3,7 @@ from requests.auth import HTTPBasicAuth
 
 from .compat_typing import Literal, List, Dict
 from .api.syntax import SyntaxCheckResult, syntax_check
+from .api.objectstructure import object_structure
 from .api.prettyprint import (
     PrettyPrintSettings,
     prettyprint,
@@ -148,4 +149,9 @@ class AdtClient:
         response = syntax_check(
             http_request_parameters, object_uri, include_uri, src, version
         )
+        return response
+
+    def object_structure(self, object_uri: str):
+        http_request_parameters = self.build_request_parameters()
+        response = object_structure(http_request_parameters, object_uri)
         return response
