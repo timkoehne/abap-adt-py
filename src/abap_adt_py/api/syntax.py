@@ -1,36 +1,47 @@
 import base64
 import xml.etree.ElementTree as et
-from ..compat_typing import TypedDict, Literal
+from ..compat_typing import TypedDict, Literal, NotRequired
 from ..http_request import HttpRequestParameters, request
 from .xml_namespaces import XML_NAMESPACES
 
 
 class SyntaxCheckResult(TypedDict):
     uri: str
-    line: int
-    offset: int
+    line: NotRequired[int]
+    offset: NotRequired[int]
     type: str
     short_text: str
+
 
 def _parse_syntax_check_response(response_text: str) -> list[SyntaxCheckResult]:
     root = et.fromstring(response_text)
     messages = []
     for msg in root.findall(".//chkrun:checkMessage", XML_NAMESPACES):
         uri: str = msg.get(f'{{{XML_NAMESPACES["chkrun"]}}}uri', "")
-        line, offset = uri[uri.index("#start=") + 7 :].split(",")
-        uri = uri[: uri.index("#start=")].removesuffix("/source/main")
+
+        if "#start=" in uri:
+            line, offset = uri[uri.index("#start=") + 7 :].split(",")
+            line, offset = int(line), int(offset)
+            uri = uri[: uri.index("#start=")]
+        else:
+            line, offset = None, None
+
+        uri = uri.removesuffix("/source/main")
 
         type = msg.get(f'{{{XML_NAMESPACES["chkrun"]}}}type', "")
         short_text = msg.get(f'{{{XML_NAMESPACES["chkrun"]}}}shortText', "")
-        messages.append(
-            {
-                "uri": uri,
-                "line": int(line),
-                "offset": int(offset),
-                "type": type,
-                "short_text": short_text,
-            }
-        )
+
+        message: SyntaxCheckResult = {
+            "uri": uri,
+            "type": type,
+            "short_text": short_text,
+        }
+
+        if line and offset:
+            message["line"] = line
+            message["offset"] = offset
+
+        messages.append(message)
     return messages
 
 
@@ -69,5 +80,3 @@ def syntax_check(
         raise Exception(
             f"{response.status_code} - Failed to check syntax for {object_uri}\n{response.text}"
         )
-
-
