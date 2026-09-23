@@ -9,6 +9,8 @@ def lock(http_request_parameters: HttpRequestParameters, object_uri: str) -> str
         body="",
         params={"_action": "LOCK", "accessMode": "MODIFY"},
         method="POST",
+        # packages reject the lock with 406 unless the result type is requested explicitly
+        accept="application/*,application/vnd.sap.as+xml;charset=UTF-8;dataname=com.sap.adt.lock.result",
     )
     if response.status_code == 200:
         lock_handle = find_xml_element_text(response.text, ".//LOCK_HANDLE")

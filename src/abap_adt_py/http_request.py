@@ -17,12 +17,13 @@ def request(
     body: str,
     params: dict,
     content_type: str = "application/xml",
+    accept: str = "*/*",
 ) -> requests.Response:
 
     config = {
         "params": params,
         "headers": {
-            "Accept": "*/*",
+            "Accept": accept,
             "Cache-Control": "no-cache",
             "x-csrf-token": http_request_parameters["csrf_token"],
             "X-sap-adt-sessiontype": http_request_parameters["statefulness"],

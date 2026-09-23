@@ -1,4 +1,6 @@
-from ..compat_typing import Literal, TypeAlias, Dict, TypedDict
+from xml.sax.saxutils import quoteattr
+
+from ..compat_typing import Literal, TypeAlias, Dict, TypedDict, Optional
 from ..http_request import HttpRequestParameters, request
 
 
@@ -178,4 +180,63 @@ def create_test_class_include(
     else:
         raise Exception(
             f"{response.status_code} - Failed to create testclass for {class_name}\n{response.text}"
+        )
+
+
+PackageTypes: TypeAlias = Literal["development", "structure", "main"]
+
+
+def create_package(
+    http_request_parameters: HttpRequestParameters,
+    name: str,
+    description: str,
+    owner: str,
+    parent: str = "",
+    package_type: PackageTypes = "development",
+    software_component: Optional[str] = None,
+    transport_layer: str = "",
+    transport: Optional[str] = None,
+) -> bool:
+    
+    if software_component is None:
+        software_component = "LOCAL" if name.startswith("$") else "HOME"
+
+    body = f"""<?xml version="1.0" encoding="UTF-8"?>
+    <pak:package xmlns:pak="http://www.sap.com/adt/packages"
+        xmlns:adtcore="http://www.sap.com/adt/core"
+        adtcore:description={quoteattr(description)}
+        adtcore:name={quoteattr(name)} adtcore:type="DEVC/K"
+        adtcore:version="active" adtcore:responsible={quoteattr(owner)}>
+        <adtcore:packageRef adtcore:name={quoteattr(name)}/>
+        <pak:attributes pak:packageType={quoteattr(package_type)}/>
+        <pak:superPackage adtcore:name={quoteattr(parent)}/>
+        <pak:applicationComponent/>
+        <pak:transport>
+            <pak:softwareComponent pak:name={quoteattr(software_component)}/>
+            <pak:transportLayer pak:name={quoteattr(transport_layer)}/>
+        </pak:transport>
+        <pak:translation/>
+        <pak:useAccesses/>
+        <pak:packageInterfaces/>
+        <pak:subPackages/>
+    </pak:package>"""
+
+    params = {}
+    if transport:
+        params["corrNr"] = transport
+
+    response = request(
+        http_request_parameters=http_request_parameters,
+        uri="/sap/bc/adt/packages",
+        method="POST",
+        body=body,
+        params=params,
+        content_type="application/*",
+    )
+
+    if 200 <= response.status_code < 300:
+        return True
+    else:
+        raise Exception(
+            f"{response.status_code} - Failed to create package {name}\n{response.text}"
         )

@@ -9,7 +9,12 @@ from .api.prettyprint import (
     prettyprint,
     set_pretty_printer_settings,
 )
-from .api.create import create, create_test_class_include
+from .api.create import (
+    PackageTypes,
+    create,
+    create_package,
+    create_test_class_include,
+)
 from .api.activate import activate
 from .api.create import ObjectTypes
 from .api.delete import delete
@@ -126,6 +131,30 @@ class AdtClient:
             parent,
             description,
             self.username,
+        )
+        return response
+
+    def create_package(
+        self,
+        name: str,
+        description: str,
+        parent: str = "",
+        package_type: PackageTypes = "development",
+        software_component: Optional[str] = None,
+        transport_layer: str = "",
+        transport: Optional[str] = None,
+    ) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = create_package(
+            http_request_parameters,
+            name,
+            description,
+            self.username,
+            parent,
+            package_type,
+            software_component,
+            transport_layer,
+            transport,
         )
         return response
 

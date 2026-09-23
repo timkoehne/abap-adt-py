@@ -48,6 +48,9 @@ response = client.login()
 results: list = client.search_object(report_name, 50)
 print(results)
 
+# create a local package (transportable packages also need transport="<request number>")
+client.create_package("$Z_DEMO", "Demo package", parent="$TMP")
+
 # browse a package (subpackages appear as DEVC/K entries)
 objects: list = client.package_contents("$TMP")
 all_objects: list = client.package_contents("$TMP", recursive=True)
