@@ -1,7 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 
-from .compat_typing import Literal, List, Dict
+from .compat_typing import Literal, List, Dict, Optional
 from .api.syntax import SyntaxCheckResult, syntax_check
 from .api.objectstructure import object_structure
 from .api.prettyprint import (
@@ -17,6 +17,14 @@ from .api.lock import lock, unlock
 from .api.login import login
 from .api.content import get_object_source, set_object_source
 from .api.search import search_object
+from .api.repository import (
+    NodeStructure,
+    PackageInfo,
+    RepositoryNode,
+    node_contents,
+    object_package_path,
+    package_contents,
+)
 from .api.unittest import UnitTestAlert, UnittestFlags, run_unit_test
 from .http_request import HttpRequestParameters
 
@@ -154,4 +162,25 @@ class AdtClient:
     def object_structure(self, object_uri: str):
         http_request_parameters = self.build_request_parameters()
         response = object_structure(http_request_parameters, object_uri)
+        return response
+
+    def node_contents(
+        self, parent_type: str, parent_name: str, node_key: Optional[str] = None
+    ) -> NodeStructure:
+        http_request_parameters = self.build_request_parameters()
+        response = node_contents(
+            http_request_parameters, parent_type, parent_name, node_key
+        )
+        return response
+
+    def package_contents(
+        self, package: str, recursive: bool = False
+    ) -> List[RepositoryNode]:
+        http_request_parameters = self.build_request_parameters()
+        response = package_contents(http_request_parameters, package, recursive)
+        return response
+
+    def object_package_path(self, object_uri: str) -> List[PackageInfo]:
+        http_request_parameters = self.build_request_parameters()
+        response = object_package_path(http_request_parameters, object_uri)
         return response

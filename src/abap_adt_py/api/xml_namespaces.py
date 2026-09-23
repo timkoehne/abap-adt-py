@@ -7,4 +7,5 @@ XML_NAMESPACES = {
     "aunit": "http://www.sap.com/adt/aunit",
     "chkrun": "http://www.sap.com/adt/checkrun",
     "abapsource": "http://www.sap.com/adt/abapsource",
+    "opr": "http://www.sap.com/adt/ris/objectProperties",
 }

@@ -7,6 +7,7 @@
 - Authenticate and log in to SAP systems securely
 - Create, read, edit, and activate ABAP objects
 - Search ABAP repositories and metadata
+- Browse packages and the repository tree
 - Run ABAP unit tests and retrieve results
 - Seamless integration with Python for automation and scripting
 
@@ -46,6 +47,13 @@ response = client.login()
 # search
 results: list = client.search_object(report_name, 50)
 print(results)
+
+# browse a package (subpackages appear as DEVC/K entries)
+objects: list = client.package_contents("$TMP")
+all_objects: list = client.package_contents("$TMP", recursive=True)
+
+# package hierarchy of an object, top-level package first
+packages: list = client.object_package_path(report_uri)
 
 # create report object
 client.create(

@@ -24,6 +24,9 @@ if __name__ == "__main__":
     results: list = client.search_object(report_name, 50)
     print(results)
 
+    # browse packages
+    print(client.package_contents("$TMP"))
+
     # create report object
     client.create(
         object_type="PROG/P",
