@@ -37,7 +37,7 @@ report_uri = "/sap/bc/adt/programs/programs/z_test"
 client = AdtClient(
     sap_host="http://localhost:50000",
     username="DEVELOPER",
-    password="ABAPtr2022#01",
+    password="<password>",
     client="001",
     language="EN",
 )
