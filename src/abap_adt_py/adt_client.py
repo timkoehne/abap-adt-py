@@ -46,6 +46,8 @@ class AdtClient:
         self.username = username
         self.session = requests.Session()
         self.session.auth = HTTPBasicAuth(username, password)
+        # merged into the query string of every request made with this session
+        self.session.params = {"sap-client": client, "sap-language": language}
         self.sap_host = sap_host
         self.client = client
         self.language = language
