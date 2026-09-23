@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+    <DATA>
+      <PGMID>LIMU</PGMID>
+      <OBJECT>REPS</OBJECT>
+      <OBJECTNAME>Z_ADTPY_FIXTURE_TR</OBJECTNAME>
+      <OPERATION>U</OPERATION>
+      <DEVCLASS>ZADTPY_FIXTURE</DEVCLASS>
+      <CTEXT>fixture pkg</CTEXT>
+      <KORRFLAG>X</KORRFLAG>
+      <AS4USER/>
+      <PDEVCLASS/>
+      <DLVUNIT>HOME</DLVUNIT>
+      <NAMESPACE>/0CUST/</NAMESPACE>
+      <SUPER_PACKAGE/>
+      <RECORD_CHANGES/>
+      <RESULT>S</RESULT>
+      <RECORDING/>
+      <EXISTING_REQ_ONLY>X</EXISTING_REQ_ONLY>
+      <MESSAGES/>
+      <REQUESTS/>
+      <LOCKS>
+        <CTS_OBJECT_LOCK>
+          <OBJECT_KEY>
+            <PGMID>LIMU</PGMID>
+            <OBJECT>REPS</OBJECT>
+            <OBJ_NAME>Z_ADTPY_FIXTURE_TR</OBJ_NAME>
+          </OBJECT_KEY>
+          <LOCK_HOLDER>
+            <REQ_HEADER>
+              <TRKORR>A4HK900160</TRKORR>
+              <TRFUNCTION>K</TRFUNCTION>
+              <TRSTATUS>D</TRSTATUS>
+              <TARSYSTEM/>
+              <AS4USER>DEVELOPER</AS4USER>
+              <AS4DATE>2026-09-24</AS4DATE>
+              <AS4TIME>12:50:24</AS4TIME>
+              <AS4TEXT>adt-py fixture capture</AS4TEXT>
+              <CLIENT>001</CLIENT>
+              <REPOID/>
+            </REQ_HEADER>
+            <REQ_ATTRS/>
+            <TASK_HEADERS>
+              <CTS_TASK_HEADER>
+                <TRKORR>A4HK900161</TRKORR>
+                <TRFUNCTION>S</TRFUNCTION>
+                <TRSTATUS>D</TRSTATUS>
+                <AS4USER>DEVELOPER</AS4USER>
+                <AS4DATE>2026-09-24</AS4DATE>
+                <AS4TIME>12:50:24</AS4TIME>
+                <AS4TEXT>adt-py fixture capture</AS4TEXT>
+              </CTS_TASK_HEADER>
+            </TASK_HEADERS>
+          </LOCK_HOLDER>
+        </CTS_OBJECT_LOCK>
+      </LOCKS>
+      <TADIRDEVC>ZADTPY_FIXTURE</TADIRDEVC>
+      <URI>/sap/bc/adt/programs/programs/z_adtpy_fixture_tr</URI>
+      <CTS_PROJECTS/>
+    </DATA>
+  </asx:values>
+</asx:abap>

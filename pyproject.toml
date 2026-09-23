@@ -28,3 +28,15 @@ classifiers = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--import-mode=importlib"]
+pythonpath = ["src", "tests"]
+markers = [
+  "integration: needs a live SAP system (configure via ABAP_ADT_* environment variables)",
+  "transport: creates and releases transport requests on the live system (opt-in via ABAP_ADT_TEST_TRANSPORTS=1)",
+]

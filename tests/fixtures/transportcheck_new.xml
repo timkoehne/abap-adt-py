@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+    <DATA>
+      <PGMID>LIMU</PGMID>
+      <OBJECT>REPS</OBJECT>
+      <OBJECTNAME>Z_ADTPY_FIXTURE_TR</OBJECTNAME>
+      <OPERATION>I</OPERATION>
+      <DEVCLASS>ZADTPY_FIXTURE</DEVCLASS>
+      <CTEXT>fixture pkg</CTEXT>
+      <KORRFLAG>X</KORRFLAG>
+      <AS4USER/>
+      <PDEVCLASS/>
+      <DLVUNIT>HOME</DLVUNIT>
+      <NAMESPACE>/0CUST/</NAMESPACE>
+      <SUPER_PACKAGE/>
+      <RECORD_CHANGES/>
+      <RESULT>S</RESULT>
+      <RECORDING>X</RECORDING>
+      <EXISTING_REQ_ONLY/>
+      <MESSAGES/>
+      <REQUESTS>
+        <CTS_REQUEST>
+          <REQ_HEADER>
+            <TRKORR>A4HK900160</TRKORR>
+            <TRFUNCTION>K</TRFUNCTION>
+            <TRSTATUS>D</TRSTATUS>
+            <TARSYSTEM/>
+            <AS4USER>DEVELOPER</AS4USER>
+            <AS4DATE>2026-09-24</AS4DATE>
+            <AS4TIME>12:50:24</AS4TIME>
+            <AS4TEXT>adt-py fixture capture</AS4TEXT>
+            <CLIENT>001</CLIENT>
+            <REPOID/>
+          </REQ_HEADER>
+          <REQ_ATTRS/>
+          <TASK_HEADERS/>
+        </CTS_REQUEST>
+      </REQUESTS>
+      <LOCKS/>
+      <TADIRDEVC>ZADTPY_FIXTURE</TADIRDEVC>
+      <URI>/sap/bc/adt/programs/programs/z_adtpy_fixture_tr</URI>
+      <CTS_PROJECTS/>
+    </DATA>
+  </asx:values>
+</asx:abap>

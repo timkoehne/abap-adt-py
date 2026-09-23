@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<chkl:messages xmlns:chkl="http://www.sap.com/abapxml/checklist">
+  <chkl:properties checkExecuted="true" activationExecuted="false" generationExecuted="false"/>
+  <msg objDescr="" type="W" line="0" href="">
+    <shortText>
+      <txt>Activation was cancelled.</txt>
+    </shortText>
+  </msg>
+  <msg objDescr="Program Z_ADTPY_FIXTURE" type="E" line="1" href="/sap/bc/adt/programs/programs/z_adtpy_fixture/source/main#start=2,6;end=2,19" code="MESSAGE(GTU)" forceSupported="true">
+    <shortText>
+      <txt>Field "UNDEFINED_VAR" is unknown.</txt>
+    </shortText>
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="art.syntax:GTU" rel="http://www.sap.com/adt/categories/quickfixes"/>
+  </msg>
+</chkl:messages>

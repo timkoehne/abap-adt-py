@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<aunit:runResult xmlns:aunit="http://www.sap.com/adt/aunit">
+  <program xmlns:adtcore="http://www.sap.com/adt/core" adtcore:uri="/sap/bc/adt/oo/classes/zcl_adtpy_fixture" adtcore:type="CLAS/OC" adtcore:name="ZCL_ADTPY_FIXTURE" uriType="semantic">
+    <testClasses>
+      <testClass adtcore:uri="/sap/bc/adt/oo/classes/zcl_adtpy_fixture#testclass=LTC" adtcore:type="CLAS/OP" adtcore:name="LTC" uriType="semantic" navigationUri="/sap/bc/adt/oo/classes/zcl_adtpy_fixture/includes/testclasses#type=CLAS%2FOCL;name=LTC" durationCategory="short" riskLevel="harmless">
+        <testMethods>
+          <testMethod adtcore:uri="/sap/bc/adt/oo/classes/zcl_adtpy_fixture#testclass=LTC;testmethod=FAILS" adtcore:type="CLAS/OLI" adtcore:name="FAILS" executionTime="0.45" uriType="semantic" navigationUri="/sap/bc/adt/oo/classes/zcl_adtpy_fixture/includes/testclasses#type=CLAS%2FOLI;name=LTC%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20FAILS" unit="s">
+            <alerts>
+              <alert kind="failedAssertion" severity="critical">
+                <title>Critical Assertion Error: 'expected failure'</title>
+                <details>
+                  <detail text="Different values">
+                    <details>
+                      <detail text="Expected [5] Actual [3]"/>
+                    </details>
+                  </detail>
+                  <detail text="Test 'LTC-&gt;FAILS' in Main Program 'ZCL_ADTPY_FIXTURE=============CP'"/>
+                </details>
+                <stack>
+                  <stackEntry adtcore:uri="/sap/bc/adt/oo/classes/zcl_adtpy_fixture/includes/testclasses#start=11,0;end=11,0" adtcore:type="CLAS/OCN/testclasses" adtcore:name="ZCL_ADTPY_FIXTURE" adtcore:description="Include: &lt;ZCL_ADTPY_FIXTURE=============CCAU&gt; Line: &lt;11&gt; (FAILS)"/>
+                </stack>
+              </alert>
+            </alerts>
+          </testMethod>
+          <testMethod adtcore:uri="/sap/bc/adt/oo/classes/zcl_adtpy_fixture#testclass=LTC;testmethod=PASSES" adtcore:type="CLAS/OLI" adtcore:name="PASSES" executionTime="0" uriType="semantic" navigationUri="/sap/bc/adt/oo/classes/zcl_adtpy_fixture/includes/testclasses#type=CLAS%2FOLI;name=LTC%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20PASSES" unit="s"/>
+        </testMethods>
+      </testClass>
+    </testClasses>
+  </program>
+</aunit:runResult>

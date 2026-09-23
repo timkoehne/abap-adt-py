@@ -100,3 +100,17 @@ lock_handle: str = client.lock(report_uri)
 client.delete(report_uri, lock_handle)
 client.unlock(report_uri, lock_handle)
 ```
+# Testing
+```bash
+pip install -e ".[test]"
+pytest
+```
+The unit tests run offline against responses recorded from a real SAP system (`tests/fixtures`).
+The integration tests in `tests/integration` run against a live system and are skipped unless it is configured:
+```bash
+export ABAP_ADT_HOST=http://localhost:50000 ABAP_ADT_USER=DEVELOPER ABAP_ADT_PASSWORD=...
+export ABAP_ADT_CLIENT=001 ABAP_ADT_LANGUAGE=EN  # optional, these are the defaults
+pytest -m integration
+```
+They create objects with unique names in `$TMP` and delete them again. The test run stops after a failed login so a wrong password cannot lock the user.
+Tests that create and release transport requests only run with `ABAP_ADT_TEST_TRANSPORTS=1`, because released requests stay in the system.

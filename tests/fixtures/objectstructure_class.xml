@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<abapsource:objectStructureElement xmlns:adtcore="http://www.sap.com/adt/core" xmlns:abapsource="http://www.sap.com/adt/abapsource" xmlns:atom="http://www.w3.org/2005/Atom" xml:base="/sap/bc/adt/oo/classes/zcl_adtpy_fixture/objectstructure?sap-client=001&amp;sap-language=EN&amp;version=active&amp;withShortDescriptions=True" adtcore:name="ZCL_ADTPY_FIXTURE" visibility="public" final="true" adtcore:type="CLAS/OC">
+  <atom:link rel="http://www.sap.com/adt/relations/source/definitionIdentifier" href="./source/main#start=1,6;end=1,23"/>
+  <atom:link rel="http://www.sap.com/adt/relations/source/implementationIdentifier" href="./source/main#start=7,6;end=7,23"/>
+  <atom:link rel="http://www.sap.com/adt/relations/source/definitionBlock" href="./source/main#start=1,0;end=6,8"/>
+  <atom:link rel="http://www.sap.com/adt/relations/source/implementationBlock" href="./source/main#start=7,0;end=11,8"/>
+  <abapsource:objectStructureElement adtcore:type="CLAS/OM" adtcore:name="ADD" level="instance" clif_name="ZCL_ADTPY_FIXTURE" visibility="public">
+    <atom:link rel="http://www.sap.com/adt/relations/source/definitionIdentifier" href="./source/main#start=3,12;end=3,15" type="CLAS/OM"/>
+    <atom:link rel="http://www.sap.com/adt/relations/source/implementationIdentifier" href="./source/main#start=8,9;end=8,12"/>
+    <atom:link rel="http://www.sap.com/adt/relations/source/definitionBlock" href="./source/main#start=3,4;end=3,69"/>
+    <atom:link rel="http://www.sap.com/adt/relations/source/implementationBlock" href="./source/main#start=8,2;end=10,11"/>
+  </abapsource:objectStructureElement>
+  <abapsource:objectStructureElement adtcore:name="LTC" final="true" testclass="true" adtcore:type="CLAS/OCL">
+    <atom:link rel="http://www.sap.com/adt/relations/source/definitionIdentifier" href="./includes/testclasses#start=1,6;end=1,9"/>
+    <atom:link rel="http://www.sap.com/adt/relations/source/implementationIdentifier" href="./includes/testclasses#start=6,6;end=6,9"/>
+    <atom:link rel="http://www.sap.com/adt/relations/source/definitionBlock" href="./includes/testclasses#start=1,0;end=5,8"/>
+    <atom:link rel="http://www.sap.com/adt/relations/source/implementationBlock" href="./includes/testclasses#start=6,0;end=13,8"/>
+    <abapsource:objectStructureElement adtcore:type="CLAS/OLD" adtcore:name="PASSES" testmethod="true" level="instance" clif_name="LTC" visibility="private">
+      <atom:link rel="http://www.sap.com/adt/relations/source/definitionIdentifier" href="./includes/testclasses#start=3,12;end=3,18" type="CLAS/OLD"/>
+      <atom:link rel="http://www.sap.com/adt/relations/source/implementationIdentifier" href="./includes/testclasses#start=7,9;end=7,15" type="CLAS/OLD"/>
+      <atom:link rel="http://www.sap.com/adt/relations/source/definitionBlock" href="./includes/testclasses#start=3,4;end=3,30"/>
+      <atom:link rel="http://www.sap.com/adt/relations/source/implementationBlock" href="./includes/testclasses#start=7,2;end=9,11"/>
+    </abapsource:objectStructureElement>
+    <abapsource:objectStructureElement adtcore:type="CLAS/OLD" adtcore:name="FAILS" testmethod="true" level="instance" clif_name="LTC" visibility="private">
+      <atom:link rel="http://www.sap.com/adt/relations/source/definitionIdentifier" href="./includes/testclasses#start=4,12;end=4,17" type="CLAS/OLD"/>
+      <atom:link rel="http://www.sap.com/adt/relations/source/implementationIdentifier" href="./includes/testclasses#start=10,9;end=10,14" type="CLAS/OLD"/>
+      <atom:link rel="http://www.sap.com/adt/relations/source/definitionBlock" href="./includes/testclasses#start=4,4;end=4,29"/>
+      <atom:link rel="http://www.sap.com/adt/relations/source/implementationBlock" href="./includes/testclasses#start=10,2;end=12,11"/>
+    </abapsource:objectStructureElement>
+  </abapsource:objectStructureElement>
+  <abapsource:objectStructureElement adtcore:type="CLAS/OCX" adtcore:name="ZCL_ADTPY_FIXTURE" isExternalRef="true" description="Text Elements">
+    <atom:link rel="http://www.sap.com/adt/relations/source/definitionIdentifier" href="/sap/bc/adt/textelements/classes/zcl_adtpy_fixture"/>
+  </abapsource:objectStructureElement>
+</abapsource:objectStructureElement>

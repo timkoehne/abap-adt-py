@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<opr:objectProperties xmlns:opr="http://www.sap.com/adt/ris/objectProperties">
+  <opr:object text="Runtime Type Services" name="CL_ABAP_TYPEDESCR" package="SABP_RTTI" type="CLAS/OC" expandable="true">
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/oo/classes/cl_abap_typedescr" rel="http://www.sap.com/adt/relations/objects" title="ADT Object Reference"/>
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/vit/wb/object_type/clasoc/object_name/CL_ABAP_TYPEDESCR" rel="http://www.sap.com/adt/relations/objects" type="application/vnd.sap.sapgui" title="ADT Object Reference"/>
+  </opr:object>
+  <opr:property facet="PACKAGE" name="BASIS" displayName="BASIS" text="BASIS Structure Package" hasChildrenOfSameFacet="true">
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/packages/basis" rel="http://www.sap.com/adt/relations/packages" type="application/vnd.sap.sapgui" title="ADT Object Reference"/>
+  </opr:property>
+  <opr:property facet="PACKAGE" name="SABP_MAIN" displayName="SABP_MAIN" text="ABAP Runtime Environment" hasChildrenOfSameFacet="true">
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/packages/sabp_main" rel="http://www.sap.com/adt/relations/packages" type="application/vnd.sap.sapgui" title="ADT Object Reference"/>
+  </opr:property>
+  <opr:property facet="PACKAGE" name="SABP_RTTI" displayName="SABP_RTTI">
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/packages/sabp_rtti" rel="http://www.sap.com/adt/relations/packages" type="application/vnd.sap.sapgui" title="ADT Object Reference"/>
+  </opr:property>
+</opr:objectProperties>

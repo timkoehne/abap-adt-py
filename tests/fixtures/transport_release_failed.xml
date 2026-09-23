@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<tm:root xmlns:tm="http://www.sap.com/cts/adt/tm" tm:useraction="newreleasejobs" tm:releasetimestamp="20260924125024 " tm:number="A4HK900160">
+  <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/cts/transportrequests/A4HK900160/displayatcfindings" rel="http://www.sap.com/cts/relations/displayatcfindings" type="application/xml" title="Diplay ATC Findings"/>
+  <tm:releasereports>
+    <chkrun:checkReport xmlns:chkrun="http://www.sap.com/adt/checkrun" chkrun:reporter="transportrelease" chkrun:triggeringUri="/sap/bc/adt/cts/transportrequests/A4HK900160" chkrun:status="abortrelapifail" chkrun:statusText="Release of transport request/task A4HK900160 has failed. See Problems view">
+      <chkrun:checkMessageList>
+        <chkrun:checkMessage chkrun:uri="/sap/bc/adt/cts/transportrequests/A4HK900160" chkrun:type="E" chkrun:shortText="Referencing task A4HK900161 not yet released">
+          <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/messageclass/TR/messages/732/longtext?language=E&amp;msgv1=A4HK900161" rel="http://www.sap.com/adt/relations/longtext" type="text/html"/>
+        </chkrun:checkMessage>
+      </chkrun:checkMessageList>
+    </chkrun:checkReport>
+  </tm:releasereports>
+</tm:root>
