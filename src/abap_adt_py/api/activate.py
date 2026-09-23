@@ -1,3 +1,5 @@
+from xml.sax.saxutils import quoteattr
+
 from ..http_request import HttpRequestParameters, request
 from ..response_parsing import find_xml_element_attributes, find_xml_elements_attributes
 
@@ -9,7 +11,7 @@ def activate(
     body = f"""
     <?xml version="1.0" encoding="UTF-8"?>
     <adtcore:objectReferences xmlns:adtcore="http://www.sap.com/adt/core">
-        <adtcore:objectReference adtcore:uri="{object_uri}" adtcore:name="{object_name}"/>
+        <adtcore:objectReference adtcore:uri={quoteattr(object_uri)} adtcore:name={quoteattr(object_name)}/>
     </adtcore:objectReferences>
     """
 

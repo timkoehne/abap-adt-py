@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as et
+from xml.sax.saxutils import quoteattr
 
 from ..compat_typing import List, TypedDict
 from ..api.xml_namespaces import XML_NAMESPACES
@@ -76,7 +77,7 @@ def run_unit_test(
         <adtcore:objectSets xmlns:adtcore="http://www.sap.com/adt/core">
             <objectSet kind="inclusive">
             <adtcore:objectReferences>
-                <adtcore:objectReference adtcore:uri="{object_uri}"/>
+                <adtcore:objectReference adtcore:uri={quoteattr(object_uri)}/>
             </adtcore:objectReferences>
             </objectSet>
         </adtcore:objectSets>

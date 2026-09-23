@@ -1,5 +1,6 @@
 import base64
 import xml.etree.ElementTree as et
+from xml.sax.saxutils import quoteattr
 from ..compat_typing import TypedDict, Literal, NotRequired
 from ..http_request import HttpRequestParameters, request
 from .xml_namespaces import XML_NAMESPACES
@@ -55,9 +56,9 @@ def syntax_check(
     body = f"""
     <?xml version="1.0" encoding="UTF-8"?>
     <chkrun:checkObjectList xmlns:chkrun="http://www.sap.com/adt/checkrun" xmlns:adtcore="http://www.sap.com/adt/core">
-    <chkrun:checkObject adtcore:uri="{object_uri}" chkrun:version="{version}">
+    <chkrun:checkObject adtcore:uri={quoteattr(object_uri)} chkrun:version={quoteattr(version)}>
         <chkrun:artifacts>
-        <chkrun:artifact chkrun:contentType="text/plain; charset=utf-8" chkrun:uri="{include_uri}">
+        <chkrun:artifact chkrun:contentType="text/plain; charset=utf-8" chkrun:uri={quoteattr(include_uri)}>
             <chkrun:content>{base64.b64encode(source_code.encode("utf-8")).decode("utf-8")}</chkrun:content>
         </chkrun:artifact>
         </chkrun:artifacts>

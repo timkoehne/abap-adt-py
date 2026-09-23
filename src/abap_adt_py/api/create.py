@@ -96,12 +96,12 @@ def _build_body(
 
     if object_type in ["FUGR/FF"]:
         parent_ref = f"""
-        <adtcore:containerRef adtcore:name="{owner}" 
+        <adtcore:containerRef adtcore:name={quoteattr(owner)} 
             adtcore:type="FUGR/F"
-            adtcore:uri="{package}" />"""
+            adtcore:uri={quoteattr(package)} />"""
     else:
         parent_ref = f"""
-        <adtcore:packageRef adtcore:name="{package}"/>
+        <adtcore:packageRef adtcore:name={quoteattr(package)}/>
         """
 
     creatable_object = CREATEABLE_TYPES[object_type]
@@ -110,9 +110,9 @@ def _build_body(
     <?xml version="1.0" encoding="UTF-8"?>
     <{creatable_object["xml_name"]} {creatable_object["xml_namespace"]}
         xmlns:adtcore="http://www.sap.com/adt/core"
-        adtcore:description="{description}"
-        adtcore:name="{name}" adtcore:type="{object_type}"
-        adtcore:responsible="{owner}" >
+        adtcore:description={quoteattr(description)}
+        adtcore:name={quoteattr(name)} adtcore:type={quoteattr(object_type)}
+        adtcore:responsible={quoteattr(owner)} >
     {parent_ref}
     </{creatable_object["xml_name"]}>
     """
@@ -164,7 +164,7 @@ def create_test_class_include(
     body = f"""
         <?xml version="1.0" encoding="UTF-8"?>
         <class:abapClassInclude xmlns:class="http://www.sap.com/adt/oo/classes"
-            xmlns:adtcore="http://www.sap.com/adt/core" adtcore:name="{class_name}" class:includeType="testclasses"/>
+            xmlns:adtcore="http://www.sap.com/adt/core" adtcore:name={quoteattr(class_name)} class:includeType="testclasses"/>
         """
 
     response = request(
