@@ -1,4 +1,5 @@
 import base64
+import re
 import xml.etree.ElementTree as et
 from xml.sax.saxutils import quoteattr
 from ..compat_typing import TypedDict, Literal, NotRequired
@@ -20,14 +21,16 @@ def _parse_syntax_check_response(response_text: str) -> list[SyntaxCheckResult]:
     for msg in root.findall(".//chkrun:checkMessage", XML_NAMESPACES):
         uri: str = msg.get(f'{{{XML_NAMESPACES["chkrun"]}}}uri', "")
 
-        if "#start=" in uri:
-            line, offset = uri[uri.index("#start=") + 7 :].split(",")
-            line, offset = int(line), int(offset)
-            uri = uri[: uri.index("#start=")]
+        # the position is appended as #start=line,offset or #start=line,offset;end=line,offset
+        position = re.search(r"#start=(\d+),(\d+)", uri)
+        if position:
+            line, offset = int(position.group(1)), int(position.group(2))
+            uri = uri[: position.start()]
         else:
             line, offset = None, None
 
-        uri = uri.removesuffix("/source/main")
+        if uri.endswith("/source/main"):
+            uri = uri[: -len("/source/main")]
 
         type = msg.get(f'{{{XML_NAMESPACES["chkrun"]}}}type', "")
         short_text = msg.get(f'{{{XML_NAMESPACES["chkrun"]}}}shortText', "")
@@ -38,7 +41,7 @@ def _parse_syntax_check_response(response_text: str) -> list[SyntaxCheckResult]:
             "short_text": short_text,
         }
 
-        if line and offset:
+        if line is not None and offset is not None:
             message["line"] = line
             message["offset"] = offset
 

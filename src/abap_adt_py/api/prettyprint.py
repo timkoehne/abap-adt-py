@@ -66,7 +66,7 @@ def set_pretty_printer_settings(
         params={},
         body=body,
         method="PUT",
-        content_type="application/xml",
+        content_type="application/vnd.sap.adt.ppsettings.v5+xml",
     )
     if response.status_code == 200:
         return True
