@@ -22,6 +22,15 @@ from .api.lock import lock, unlock
 from .api.login import login
 from .api.content import get_object_source, set_object_source
 from .api.search import search_object
+from .api.transport import (
+    TransportInfo,
+    TransportRequest,
+    create_transport,
+    delete_transport,
+    list_transports,
+    release_transport,
+    transport_info,
+)
 from .api.repository import (
     NodeStructure,
     PackageInfo,
@@ -102,11 +111,15 @@ class AdtClient:
         return response
 
     def set_object_source(
-        self, object_uri: str, source_code: str, lock_handle: str
+        self,
+        object_uri: str,
+        source_code: str,
+        lock_handle: str,
+        transport: Optional[str] = None,
     ) -> bool:
         http_request_parameters = self.build_request_parameters()
         response = set_object_source(
-            http_request_parameters, object_uri, source_code, lock_handle
+            http_request_parameters, object_uri, source_code, lock_handle, transport
         )
         return response
 
@@ -117,13 +130,20 @@ class AdtClient:
         response = run_unit_test(http_request_parameters, object_uri, unit_test_flags)
         return response
 
-    def delete(self, object_uri: str, lock_handle: str) -> bool:
+    def delete(
+        self, object_uri: str, lock_handle: str, transport: Optional[str] = None
+    ) -> bool:
         http_request_parameters = self.build_request_parameters()
-        response = delete(http_request_parameters, object_uri, lock_handle)
+        response = delete(http_request_parameters, object_uri, lock_handle, transport)
         return response
 
     def create(
-        self, object_type: ObjectTypes, name: str, parent: str, description: str
+        self,
+        object_type: ObjectTypes,
+        name: str,
+        parent: str,
+        description: str,
+        transport: Optional[str] = None,
     ) -> bool:
         http_request_parameters = self.build_request_parameters()
         response = create(
@@ -133,6 +153,7 @@ class AdtClient:
             parent,
             description,
             self.username,
+            transport,
         )
         return response
 
@@ -160,10 +181,12 @@ class AdtClient:
         )
         return response
 
-    def create_test_class_include(self, class_name: str, lock_handle: str) -> bool:
+    def create_test_class_include(
+        self, class_name: str, lock_handle: str, transport: Optional[str] = None
+    ) -> bool:
         http_request_parameters = self.build_request_parameters()
         response = create_test_class_include(
-            http_request_parameters, class_name, lock_handle
+            http_request_parameters, class_name, lock_handle, transport
         )
         return response
 
@@ -214,4 +237,35 @@ class AdtClient:
     def object_package_path(self, object_uri: str) -> List[PackageInfo]:
         http_request_parameters = self.build_request_parameters()
         response = object_package_path(http_request_parameters, object_uri)
+        return response
+
+    def transport_info(
+        self, object_uri: str, package: str = "", operation: str = "I"
+    ) -> TransportInfo:
+        http_request_parameters = self.build_request_parameters()
+        response = transport_info(
+            http_request_parameters, object_uri, package, operation
+        )
+        return response
+
+    def create_transport(self, object_uri: str, description: str, package: str) -> str:
+        http_request_parameters = self.build_request_parameters()
+        response = create_transport(
+            http_request_parameters, object_uri, description, package
+        )
+        return response
+
+    def list_transports(self, user: Optional[str] = None) -> List[TransportRequest]:
+        http_request_parameters = self.build_request_parameters()
+        response = list_transports(http_request_parameters, user or self.username)
+        return response
+
+    def release_transport(self, transport: str) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = release_transport(http_request_parameters, transport)
+        return response
+
+    def delete_transport(self, transport: str) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = delete_transport(http_request_parameters, transport)
         return response

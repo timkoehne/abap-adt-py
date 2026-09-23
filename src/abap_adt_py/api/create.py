@@ -1,7 +1,7 @@
 from xml.sax.saxutils import quoteattr
 
 from ..compat_typing import Literal, TypeAlias, Dict, TypedDict, Optional
-from ..http_request import HttpRequestParameters, request
+from ..http_request import HttpRequestParameters, request, with_transport
 
 
 class CreateableTypeDetails(TypedDict):
@@ -125,6 +125,7 @@ def create(
     parent: str,
     description: str,
     owner: str,
+    transport: Optional[str] = None,
 ) -> bool:
 
     object_uri = CREATEABLE_TYPES[object_type]["path"]
@@ -145,7 +146,7 @@ def create(
         uri=object_uri,
         method="POST",
         body=body,
-        params={},
+        params=with_transport({}, transport),
         content_type="application/*",
     )
 
@@ -158,7 +159,10 @@ def create(
 
 
 def create_test_class_include(
-    http_request_parameters: HttpRequestParameters, class_name: str, lock_handle: str
+    http_request_parameters: HttpRequestParameters,
+    class_name: str,
+    lock_handle: str,
+    transport: Optional[str] = None,
 ) -> bool:
 
     body = f"""
@@ -172,7 +176,7 @@ def create_test_class_include(
         uri=f"/sap/bc/adt/oo/classes/{class_name}/includes",
         method="POST",
         body=body,
-        params={"lockHandle": lock_handle},
+        params=with_transport({"lockHandle": lock_handle}, transport),
     )
 
     if 200 <= response.status_code <= 300:
@@ -200,6 +204,7 @@ def create_package(
     
     if software_component is None:
         software_component = "LOCAL" if name.startswith("$") else "HOME"
+    record_changes = "false" if software_component == "LOCAL" else "true"
 
     body = f"""<?xml version="1.0" encoding="UTF-8"?>
     <pak:package xmlns:pak="http://www.sap.com/adt/packages"
@@ -208,7 +213,8 @@ def create_package(
         adtcore:name={quoteattr(name)} adtcore:type="DEVC/K"
         adtcore:version="active" adtcore:responsible={quoteattr(owner)}>
         <adtcore:packageRef adtcore:name={quoteattr(name)}/>
-        <pak:attributes pak:packageType={quoteattr(package_type)}/>
+        <pak:attributes pak:packageType={quoteattr(package_type)}
+            pak:recordChanges="{record_changes}"/>
         <pak:superPackage adtcore:name={quoteattr(parent)}/>
         <pak:applicationComponent/>
         <pak:transport>
@@ -221,16 +227,12 @@ def create_package(
         <pak:subPackages/>
     </pak:package>"""
 
-    params = {}
-    if transport:
-        params["corrNr"] = transport
-
     response = request(
         http_request_parameters=http_request_parameters,
         uri="/sap/bc/adt/packages",
         method="POST",
         body=body,
-        params=params,
+        params=with_transport({}, transport),
         content_type="application/*",
     )
 

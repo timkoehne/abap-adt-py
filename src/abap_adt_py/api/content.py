@@ -1,5 +1,5 @@
-from ..compat_typing import Literal
-from ..http_request import HttpRequestParameters, request
+from ..compat_typing import Literal, Optional
+from ..http_request import HttpRequestParameters, request, with_transport
 
 
 def get_object_source(
@@ -34,13 +34,14 @@ def set_object_source(
     object_uri: str,
     source_code: str,
     lock_handle: str,
+    transport: Optional[str] = None,
 ) -> bool:
     response = request(
         http_request_parameters=http_request_parameters,
         uri=object_uri,
         method="PUT",
         body=source_code,
-        params={"lockHandle": lock_handle},
+        params=with_transport({"lockHandle": lock_handle}, transport),
         content_type="text/plain; charset=utf-8",
     )
 

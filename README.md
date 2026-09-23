@@ -9,6 +9,7 @@
 - Search ABAP repositories and metadata
 - Browse packages and the repository tree
 - Run ABAP unit tests and retrieve results
+- Create, list, and release transport requests
 - Seamless integration with Python for automation and scripting
 
 ## Installation
@@ -85,6 +86,14 @@ client.unlock(report_uri, lock_handle)
 
 # activate object
 client.activate(report_name, report_uri)
+
+# transportable objects: create a transport request and pass it along
+transport: str = client.create_transport("/sap/bc/adt/packages/z_demo", "Demo changes", "Z_DEMO")
+client.create_package("Z_DEMO", "Demo package", transport=transport)
+client.create("PROG/P", "Z_DEMO_REPORT", "Z_DEMO", "Demo report", transport=transport)
+info = client.transport_info("/sap/bc/adt/programs/programs/z_demo_report", "Z_DEMO")  # recording needed? usable requests?
+print(client.list_transports())  # modifiable requests with their tasks and objects
+client.release_transport(transport)  # releases the tasks first, then the request
 
 # delete object
 lock_handle: str = client.lock(report_uri)

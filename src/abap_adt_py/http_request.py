@@ -1,5 +1,5 @@
 import requests
-from .compat_typing import Literal, TypedDict
+from .compat_typing import Literal, Optional, TypedDict
 
 
 class HttpRequestParameters(TypedDict):
@@ -8,6 +8,13 @@ class HttpRequestParameters(TypedDict):
     statefulness: Literal["stateless", "stateful"]
     request_number: int
     session: requests.Session
+
+
+def with_transport(params: dict, transport: Optional[str]) -> dict:
+    """Add the transport request (corrNr) to the query parameters if one is given."""
+    if transport:
+        params["corrNr"] = transport
+    return params
 
 
 def request(
