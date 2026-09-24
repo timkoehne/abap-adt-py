@@ -52,12 +52,36 @@ def test_activation_error(client, program):
     assert "#start=2," in message["uri"]
 
 
-def test_expired_session(config):
+def test_expired_session_reconnects(config, uid, cleanup):
     client = AdtClient(**config)
     client.login()
-    client.csrf_token = "expired"
+    # losing the session cookie is what an expired session looks like to the client
+    client.session.cookies.clear()
+
+    name = f"Z_ADTPY_{uid}_SESS"
+    assert client.create("PROG/P", name, "$TMP", "adt-py session test")
+    cleanup(f"/sap/bc/adt/programs/programs/{name.lower()}")
+
+
+def test_expired_session_without_reconnect(config):
+    client = AdtClient(**config, reconnect=False)
+    client.login()
+    client.session.cookies.clear()
     with pytest.raises(SessionError):
         client.create("PROG/P", "Z_ADTPY_NEVER_CREATED", "$TMP", "x")
+
+
+def test_expired_session_while_holding_a_lock(client, program):
+    # the lock belongs to the session, so the client must not silently start a new one
+    handle = client.lock(program["uri"])
+    token = client.csrf_token
+    try:
+        client.csrf_token = "expired"
+        with pytest.raises(SessionError):
+            client.set_object_source(program["uri"] + "/source/main", "REPORT x.", handle)
+    finally:
+        client.csrf_token = token
+        client.unlock(program["uri"], handle)
 
 
 def test_query_error(client):

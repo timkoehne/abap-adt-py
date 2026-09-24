@@ -1,4 +1,10 @@
-from typing import Optional, Dict, List, Union  # Always available since Python 3.5
+from typing import (
+    Callable,
+    Optional,
+    Dict,
+    List,
+    Union,
+)  # Always available since Python 3.5
 
 try:
     # Python 3.11+ where all are in typing

@@ -68,9 +68,21 @@ class AdtClient:
     statefulness: Literal["stateless", "stateful"] = "stateless"
 
     def __init__(
-        self, sap_host: str, username: str, password: str, client: str, language: str
+        self,
+        sap_host: str,
+        username: str,
+        password: str,
+        client: str,
+        language: str,
+        reconnect: bool = True,
     ):
+        """reconnect: log in again and retry once when the session has expired.
+
+        This only happens while no object is locked. Locks belong to the session,
+        so an expired session while holding a lock raises SessionError instead.
+        """
         self.username = username
+        self.reconnect = reconnect
         self.session = requests.Session()
         self.session.auth = HTTPBasicAuth(username, password)
         # merged into the query string of every request made with this session
@@ -87,8 +99,15 @@ class AdtClient:
             "request_number": self.request_number,
             "session": self.session,
         }
+        # a new session can't continue the locks of the old one
+        if self.reconnect and self.statefulness == "stateless":
+            http_request_parameters["refresh_csrf_token"] = self._refresh_csrf_token
         self.request_number += 1
         return http_request_parameters
+
+    def _refresh_csrf_token(self) -> str:
+        self.login()
+        return self.csrf_token
 
     def login(self) -> bool:
         http_request_parameters = self.build_request_parameters()
@@ -113,8 +132,10 @@ class AdtClient:
         return response
 
     def lock(self, object_uri: str) -> str:
-        self.statefulness = "stateful"
+        # built before switching to stateful, so an expired session can still reconnect
         http_request_parameters = self.build_request_parameters()
+        self.statefulness = "stateful"
+        http_request_parameters["statefulness"] = "stateful"
         response = lock(http_request_parameters, object_uri)
         return response
 

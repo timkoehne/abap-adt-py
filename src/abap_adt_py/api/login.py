@@ -3,7 +3,14 @@ from ..http_request import HttpRequestParameters, request
 
 
 def login(http_request_parameters: HttpRequestParameters) -> str:
+    """Start a session and return its CSRF token."""
 
+    # always ask for a new token, the current one may belong to an expired session
+    http_request_parameters = {
+        **http_request_parameters,
+        "csrf_token": "fetch",
+        "refresh_csrf_token": None,
+    }
     response = request(
         http_request_parameters=http_request_parameters,
         uri="/sap/bc/adt/compatibility/graph",

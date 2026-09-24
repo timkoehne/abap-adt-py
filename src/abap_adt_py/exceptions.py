@@ -22,6 +22,7 @@ import re
 import xml.etree.ElementTree as et
 
 from .compat_typing import List, Optional
+from .http_request import csrf_token_rejected
 
 
 class AdtError(Exception):
@@ -126,10 +127,9 @@ def error_from_response(response, action: str, error_class=None) -> AdtError:
     if not sap_message:
         sap_message = getattr(response, "reason", "") or text.strip()[:500]
 
-    headers = getattr(response, "headers", None) or {}
     if status == 401:
         cls = AuthenticationError
-    elif status == 403 and headers.get("x-csrf-token", "").lower() == "required":
+    elif csrf_token_rejected(response):
         cls = SessionError
     elif status == 404:
         cls = NotFoundError

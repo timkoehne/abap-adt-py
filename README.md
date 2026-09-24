@@ -144,7 +144,7 @@ except ActivationError as error:
 | Error | Raised when |
 |---|---|
 | `AuthenticationError` | login failed |
-| `SessionError` | the session or CSRF token expired, log in again |
+| `SessionError` | the session expired while an object was locked, or `reconnect=False` |
 | `NotFoundError` | an object, check variant, transport request, ... doesn't exist |
 | `ObjectLockedError` | the object is locked by another user or session (a `LockError`) |
 | `InvalidLockHandleError` | writing without a valid lock (a `LockError`) |
@@ -152,6 +152,11 @@ except ActivationError as error:
 | `TransportError` | a transport request couldn't be created, released, deleted, ... |
 | `QueryError` | an SQL query failed |
 | `ClassRunError` | a runtime error occurred while running a class |
+
+## Expired sessions
+When the session expires (e.g. after SAP's idle timeout), the client logs in again and repeats the request once.
+This only happens while no object is locked: locks belong to the session, so an expired session while holding a lock raises `SessionError` instead of silently continuing without the lock.
+Pass `reconnect=False` to `AdtClient` to always get the `SessionError`.
 
 # Testing
 ```bash
