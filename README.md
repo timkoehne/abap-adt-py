@@ -12,6 +12,7 @@
 - Run classes and capture their console output
 - Run ATC checks and read the findings' documentation
 - Navigate code: go to definition, where-used list, code completion
+- Read runtime errors (short dumps)
 - Run ABAP unit tests and retrieve results
 - Create, list, and release transport requests
 - Seamless integration with Python for automation and scripting
@@ -83,6 +84,13 @@ target = client.find_definition(source_uri, source, line=3, column=18)  # {"uri"
 usages = client.where_used("/sap/bc/adt/oo/classes/zcl_demo")  # one entry per usage with its code line
 usages = client.where_used("/sap/bc/adt/oo/classes/zcl_demo/source/main", line=3, column=12)  # e.g. one method
 proposals = client.code_completion(source_uri, source, line=6, column=17)
+
+# runtime errors (short dumps, as in ST22)
+from datetime import datetime, timedelta
+for dump in client.list_dumps(user="DEVELOPER", since=datetime.now() - timedelta(days=1)):
+    print(dump["datetime"], dump["runtime_error"], dump["program"], dump["short_text"])
+dump = client.get_dump(dump["id"])
+print(dump["chapters"]["Error analysis"])  # also "What happened?", "Information on where terminated", ...
 
 # create report object
 client.create(

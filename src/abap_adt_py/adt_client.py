@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 from requests.auth import HTTPBasicAuth
 
@@ -26,6 +28,7 @@ from .api.create import (
 from .api.activate import activate
 from .api.create import ObjectTypes
 from .api.delete import delete
+from .api.dumps import Dump, DumpSummary, get_dump, list_dumps
 from .api.lock import lock, unlock
 from .api.login import login
 from .api.atc import (
@@ -372,4 +375,22 @@ class AdtClient:
         response = code_completion(
             http_request_parameters, source_uri, source, line, column
         )
+        return response
+
+    def list_dumps(
+        self,
+        user: Optional[str] = None,
+        runtime_error: Optional[str] = None,
+        since: Optional[datetime] = None,
+        max_results: int = 50,
+    ) -> List[DumpSummary]:
+        http_request_parameters = self.build_request_parameters()
+        response = list_dumps(
+            http_request_parameters, user, runtime_error, since, max_results
+        )
+        return response
+
+    def get_dump(self, dump_id: str) -> Dump:
+        http_request_parameters = self.build_request_parameters()
+        response = get_dump(http_request_parameters, dump_id)
         return response

@@ -1,0 +1,330 @@
+----------------------------------------------------------------------------------------------------
+Category               ABAP programming error
+Runtime Errors         COMPUTE_INT_ZERODIVIDE
+Except.                CX_SY_ZERODIVIDE
+ABAP: Program          ZCL_ADTPY_83D6E6_ERR==========CP
+Application Component  Not assigned
+Date and Time          24.09.2026 18:28:16 (UTC)
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|Short Text                                                                                        |
+|    Division by 0 (type I or INT8)                                                                |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|What happened?                                                                                    |
+|    Error in the ABAP application program.                                                        |
+|                                                                                                  |
+|    The current ABAP program "ZCL_ADTPY_83D6E6_ERR==========CP" had to be                         |
+|     terminated because it found a                                                                |
+|    statement that could not be executed.                                                         |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|What can you do?                                                                                  |
+|    Note which actions and entries caused the error to occur.                                     |
+|                                                                                                  |
+|    Consult your SAP administrator.                                                               |
+|                                                                                                  |
+|    Using transaction ST22 for ABAP dump analysis, you can view, manage,                          |
+|    and retain termination messages for longer periods.                                           |
+|    Note which actions and entries caused the error to occur.                                     |
+|                                                                                                  |
+|    Consult your SAP administrator.                                                               |
+|                                                                                                  |
+|    Using transaction ST22 for ABAP dump analysis, you can view, manage,                          |
+|    and retain termination messages for longer periods.                                           |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|Error analysis                                                                                    |
+|    An exception has occurred in class "CX_SY_ZERODIVIDE". This exception was not                 |
+|     caught                                                                                       |
+|    in procedure "IF_OO_ADT_CLASSRUN~MAIN" "(METHOD)" or propagated by a RAISING                  |
+|     clause.                                                                                      |
+|    Since the caller of the procedure could not have anticipated this                             |
+|    exception, the current program was terminated.                                                |
+|    The reason for the exception occurring was:                                                   |
+|    The reason for the exception is:                                                              |
+|    In the current program "ZCL_ADTPY_83D6E6_ERR==========CP", a division                         |
+|     ('DIVIDE', '/', 'DIV' or 'MOD')                                                              |
+|    attempted to use operands of type I or INT8 to divide by 0.                                   |
+|    by 0.                                                                                         |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|How to correct the error                                                                          |
+|    If the exception cannot be prevented, "CX_SY_ZERODIVIDE" must be caught within                |
+|    procedure "IF_OO_ADT_CLASSRUN~MAIN" "(METHOD)" or declared in the procedure's                 |
+|     RAISING clause.                                                                              |
+|    To prevent the exception, note the following:                                                 |
+|                                                                                                  |
+|    If the error occurs in one of your own ABAP programs or an SAP program                        |
+|    that you have modified, try to remedy the error.                                              |
+|    If the error occurs in a non-modfied SAP program, you might be able to                        |
+|    find a solution in the SAP Notes system. If you have access to the SAP                        |
+|    Notes system, check there first using the following keywords:                                 |
+|                                                                                                  |
+|    "COMPUTE_INT_ZERODIVIDE" CX_SY_ZERODIVIDE                                                     |
+|    "ZCL_ADTPY_83D6E6_ERR==========CP" bzw. ZCL_ADTPY_83D6E6_ERR==========CM001                   |
+|    "IF_OO_ADT_CLASSRUN~MAIN"                                                                     |
+|    If you cannot solve the problem yourself, please send the following                           |
+|    information to SAP:                                                                           |
+|                                                                                                  |
+|    1. The description of the problem (short dump)                                                |
+|    Please press the "Local File” button in the current display.                                  |
+|                                                                                                  |
+|    2. The relevant system log                                                                    |
+|    To do this, call the system log in transaction SM21. Restrict the time                        |
+|    interval to ten minutes before the short dump and five minutes after                          |
+|    it. In the display, choose System -> List -> Save -> Local File                               |
+|    (unconverted).                                                                                |
+|                                                                                                  |
+|    3. If these are programs of your own, or modified SAP programs: The                           |
+|    source text of the programs                                                                   |
+|    To do this, please choose                                                                     |
+|    "Other Utilities -> Upload/Download -> Download".                                             |
+|                                                                                                  |
+|    4. Details regarding the conditions under which the error occurred or                         |
+|    which actions and input caused the error.                                                     |
+|    which actions and input caused the error.                                                     |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|System environment                                                                                |
+|    SAP Release..... 816                                                                          |
+|    SAP Basis level 0001                                                                          |
+|                                                                                                  |
+|    Application server... vhcala4hci                                                              |
+|    Instance name....... vhcala4hci_A4H_00                                                        |
+|    Network address...... 172.17.0.4                                                              |
+|    Operating system... Linux                                                                     |
+|    Release.............. 7.2.6-arch2-1                                                           |
+|    Hardware type....... x86_64                                                                   |
+|    Character length..... 16 Bits                                                                 |
+|    Pointer length........ 64 Bits                                                                |
+|    Work process number... 1                                                                      |
+|    Work process ID....... 2596                                                                   |
+|    ABAP load version.... 3684                                                                    |
+|    Shortdump setting. full                                                                       |
+|                                                                                                  |
+|    Database server... vhcala4hci                                                                 |
+|    Database type..... HDB                                                                        |
+|    Database name..... A4H                                                                        |
+|    Database user ID SAPA4H                                                                       |
+|                                                                                                  |
+|    Terminal.......... 172.17.0.1                                                                 |
+|                                                                                                  |
+|    Character set C                                                                               |
+|                                                                                                  |
+|    SAP kernel....... 916                                                                         |
+|    Created on....... Jun 22 2026 18:46:39                                                        |
+|    Created at....... Linux GNU SLES-15 x86_64  cc10.3.0 use-pr260622                             |
+|    Database version SQLDBC 2.05.111.1600459197                                                   |
+|    Patch level....... 100                                                                        |
+|    Patch text.......                                                                             |
+|    Hash............. 9e82d3a0da5a3010bdad02609cc3d355c2c008d7                                    |
+|    Version.......... v9.16-4358-g9e82d3a0                                                        |
+|                                                                                                  |
+|    Database............ HANA 1.0, HANA 2.0                                                       |
+|    SAP database version. 916                                                                     |
+|    Operating system... "Linux,   GitVers: v9.16-4358-g9e82d3a0,   GitHash:                       |
+|     9e82d3a0da5a3010bdad02609cc3d355c2c008d7"                                                    |
+|    Operating system... Linux,   GitVers: v9.16-4358-g9e82d3a0,   GitHash:                        |
+|     9e82d3a0da5a3010bdad02609cc3d355c2c008d7                                                     |
+|                                                                                                  |
+|    Memory consumption                                                                            |
+|    EM...... 8201753 Bytes                                                                        |
+|    Heap........................ 0 Bytes                                                          |
+|    Page........................ 16384 Bytes                                                      |
+|    MM used memory..... 3513416 Bytes                                                             |
+|    MM free memory.......... 4684392 Bytes                                                        |
+|    MM largest free block... 3198328 Bytes                                                        |
+|    MM used blocks....... 1374                                                                    |
+|    MM free blocks............ 20                                                                 |
+|    MM maximum memory used... 4999424 Bytes                                                       |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|User and Transaction                                                                              |
+|    Client................. 001                                                                   |
+|    User.................. DEVELOPER                                                              |
+|    Language key.......... E                                                                      |
+|    Transaction.........                                                                          |
+|    Transaction ID...... 4DD97CCD6B390010E006AB50B5960483                                         |
+|                                                                                                  |
+|    EPP Root Context ID.... CAB27D7F2DFC1FE1AE88B6B08DAB0069                                      |
+|    EPP Connection ID...... CAB27D7F2DFC1FE1AE88B6B08DAB2069                                      |
+|    EPP Connection Counter. 1                                                                     |
+|    EPP Component Name..... A4H/vhcala4hci_A4H_00                                                 |
+|                                                                                                  |
+|    Program....................... ZCL_ADTPY_83D6E6_ERR==========CP                               |
+|    Screen......................... SAPMHTTP                                0010                  |
+|    Screen line.................... 2                                                             |
+|    Debugger interpretor loop... "(TPDA)"                                                         |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|Server-Side Connection Information                                                                |
+|    Information on caller of "HTTP" connection: Plug-in type.........  HTTP                       |
+|    Caller IP.............. 172.17.0.1                                                            |
+|    Caller port............  50000                                                                |
+|    Universal resource ID /sap/bc/adt/oo/classrun/ZCL_ADTPY_83D6E6_ERR                            |
+|                                                                                                  |
+|    Program.............. ZCL_ADTPY_83D6E6_ERR==========CP                                        |
+|    Screen.............. SAPMHTTP                                0010                             |
+|    Screen line.......... 2                                                                       |
+|                                                                                                  |
+|    Information on caller of "HTTP" connection: Plug-in type.........  HTTP                       |
+|    Caller IP.............. 172.17.0.1                                                            |
+|    Caller port............  50000                                                                |
+|    Universal resource ID "/sap/bc/adt/oo/classrun/ZCL_ADTPY_83D6E6_ERR"                          |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|Chain of Exception Objects                                                                        |
+----------------------------------------------------------------------------------------------------
+|Level        Class                                                                                |
+|Attrib. Name                   Value                                                              |
+----------------------------------------------------------------------------------------------------
+|1            CX_SY_ZERODIVIDE                                                                     |
+|(Program)                      ZCL_ADTPY_83D6E6_ERR==========CP                                   |
+|(Include)                      ZCL_ADTPY_83D6E6_ERR==========CM001                                |
+|(Row)                          3                                                                  |
+|(Short Text)                   Division by zero                                                   |
+|(Long Text)                    You tried to divide by zero during the operation '/'.              |
+|IS_RESUMABLE                                                                                      |
+|KERNEL_ERRID                   COMPUTE_INT_ZERODIVIDE                                             |
+|OPERATION                      /                                                                  |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|Information on where terminated                                                                   |
+|    The termination occurred in ABAP program or include                                           |
+|     "ZCL_ADTPY_83D6E6_ERR==========CP", in "IF_OO_ADT_CLASSRUN~MAIN". The                        |
+|    main program was "SAPMHTTP".                                                                  |
+|                                                                                                  |
+|    In the source code, the termination point is in line 3 of include                             |
+|     "ZCL_ADTPY_83D6E6_ERR==========CM001".                                                       |
+|    include "ZCL_ADTPY_83D6E6_ERR==========CM001".                                                |
+|    The termination is due to exception "CX_SY_ZERODIVIDE" occurring in procedure                 |
+|     "IF_OO_ADT_CLASSRUN~MAIN" "(METHOD)",                                                        |
+|    but not being handled locally there or being declared in the RAISING                          |
+|    clause.                                                                                       |
+|    The procedure is in program "ZCL_ADTPY_83D6E6_ERR==========CP". Its source                    |
+|     code begins in line 1 of                                                                     |
+|    include "ZCL_ADTPY_83D6E6_ERR==========CM001".                                                |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|Contents of system fields                                                                         |
+----------------------------------------------------------------------------------------------------
+|Name    |Val.                                                                                     |
+----------------------------------------------------------------------------------------------------
+|SY-SUBRC|0                                                                                        |
+|SY-INDEX|1                                                                                        |
+|SY-TABIX|0                                                                                        |
+|SY-DBCNT|2                                                                                        |
+|SY-FDPOS|9                                                                                        |
+|SY-LSIND|0                                                                                        |
+|SY-PAGNO|0                                                                                        |
+|SY-LINNO|1                                                                                        |
+|SY-COLNO|1                                                                                        |
+|SY-PFKEY|                                                                                         |
+|SY-UCOMM|                                                                                         |
+|SY-TITLE|HTTP Control                                                                             |
+|SY-MSGTY|                                                                                         |
+|SY-MSGID|                                                                                         |
+|SY-MSGNO|000                                                                                      |
+|SY-MSGV1|                                                                                         |
+|SY-MSGV2|                                                                                         |
+|SY-MSGV3|                                                                                         |
+|SY-MSGV4|                                                                                         |
+|SY-MODNO|0                                                                                        |
+|SY-DATUM|20260924                                                                                 |
+|SY-UZEIT|182816                                                                                   |
+|SY-XPROG|                                                                                         |
+|SY-XFORM|                                                                                         |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|Active Calls/Events                                                                               |
+----------------------------------------------------------------------------------------------------
+|No.   Ty.          Program                             Include                             Line   |
+|      Name                                                                                        |
+----------------------------------------------------------------------------------------------------
+|   12 METHOD       ZCL_ADTPY_83D6E6_ERR==========CP    ZCL_ADTPY_83D6E6_ERR==========CM001     3  |
+|      ZCL_ADTPY_83D6E6_ERR=>IF_OO_ADT_CLASSRUN~MAIN                                               |
+|   11 METHOD       CL_OO_ADT_RES_CLASSRUN========CP    CL_OO_ADT_RES_CLASSRUN========CM003   111  |
+|      CL_OO_ADT_RES_CLASSRUN=>EXECUTE_CLAS                                                        |
+|   10 METHOD       CL_OO_ADT_RES_CLASSRUN========CP    CL_OO_ADT_RES_CLASSRUN========CM004    29  |
+|      CL_OO_ADT_RES_CLASSRUN=>POST                                                                |
+|    9 METHOD       CL_ADT_REST_RESOURCE==========CP    CL_ADT_REST_RESOURCE==========CM004    24  |
+|      CL_ADT_REST_RESOURCE=>IF_REST_HANDLER~HANDLE                                                |
+|    8 METHOD       CL_REST_ROUTER================CP    CL_REST_ROUTER================CM003    60  |
+|      CL_REST_ROUTER=>IF_REST_HANDLER~HANDLE                                                      |
+|    7 METHOD       CL_REST_HTTP_HANDLER==========CP    CL_REST_HTTP_HANDLER==========CM001    99  |
+|      CL_REST_HTTP_HANDLER=>IF_HTTP_EXTENSION~HANDLE_REQUEST                                      |
+|    6 METHOD       CL_ADT_WB_RES_APP=============CP    CL_ADT_WB_RES_APP=============CCIMP    19  |
+|      LCL_REQUEST_HANDLER=>LIF_REQUEST_HANDLER~HANDLE_REQUEST                                     |
+|    5 METHOD       CL_ADT_WB_RES_APP=============CP    CL_ADT_WB_RES_APP=============CCIMP   319  |
+|      LCL_HTTP_REQUEST_PROXY=>HANDLE_REQUEST                                                      |
+|    4 METHOD       CL_ADT_WB_RES_APP=============CP    CL_ADT_WB_RES_APP=============CM002    23  |
+|      CL_ADT_WB_RES_APP=>IF_HTTP_EXTENSION~HANDLE_REQUEST                                         |
+|    3 METHOD       CL_HTTP_SERVER================CP    CL_HTTP_SERVER================CM00I   814  |
+|      CL_HTTP_SERVER=>EXECUTE_REQUEST                                                             |
+|    2 FUNCTION     SAPLHTTP_RUNTIME                    LHTTP_RUNTIMEU02                     1800  |
+|      HTTP_DISPATCH_REQUEST                                                                       |
+|    1 MODULE (PBO) SAPMHTTP                            SAPMHTTP                               12  |
+|      %_HTTP_START                                                                                |
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+|Selected Variables                                                                                |
+----------------------------------------------------------------------------------------------------
+|Name                                                                                              |
+|    Val.                                                                                          |
+----------------------------------------------------------------------------------------------------
+|No.      12 Ty.          METHOD                                                                   |
+|Name  ZCL_ADTPY_83D6E6_ERR=>IF_OO_ADT_CLASSRUN~MAIN                                               |
+----------------------------------------------------------------------------------------------------
+|OUT                                                                                               |
+|    {O:127*\CLASS=CL_OO_ADT_CLASSRUN_OUTPUT}                                                      |
+|    80007000                                                                                      |
+|    0000F000                                                                                      |
+|    800000007F000000                                                                              |
+|%_DUMMY$$                                                                                         |
+|                                                                                                  |
+|    2222                                                                                          |
+|    0000                                                                                          |
+|    0000                                                                                          |
+|    0000                                                                                          |
+|    2000200020002000                                                                              |
+|SCREEN                                                                                            |
+|    {;;;;;;;;;;00;;;;;;0}                                                                         |
+|    202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202\|
+|0202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020202020\|
+|20202020202020202020202020202020202020202020202020202020202020202                                 |
+|    000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\|
+|0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000\|
+|00000000000000000000000000000000000000000000000000000000000000000                                 |
+|    200020002000200020002000200020002000200020002000200020002000200020002000200020002000200020002\|
+|0002000200020002000200020002000200020002000200020002000200020002000200020002000200020002000200020\|
+|0020002000200020002000200020002000200020002000200020002000200020002000200020002000200020002000200\|
+|0200020002000200020002000200020002000200020002000200020002000200020002000200020002000200020002000\|
+|2000200020002000200020002000200020002000200020002000200020002000200020002000200020002000200020002\|
+|00020002000200020002000200020                                                                     |
+|ZERO                                                                                              |
+|    0                                                                                             |
+|    0000                                                                                          |
+|    0000                                                                                          |
+|    00000000                                                                                      |
+|%_FSREG_001                                                                                       |
+|    ???                                                                                           |
+|    ??????                                                                                        |
+|    ??????                                                                                        |
+|    ????????????                                                                                  |
+|SYST-REPID                                                                                        |
+|    ZCL_ADTPY_83D6E6_ERR==========CP                                                              |
+|    5445445555334343545533333333334522222222                                                      |
