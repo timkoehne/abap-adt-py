@@ -2,7 +2,7 @@ import base64
 import re
 import xml.etree.ElementTree as et
 from xml.sax.saxutils import quoteattr
-from ..compat_typing import TypedDict, Literal, NotRequired
+from ..compat_typing import List, TypedDict, Literal, NotRequired
 from ..http_request import HttpRequestParameters, request
 from .xml_namespaces import XML_NAMESPACES
 
@@ -15,7 +15,7 @@ class SyntaxCheckResult(TypedDict):
     short_text: str
 
 
-def _parse_syntax_check_response(response_text: str) -> list[SyntaxCheckResult]:
+def _parse_syntax_check_response(response_text: str) -> List[SyntaxCheckResult]:
     root = et.fromstring(response_text)
     messages = []
     for msg in root.findall(".//chkrun:checkMessage", XML_NAMESPACES):
@@ -55,7 +55,7 @@ def syntax_check(
     include_uri: str,
     source_code: str,
     version: Literal["active", "inactive"] = "active",
-) -> list[SyntaxCheckResult]:
+) -> List[SyntaxCheckResult]:
     body = f"""
     <?xml version="1.0" encoding="UTF-8"?>
     <chkrun:checkObjectList xmlns:chkrun="http://www.sap.com/adt/checkrun" xmlns:adtcore="http://www.sap.com/adt/core">
