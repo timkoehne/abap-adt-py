@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<nameditem:namedItemList xmlns:nameditem="http://www.sap.com/adt/nameditem">
+  <nameditem:totalItemCount>1</nameditem:totalItemCount>
+  <nameditem:namedItem>
+    <nameditem:name>ZABAP_CLOUD_DEVELOPMENT</nameditem:name>
+    <nameditem:description>Default ATC variant for ABAP Cloud Development</nameditem:description>
+    <nameditem:data/>
+  </nameditem:namedItem>
+</nameditem:namedItemList>

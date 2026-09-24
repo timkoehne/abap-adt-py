@@ -1,7 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 
-from .compat_typing import Literal, List, Dict, Optional
+from .compat_typing import Literal, List, Dict, Optional, Union
 from .api.syntax import SyntaxCheckResult, syntax_check
 from .api.objectstructure import object_structure
 from .api.prettyprint import (
@@ -20,6 +20,14 @@ from .api.create import ObjectTypes
 from .api.delete import delete
 from .api.lock import lock, unlock
 from .api.login import login
+from .api.atc import (
+    AtcResult,
+    AtcVariant,
+    atc_documentation,
+    default_check_variant,
+    list_check_variants,
+    run_atc,
+)
 from .api.classrun import run_class
 from .api.content import get_object_source, set_object_source
 from .api.datapreview import QueryResult, run_query
@@ -280,4 +288,35 @@ class AdtClient:
     def run_class(self, class_name: str) -> str:
         http_request_parameters = self.build_request_parameters()
         response = run_class(http_request_parameters, class_name)
+        return response
+
+    def run_atc(
+        self,
+        object_uris: Union[str, List[str]],
+        check_variant: Optional[str] = None,
+        max_findings: int = 100,
+    ) -> AtcResult:
+        http_request_parameters = self.build_request_parameters()
+        response = run_atc(
+            http_request_parameters, object_uris, check_variant, max_findings
+        )
+        return response
+
+    def default_check_variant(self) -> str:
+        http_request_parameters = self.build_request_parameters()
+        response = default_check_variant(http_request_parameters)
+        return response
+
+    def list_check_variants(
+        self, pattern: str = "*", max_results: int = 100
+    ) -> List[AtcVariant]:
+        http_request_parameters = self.build_request_parameters()
+        response = list_check_variants(http_request_parameters, pattern, max_results)
+        return response
+
+    def atc_documentation(self, documentation_uri: str, as_html: bool = False) -> str:
+        http_request_parameters = self.build_request_parameters()
+        response = atc_documentation(
+            http_request_parameters, documentation_uri, as_html
+        )
         return response

@@ -10,6 +10,7 @@
 - Browse packages and the repository tree
 - Run ABAP SQL queries (data preview)
 - Run classes and capture their console output
+- Run ATC checks and read the findings' documentation
 - Run ABAP unit tests and retrieve results
 - Create, list, and release transport requests
 - Seamless integration with Python for automation and scripting
@@ -67,6 +68,13 @@ print(result["total_rows"], result["rows"])
 
 # run a class implementing IF_OO_ADT_CLASSRUN and get its console output
 output: str = client.run_class("ZCL_MY_CLASSRUN")
+
+# run the ABAP Test Cockpit on objects or packages (system default variant unless given)
+result = client.run_atc("/sap/bc/adt/packages/z_demo", check_variant="ZABAP_CLOUD_DEVELOPMENT")
+for finding in result["findings"]:  # priority 1 = error, 2 = warning, 3 = information
+    print(finding["priority"], finding["object_name"], finding["line"], finding["message"])
+print(client.atc_documentation(result["findings"][0]["documentation_uri"]))
+print(client.list_check_variants("Z*"))
 
 # create report object
 client.create(

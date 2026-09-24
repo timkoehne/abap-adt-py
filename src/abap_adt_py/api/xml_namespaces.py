@@ -10,4 +10,8 @@ XML_NAMESPACES = {
     "opr": "http://www.sap.com/adt/ris/objectProperties",
     "tm": "http://www.sap.com/cts/adt/tm",
     "dataPreview": "http://www.sap.com/adt/dataPreview",
+    "nameditem": "http://www.sap.com/adt/nameditem",
+    "atcinfo": "http://www.sap.com/adt/atc/info",
+    "atcobject": "http://www.sap.com/adt/atc/object",
+    "atcfinding": "http://www.sap.com/adt/atc/finding",
 }
