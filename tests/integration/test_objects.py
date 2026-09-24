@@ -92,6 +92,8 @@ def test_class_with_unit_tests(client, uid, cleanup):
     [alert] = client.run_unit_test(uri)
     assert alert["kind"] == "failedAssertion"
     assert "expected failure" in alert["title"]
+    assert (alert["test_class"], alert["test_method"]) == ("LTC_ADD", "FAILS")
+    assert alert["stack"][0]["uri"].startswith(f"{uri}/includes/testclasses")
 
 
 def test_description_with_special_characters(client, uid, cleanup):

@@ -24,43 +24,74 @@ class UnittestFlags:
         self.long = long
 
 
+class UnitTestStackEntry(TypedDict):
+    uri: str
+    type: str
+    name: str
+    description: str
+
+
 class UnitTestAlert(TypedDict):
     title: str
     kind: str
     severity: str
     details: List[str]
+    stack: List[UnitTestStackEntry]
+    # the test class and method the alert belongs to, empty if raised above them
+    test_class: str
+    test_method: str
+
+
+def _adtcore(element: et.Element, name: str) -> str:
+    return element.get(f"{{{XML_NAMESPACES['adtcore']}}}{name}", "")
 
 
 def _parse_alerts(xml_text: str) -> List[UnitTestAlert]:
     root = et.fromstring(xml_text)
-    errors = []
-    alerts = root.findall(".//alert", XML_NAMESPACES)
-    for alert in alerts:
-        a = {}
-        title = alert.find(".//title", XML_NAMESPACES)
-        a["title"] = title.text if title is not None else ""
-        a["kind"] = alert.attrib.get("kind", "")
-        a["severity"] = alert.attrib.get("severity", "")
-        stack = alert.find(".//stack", XML_NAMESPACES)
-        a["stack"] = stack if stack is not None else []
-        details = []
-        for detail in alert.findall("./details/detail", XML_NAMESPACES):
-            detail_str = "\n".join(
-                x.attrib["text"]
-                for x in detail.iter()
-                if "text" in x.attrib is not None
-            )
-            details.append(detail_str)
-        a["details"] = details
-        errors.append(a)
-    return errors
+    parents = {child: parent for parent in root.iter() for child in parent}
+
+    def enclosing(element: et.Element, tag: str) -> str:
+        while element in parents:
+            element = parents[element]
+            if element.tag == tag:
+                return _adtcore(element, "name")
+        return ""
+
+    alerts: List[UnitTestAlert] = []
+    for alert in root.iter("alert"):
+        title = alert.find("title")
+        details = [
+            "\n".join(x.attrib["text"] for x in detail.iter() if "text" in x.attrib)
+            for detail in alert.findall("details/detail")
+        ]
+        stack: List[UnitTestStackEntry] = [
+            {
+                "uri": _adtcore(entry, "uri"),
+                "type": _adtcore(entry, "type"),
+                "name": _adtcore(entry, "name"),
+                "description": _adtcore(entry, "description"),
+            }
+            for entry in alert.findall("stack/stackEntry")
+        ]
+        alerts.append(
+            {
+                "title": (title.text or "") if title is not None else "",
+                "kind": alert.get("kind", ""),
+                "severity": alert.get("severity", ""),
+                "details": details,
+                "stack": stack,
+                "test_class": enclosing(alert, "testClass"),
+                "test_method": enclosing(alert, "testMethod"),
+            }
+        )
+    return alerts
 
 
 def run_unit_test(
     http_request_parameters: HttpRequestParameters,
     object_uri: str,
     unit_test_flags: UnittestFlags = UnittestFlags(),
-):
+) -> List[UnitTestAlert]:
     body = f"""
         <?xml version="1.0" encoding="UTF-8"?>
         <aunit:runConfiguration xmlns:aunit="http://www.sap.com/adt/aunit">

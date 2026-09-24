@@ -76,7 +76,41 @@ def test_run_unit_test_reports_failures(fake_sap):
     assert alert["kind"] == "failedAssertion"
     assert alert["severity"] == "critical"
     assert alert["details"][0] == "Different values\nExpected [5] Actual [3]"
+    assert alert["test_class"] == "LTC"
+    assert alert["test_method"] == "FAILS"
+    assert alert["stack"] == [
+        {
+            "uri": CLASS + "/includes/testclasses#start=11,0;end=11,0",
+            "type": "CLAS/OCN/testclasses",
+            "name": "ZCL_ADTPY_FIXTURE",
+            "description": "Include: <ZCL_ADTPY_FIXTURE=============CCAU> Line: <11> (FAILS)",
+        }
+    ]
     assert f'adtcore:uri="{CLASS}"' in calls[0]["body"]
+
+
+def test_run_unit_test_alert_outside_a_method(fake_sap):
+    result = """<aunit:runResult xmlns:aunit="http://www.sap.com/adt/aunit"
+        xmlns:adtcore="http://www.sap.com/adt/core">
+      <program adtcore:name="ZCL_X"><testClasses>
+        <testClass adtcore:name="LTC"><alerts>
+          <alert kind="warning" severity="tolerable"><title>No test methods</title></alert>
+        </alerts></testClass>
+      </testClasses></program>
+    </aunit:runResult>"""
+    fake_sap(unittest, FakeResponse(200, result))
+    [alert] = unittest.run_unit_test(PARAMS, CLASS)
+
+    assert alert["title"] == "No test methods"
+    assert (alert["test_class"], alert["test_method"]) == ("LTC", "")
+    assert alert["details"] == [] and alert["stack"] == []
+
+
+def test_run_unit_test_all_passing(fake_sap):
+    passing = fixture("unittest_failure.xml")
+    passing = passing[: passing.index("<alerts>")] + passing[passing.index("</alerts>") + len("</alerts>") :]
+    fake_sap(unittest, FakeResponse(200, passing))
+    assert unittest.run_unit_test(PARAMS, CLASS) == []
 
 
 def test_run_unit_test_flags(fake_sap):
