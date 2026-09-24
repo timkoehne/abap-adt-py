@@ -3,6 +3,7 @@ from xml.sax.saxutils import escape
 
 from ..compat_typing import List, Optional, TypedDict
 from ..http_request import HttpRequestParameters, request
+from ..exceptions import TransportError, error_from_response
 from .xml_namespaces import XML_NAMESPACES
 
 
@@ -85,7 +86,9 @@ def _parse_transport_info(xml_text: str) -> TransportInfo:
     root = et.fromstring(xml_text)
     data = root.find("asx:values/DATA", XML_NAMESPACES)
     if data is None:
-        raise Exception(f"Unexpected transport check response\n{xml_text}")
+        raise TransportError(
+            "Unexpected transport check response", response_text=xml_text
+        )
 
     locks: List[TransportLock] = []
     for lock in data.findall("LOCKS/CTS_OBJECT_LOCK"):
@@ -145,8 +148,8 @@ def transport_info(
     if response.status_code == 200:
         return _parse_transport_info(response.text)
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to check transport for {object_uri}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to check transport for {object_uri}", TransportError
         )
 
 
@@ -180,8 +183,8 @@ def create_transport(
         # the response is the request's object record, e.g. /com.sap.cts/object_record/A4HK900146
         return response.text.strip().split("/")[-1]
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to create transport request\n{response.text}"
+        raise error_from_response(
+            response, "Failed to create transport request", TransportError
         )
 
 
@@ -204,8 +207,8 @@ def list_transports(
     )
 
     if response.status_code != 200:
-        raise Exception(
-            f"{response.status_code} - Failed to list transport requests of {user}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to list transport requests of {user}", TransportError
         )
 
     root = et.fromstring(response.text)
@@ -258,8 +261,8 @@ def _read_request(
         accept="application/vnd.sap.adt.transportorganizer.v1+xml",
     )
     if response.status_code != 200:
-        raise Exception(
-            f"{response.status_code} - Failed to read {transport}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to read {transport}", TransportError
         )
     return et.fromstring(response.text)
 
@@ -286,8 +289,8 @@ def _release(http_request_parameters: HttpRequestParameters, transport: str):
     )
 
     if response.status_code != 200:
-        raise Exception(
-            f"{response.status_code} - Failed to release {transport}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to release {transport}", TransportError
         )
 
     chkrun = XML_NAMESPACES["chkrun"]
@@ -305,7 +308,12 @@ def _release(http_request_parameters: HttpRequestParameters, transport: str):
             if report is not None
             else [response.text]
         )
-        raise Exception(f"Release of {transport} failed: " + "; ".join(messages))
+        raise TransportError(
+            f"Release of {transport} failed: " + "; ".join(messages),
+            status_code=response.status_code,
+            sap_message="; ".join(messages),
+            response_text=response.text,
+        )
 
 
 def release_transport(
@@ -340,6 +348,6 @@ def delete_transport(
     if 200 <= response.status_code < 300:
         return True
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to delete {transport}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to delete {transport}", TransportError
         )

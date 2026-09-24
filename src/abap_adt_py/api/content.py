@@ -1,5 +1,6 @@
 from ..compat_typing import Literal, Optional
 from ..http_request import HttpRequestParameters, request, with_transport
+from ..exceptions import error_from_response
 
 
 def get_object_source(
@@ -24,9 +25,7 @@ def get_object_source(
     if response.status_code == 200:
         return response.text
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to get object source.\n{response.text}"
-        )
+        raise error_from_response(response, f"Failed to get source of {object_uri}")
 
 
 def set_object_source(
@@ -48,6 +47,6 @@ def set_object_source(
     if response.status_code == 200:
         return True
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to set source code for {object_uri}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to set source code for {object_uri}"
         )

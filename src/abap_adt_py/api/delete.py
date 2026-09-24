@@ -1,5 +1,6 @@
 from ..compat_typing import Optional
 from ..http_request import HttpRequestParameters, request, with_transport
+from ..exceptions import error_from_response
 
 
 def delete(
@@ -18,6 +19,4 @@ def delete(
     if response.status_code == 200:
         return True
     else:
-        raise Exception(
-            f"{response.status_code} Failed to delete {object_uri}.\n{response.text}"
-        )
+        raise error_from_response(response, f"Failed to delete {object_uri}")

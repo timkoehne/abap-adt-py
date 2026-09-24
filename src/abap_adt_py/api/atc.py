@@ -4,6 +4,7 @@ from html.parser import HTMLParser
 from xml.sax.saxutils import quoteattr
 
 from ..compat_typing import Dict, List, Optional, TypedDict, Union
+from ..exceptions import NotFoundError, error_from_response
 from ..http_request import HttpRequestParameters, request
 from .xml_namespaces import XML_NAMESPACES
 
@@ -49,7 +50,7 @@ def _ns(prefix: str, name: str) -> str:
 
 
 def _raise(response, action: str):
-    raise Exception(f"{response.status_code} - Failed to {action}\n{response.text}")
+    raise error_from_response(response, f"Failed to {action}")
 
 
 def default_check_variant(http_request_parameters: HttpRequestParameters) -> str:
@@ -172,7 +173,7 @@ def run_atc(
         # SAP runs an unknown variant without any checks instead of reporting an error
         variants = list_check_variants(http_request_parameters, check_variant, 1)
         if not any(v["name"] == check_variant.upper() for v in variants):
-            raise Exception(f"ATC check variant {check_variant} does not exist")
+            raise NotFoundError(f"ATC check variant {check_variant} does not exist")
         check_variant = check_variant.upper()
     else:
         check_variant = default_check_variant(http_request_parameters)

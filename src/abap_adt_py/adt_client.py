@@ -92,12 +92,8 @@ class AdtClient:
 
     def login(self) -> bool:
         http_request_parameters = self.build_request_parameters()
-        csrf_token = login(http_request_parameters)
-        if csrf_token:
-            self.csrf_token = csrf_token
-            return True
-        else:
-            raise Exception("Login failed.")
+        self.csrf_token = login(http_request_parameters)
+        return True
 
     def search_object(self, query: str, max_results: int = 1) -> List[Dict[str, str]]:
         http_request_parameters = self.build_request_parameters()

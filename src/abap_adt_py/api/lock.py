@@ -1,4 +1,5 @@
 from ..http_request import HttpRequestParameters, request
+from ..exceptions import ObjectLockedError, error_from_response
 from ..response_parsing import find_xml_element_text
 
 
@@ -16,8 +17,11 @@ def lock(http_request_parameters: HttpRequestParameters, object_uri: str) -> str
         lock_handle = find_xml_element_text(response.text, ".//LOCK_HANDLE")
         return lock_handle
     else:
-        raise Exception(
-            f"{response.status_code} Failed to lock {object_uri}.\n{response.text}"
+        # 403 means another user or session holds the lock
+        raise error_from_response(
+            response,
+            f"Failed to lock {object_uri}",
+            ObjectLockedError if response.status_code == 403 else None,
         )
 
 
@@ -35,6 +39,4 @@ def unlock(
     if response.status_code == 200:
         return True
     else:
-        raise Exception(
-            f"{response.status_code} Failed to unlock {object_uri}\n{response.text}"
-        )
+        raise error_from_response(response, f"Failed to unlock {object_uri}")

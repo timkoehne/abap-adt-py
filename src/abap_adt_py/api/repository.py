@@ -2,6 +2,7 @@ import xml.etree.ElementTree as et
 
 from ..compat_typing import Optional, TypedDict, List
 from ..http_request import HttpRequestParameters, request
+from ..exceptions import error_from_response
 from .xml_namespaces import XML_NAMESPACES
 
 
@@ -123,8 +124,8 @@ def node_contents(
     if response.status_code == 200:
         return _parse_node_structure(response.text)
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to read node structure of {parent_type} {parent_name}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to read node structure of {parent_type} {parent_name}"
         )
 
 
@@ -182,9 +183,7 @@ def object_package_path(
     )
 
     if response.status_code != 200:
-        raise Exception(
-            f"{response.status_code} - Failed to get package of {object_uri}\n{response.text}"
-        )
+        raise error_from_response(response, f"Failed to get package of {object_uri}")
 
     root = et.fromstring(response.text)
     packages: List[PackageInfo] = []

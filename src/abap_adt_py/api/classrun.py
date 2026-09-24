@@ -1,15 +1,5 @@
-import html
-import re
-
+from ..exceptions import ClassRunError, error_from_response
 from ..http_request import HttpRequestParameters, request
-
-
-def _error_message(page: str) -> str:
-    # runtime errors come back as an HTML error page with the message in <span id="msgText">
-    message = re.search(r'<span id="msgText">(.*?)</span>', page, re.S)
-    if message is None:
-        return page
-    return re.sub(r"\s+", " ", html.unescape(message.group(1))).strip()
 
 
 def run_class(http_request_parameters: HttpRequestParameters, class_name: str) -> str:
@@ -31,6 +21,6 @@ def run_class(http_request_parameters: HttpRequestParameters, class_name: str) -
     if response.status_code == 200:
         return response.text
     else:
-        raise Exception(
-            f"{response.status_code} - Running {class_name} failed: {_error_message(response.text)}"
+        raise error_from_response(
+            response, f"Running {class_name} failed", ClassRunError
         )

@@ -4,6 +4,7 @@ import xml.etree.ElementTree as et
 from xml.sax.saxutils import quoteattr
 from ..compat_typing import List, TypedDict, Literal, NotRequired
 from ..http_request import HttpRequestParameters, request
+from ..exceptions import error_from_response
 from .xml_namespaces import XML_NAMESPACES
 
 
@@ -81,6 +82,4 @@ def syntax_check(
         messages = _parse_syntax_check_response(response.text)
         return messages
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to check syntax for {object_uri}\n{response.text}"
-        )
+        raise error_from_response(response, f"Failed to check syntax for {object_uri}")

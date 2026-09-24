@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 
 from ..compat_typing import Dict, List, TypedDict
+from ..exceptions import QueryError, error_from_response
 from ..http_request import HttpRequestParameters, request
 from .xml_namespaces import XML_NAMESPACES
 
@@ -67,14 +68,6 @@ def _parse_query_result(xml_text: str) -> QueryResult:
     }
 
 
-def _error_message(xml_text: str) -> str:
-    try:
-        message = et.fromstring(xml_text).findtext("message")
-    except et.ParseError:
-        message = None
-    return message or xml_text
-
-
 def run_query(
     http_request_parameters: HttpRequestParameters, query: str, max_rows: int = 100
 ) -> QueryResult:
@@ -93,6 +86,4 @@ def run_query(
     if response.status_code == 200:
         return _parse_query_result(response.text)
     else:
-        raise Exception(
-            f"{response.status_code} - Query failed: {_error_message(response.text)}"
-        )
+        raise error_from_response(response, "Query failed", QueryError)

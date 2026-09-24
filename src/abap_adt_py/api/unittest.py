@@ -4,6 +4,7 @@ from xml.sax.saxutils import quoteattr
 from ..compat_typing import List, TypedDict
 from ..api.xml_namespaces import XML_NAMESPACES
 from ..http_request import HttpRequestParameters, request
+from ..exceptions import error_from_response
 
 
 class UnittestFlags:
@@ -128,6 +129,4 @@ def run_unit_test(
         return alerts
 
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to run unit test for {object_uri}\n{response.text}"
-        )
+        raise error_from_response(response, f"Failed to run unit test for {object_uri}")

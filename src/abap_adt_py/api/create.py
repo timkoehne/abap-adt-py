@@ -2,6 +2,7 @@ from xml.sax.saxutils import quoteattr
 
 from ..compat_typing import Literal, TypeAlias, Dict, TypedDict, Optional
 from ..http_request import HttpRequestParameters, request, with_transport
+from ..exceptions import error_from_response
 
 
 class CreateableTypeDetails(TypedDict):
@@ -153,9 +154,7 @@ def create(
     if 200 <= response.status_code <= 300:
         return True
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to create object {name}\n{response.text}"
-        )
+        raise error_from_response(response, f"Failed to create object {name}")
 
 
 def create_test_class_include(
@@ -182,8 +181,8 @@ def create_test_class_include(
     if 200 <= response.status_code <= 300:
         return True
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to create testclass for {class_name}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to create testclass for {class_name}"
         )
 
 
@@ -201,7 +200,7 @@ def create_package(
     transport_layer: str = "",
     transport: Optional[str] = None,
 ) -> bool:
-    
+
     if software_component is None:
         software_component = "LOCAL" if name.startswith("$") else "HOME"
     record_changes = "false" if software_component == "LOCAL" else "true"
@@ -239,6 +238,4 @@ def create_package(
     if 200 <= response.status_code < 300:
         return True
     else:
-        raise Exception(
-            f"{response.status_code} - Failed to create package {name}\n{response.text}"
-        )
+        raise error_from_response(response, f"Failed to create package {name}")

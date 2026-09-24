@@ -125,6 +125,34 @@ lock_handle: str = client.lock(report_uri)
 client.delete(report_uri, lock_handle)
 client.unlock(report_uri, lock_handle)
 ```
+# Errors
+All errors derive from `AdtError` (an `Exception`) and carry `status_code`, `sap_type`, `sap_message` and the raw `response_text`:
+```python
+from abap_adt_py.exceptions import AdtError, NotFoundError, ObjectLockedError, ActivationError
+
+try:
+    handle = client.lock(report_uri)
+except ObjectLockedError as error:  # someone else is editing the object
+    print(error.sap_message)         # "User DEVELOPER is currently editing Z_TEST"
+
+try:
+    client.activate(report_name, report_uri)
+except ActivationError as error:
+    for message in error.messages:   # type, text, uri (with position), object
+        print(message["type"], message["text"])
+```
+| Error | Raised when |
+|---|---|
+| `AuthenticationError` | login failed |
+| `SessionError` | the session or CSRF token expired, log in again |
+| `NotFoundError` | an object, check variant, transport request, ... doesn't exist |
+| `ObjectLockedError` | the object is locked by another user or session (a `LockError`) |
+| `InvalidLockHandleError` | writing without a valid lock (a `LockError`) |
+| `ActivationError` | activation failed, details in `.messages` |
+| `TransportError` | a transport request couldn't be created, released, deleted, ... |
+| `QueryError` | an SQL query failed |
+| `ClassRunError` | a runtime error occurred while running a class |
+
 # Testing
 ```bash
 pip install -e ".[test]"

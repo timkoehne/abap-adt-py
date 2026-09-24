@@ -1,6 +1,13 @@
 import pytest
 
 from abap_adt_py.api import activate, content, delete, lock, prettyprint, search
+from abap_adt_py.exceptions import (
+    ActivationError,
+    InvalidLockHandleError,
+    NotFoundError,
+    ObjectLockedError,
+    SessionError,
+)
 from helpers import PARAMS, FakeResponse, fixture
 
 PROGRAM = "/sap/bc/adt/programs/programs/z_test"
@@ -16,9 +23,22 @@ def test_lock_returns_handle(fake_sap):
     assert "dataname=com.sap.adt.lock.result" in call["accept"]
 
 
-def test_lock_failure_raises(fake_sap):
-    fake_sap(lock, FakeResponse(403, "locked by other user"))
-    with pytest.raises(Exception, match="403"):
+def test_lock_held_by_other_user(fake_sap):
+    fake_sap(lock, FakeResponse(403, fixture("error_locked.xml")))
+    with pytest.raises(ObjectLockedError) as error:
+        lock.lock(PARAMS, PROGRAM)
+    assert error.value.sap_message == "User DEVELOPER is currently editing Z_ADTPY_ERR"
+
+
+def test_lock_with_expired_session(fake_sap):
+    fake_sap(lock, FakeResponse(403, "CSRF token validation failed", {"x-csrf-token": "Required"}))
+    with pytest.raises(SessionError):
+        lock.lock(PARAMS, PROGRAM)
+
+
+def test_lock_missing_object(fake_sap):
+    fake_sap(lock, FakeResponse(404, fixture("error_not_found.xml")))
+    with pytest.raises(NotFoundError, match="Z_ADTPY_MISSING does not exist"):
         lock.lock(PARAMS, PROGRAM)
 
 
@@ -49,9 +69,9 @@ def test_set_object_source(fake_sap):
     assert call["content_type"].startswith("text/plain")
 
 
-def test_set_object_source_failure_raises(fake_sap):
-    fake_sap(content, FakeResponse(423, "not locked"))
-    with pytest.raises(Exception, match="423"):
+def test_set_object_source_without_lock(fake_sap):
+    fake_sap(content, FakeResponse(423, fixture("error_invalid_lock_handle.xml")))
+    with pytest.raises(InvalidLockHandleError, match="invalid lock handle"):
         content.set_object_source(PARAMS, PROGRAM, "x", "HANDLE")
 
 
@@ -82,9 +102,24 @@ def test_activate_escapes_values(fake_sap):
 
 def test_activate_error_reports_messages(fake_sap):
     fake_sap(activate, FakeResponse(200, fixture("activation_error.xml")))
-    with pytest.raises(Exception, match="Activation failed") as error:
+    with pytest.raises(ActivationError) as error:
         activate.activate(PARAMS, "Z_TEST", PROGRAM)
-    assert "#start=2,6" in str(error.value)
+
+    assert str(error.value) == (
+        '200 - Activation of Z_TEST failed: Field "UNDEFINED_VAR" is unknown.'
+    )
+    assert error.value.messages[1] == {
+        "type": "E",
+        "text": 'Field "UNDEFINED_VAR" is unknown.',
+        "uri": "/sap/bc/adt/programs/programs/z_adtpy_fixture/source/main#start=2,6;end=2,19",
+        "object": "Program Z_ADTPY_FIXTURE",
+    }
+
+
+def test_activate_http_error(fake_sap):
+    fake_sap(activate, FakeResponse(404, "not found"))
+    with pytest.raises(NotFoundError, match="404 - Failed to activate Z_TEST"):
+        activate.activate(PARAMS, "Z_TEST", PROGRAM)
 
 
 def test_prettyprint(fake_sap):

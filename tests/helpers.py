@@ -19,10 +19,11 @@ def fixture(name: str) -> str:
 
 
 class FakeResponse:
-    def __init__(self, status_code: int = 200, text: str = "", headers=None):
+    def __init__(self, status_code: int = 200, text: str = "", headers=None, reason=""):
         self.status_code = status_code
         self.text = text
         self.headers = headers or {}
+        self.reason = reason
 
 
 # helpers for the integration tests

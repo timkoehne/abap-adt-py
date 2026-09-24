@@ -1,5 +1,6 @@
 from ..compat_typing import Literal, NotRequired, TypedDict
 from ..http_request import HttpRequestParameters, request
+from ..exceptions import error_from_response
 
 
 class PrettyPrintSettings(TypedDict):
@@ -71,9 +72,7 @@ def set_pretty_printer_settings(
     if response.status_code == 200:
         return True
     else:
-        raise Exception(
-            f"{response.status_code} Failed to set prettyprint settings\n{response.text}"
-        )
+        raise error_from_response(response, "Failed to set prettyprint settings")
 
 
 def prettyprint(http_request_parameters: HttpRequestParameters, src: str):
@@ -88,6 +87,4 @@ def prettyprint(http_request_parameters: HttpRequestParameters, src: str):
     if response.status_code == 200:
         return response.text
     else:
-        raise Exception(
-            f"{response.status_code} Failed to prettyprint\n{response.text}"
-        )
+        raise error_from_response(response, "Failed to prettyprint")

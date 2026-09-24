@@ -1,7 +1,9 @@
+import xml.etree.ElementTree as et
 from xml.sax.saxutils import quoteattr
 
+from ..exceptions import ActivationError, error_from_response
 from ..http_request import HttpRequestParameters, request
-from ..response_parsing import find_xml_element_attributes, find_xml_elements_attributes
+from ..response_parsing import find_xml_element_attributes
 
 
 def activate(
@@ -23,12 +25,33 @@ def activate(
         method="POST",
         content_type="application/xml",
     )
+    if response.status_code != 200:
+        raise error_from_response(response, f"Failed to activate {object_name}")
+
     properties = find_xml_element_attributes(response.text, "chkl:properties")
     if (
-        properties["activationExecuted"] == "true"
-        or properties["generationExecuted"] == "true"
+        properties.get("activationExecuted") == "true"
+        or properties.get("generationExecuted") == "true"
     ):
         return True
-    else:
-        msg_elements = find_xml_elements_attributes(response.text, "msg")
-        raise Exception(f"{response.status_code} - Activation failed.\n{msg_elements}")
+
+    messages = [
+        {
+            "type": msg.get("type", ""),
+            "text": msg.findtext("shortText/txt", "").strip(),
+            "uri": msg.get("href", ""),
+            "object": msg.get("objDescr", ""),
+        }
+        for msg in et.fromstring(response.text).iter("msg")
+    ]
+    errors = [m["text"] for m in messages if m["type"] == "E"] or [
+        m["text"] for m in messages
+    ]
+    raise ActivationError(
+        f"{response.status_code} - Activation of {object_name} failed: "
+        + "; ".join(errors),
+        messages=messages,
+        status_code=response.status_code,
+        sap_message="; ".join(errors),
+        response_text=response.text,
+    )

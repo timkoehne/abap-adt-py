@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<exc:exception xmlns:exc="http://www.sap.com/abapxml/types/communicationframework">
+  <namespace id="com.sap.adt"/>
+  <type id="ExceptionResourceCreationFailure"/>
+  <message lang="EN">A program or include already exists with the name Z_ADTPY_ERR</message>
+  <localizedMessage lang="EN">A program or include already exists with the name Z_ADTPY_ERR</localizedMessage>
+  <properties>
+    <entry key="T100KEY-ID">XI</entry>
+    <entry key="T100KEY-NO">001</entry>
+    <entry key="T100KEY-V1">Z_ADTPY_ERR</entry>
+  </properties>
+</exc:exception>

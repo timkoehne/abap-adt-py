@@ -9,6 +9,7 @@ from xml.sax.saxutils import escape
 
 from ..compat_typing import Dict, List, Optional, TypedDict
 from ..http_request import HttpRequestParameters, request
+from ..exceptions import error_from_response
 from .xml_namespaces import XML_NAMESPACES
 
 
@@ -87,8 +88,8 @@ def find_definition(
     if response.status_code == 400 and "NavigationFailure" in response.text:
         return None
     if response.status_code != 200:
-        raise Exception(
-            f"{response.status_code} - Failed to find definition at {source_uri} {line},{column}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to find definition at {source_uri} {line},{column}"
         )
     if not response.text.strip():
         return None
@@ -114,9 +115,7 @@ def _usage_references(
         accept="application/*",
     )
     if response.status_code != 200:
-        raise Exception(
-            f"{response.status_code} - Failed to get where-used list of {uri}\n{response.text}"
-        )
+        raise error_from_response(response, f"Failed to get where-used list of {uri}")
     return et.fromstring(response.text)
 
 
@@ -142,9 +141,7 @@ def _usage_snippets(
         accept="application/*",
     )
     if response.status_code != 200:
-        raise Exception(
-            f"{response.status_code} - Failed to get where-used code snippets\n{response.text}"
-        )
+        raise error_from_response(response, "Failed to get where-used code snippets")
 
     snippets: Dict[str, List[et.Element]] = {}
     root = et.fromstring(response.text)
@@ -266,8 +263,8 @@ def code_completion(
         accept="application/*",
     )
     if response.status_code != 200:
-        raise Exception(
-            f"{response.status_code} - Failed to get code completion at {source_uri} {line},{column}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to get code completion at {source_uri} {line},{column}"
         )
 
     root = et.fromstring(response.text)

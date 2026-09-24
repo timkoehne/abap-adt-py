@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 from ..compat_typing import TypedDict, List
 from ..http_request import HttpRequestParameters, request
+from ..exceptions import error_from_response
 from .xml_namespaces import XML_NAMESPACES
 
 
@@ -102,6 +103,6 @@ def object_structure(http_request_parameters: HttpRequestParameters, object_uri:
         content = _parse_class_structure_response(response.text)
         return content
     else:
-        raise Exception(
-            f"{response.status_code} - Failed get object structure for {object_uri}\n{response.text}"
+        raise error_from_response(
+            response, f"Failed to get object structure for {object_uri}"
         )
