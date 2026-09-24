@@ -5,7 +5,7 @@
 ## Features
 
 - Authenticate and log in to SAP systems securely
-- Create, read, edit, and activate ABAP objects
+- Create, read, edit, and activate ABAP objects, including dictionary and RAP objects
 - Search ABAP repositories and metadata
 - Browse packages and the repository tree
 - Run ABAP SQL queries (data preview)
@@ -99,6 +99,13 @@ client.create(
     description="Test Program",
     parent="$TMP",
 )
+
+# more object types: structures (TABL/DS), service definitions (SRVD/SRV) and behavior
+# definitions (BDEF/BDO, named after their root CDS entity) are created with create()
+# and filled with set_object_source like a class. These are created with their settings:
+client.create_domain("Z_DEMO_DOMAIN", "$TMP", "Demo domain", data_type="CHAR", length=10)
+client.create_table_type("Z_DEMO_TT", "$TMP", "Demo table type", row_type="SCARR")  # or data_type/length
+client.create_service_binding("Z_DEMO_SB", "$TMP", "Demo binding", service_definition="Z_DEMO_SD")  # OData V4 UI
 
 # read source code
 src: str = client.get_object_source(f"{report_uri}/source/main")

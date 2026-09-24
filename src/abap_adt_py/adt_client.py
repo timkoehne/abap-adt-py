@@ -21,8 +21,12 @@ from .api.prettyprint import (
 )
 from .api.create import (
     PackageTypes,
+    ServiceBindingCategories,
     create,
+    create_domain,
     create_package,
+    create_service_binding,
+    create_table_type,
     create_test_class_include,
 )
 from .api.activate import activate
@@ -393,4 +397,83 @@ class AdtClient:
     def get_dump(self, dump_id: str) -> Dump:
         http_request_parameters = self.build_request_parameters()
         response = get_dump(http_request_parameters, dump_id)
+        return response
+
+    def create_domain(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        data_type: str,
+        length: int,
+        decimals: int = 0,
+        transport: Optional[str] = None,
+    ) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = create_domain(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            data_type,
+            length,
+            decimals,
+            self.language,
+            transport,
+        )
+        return response
+
+    def create_table_type(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        row_type: Optional[str] = None,
+        data_type: Optional[str] = None,
+        length: int = 0,
+        decimals: int = 0,
+        transport: Optional[str] = None,
+    ) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = create_table_type(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            row_type,
+            data_type,
+            length,
+            decimals,
+            self.language,
+            transport,
+        )
+        return response
+
+    def create_service_binding(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        service_definition: str,
+        binding_type: str = "ODATA",
+        version: str = "V4",
+        category: ServiceBindingCategories = "ui",
+        transport: Optional[str] = None,
+    ) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = create_service_binding(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            service_definition,
+            binding_type,
+            version,
+            category,
+            self.language,
+            transport,
+        )
         return response
