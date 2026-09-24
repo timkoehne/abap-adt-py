@@ -9,6 +9,7 @@
 - Search ABAP repositories and metadata
 - Browse packages and the repository tree
 - Run ABAP SQL queries (data preview)
+- Run classes and capture their console output
 - Run ABAP unit tests and retrieve results
 - Create, list, and release transport requests
 - Seamless integration with Python for automation and scripting
@@ -63,6 +64,9 @@ packages: list = client.object_package_path(report_uri)
 # run an ABAP SQL query, rows come back as dicts keyed by column name
 result = client.run_query("SELECT carrid, connid, price FROM sflight", max_rows=10)
 print(result["total_rows"], result["rows"])
+
+# run a class implementing IF_OO_ADT_CLASSRUN and get its console output
+output: str = client.run_class("ZCL_MY_CLASSRUN")
 
 # create report object
 client.create(
