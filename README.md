@@ -11,6 +11,7 @@
 - Run ABAP SQL queries (data preview)
 - Run classes and capture their console output
 - Run ATC checks and read the findings' documentation
+- Navigate code: go to definition, where-used list, code completion
 - Run ABAP unit tests and retrieve results
 - Create, list, and release transport requests
 - Seamless integration with Python for automation and scripting
@@ -75,6 +76,13 @@ for finding in result["findings"]:  # priority 1 = error, 2 = warning, 3 = infor
     print(finding["priority"], finding["object_name"], finding["line"], finding["message"])
 print(client.atc_documentation(result["findings"][0]["documentation_uri"]))
 print(client.list_check_variants("Z*"))
+
+# code navigation (lines start at 1, columns at 0; the source may be unsaved)
+source_uri = "/sap/bc/adt/programs/programs/z_demo/source/main"
+target = client.find_definition(source_uri, source, line=3, column=18)  # {"uri", "line", "column"} or None
+usages = client.where_used("/sap/bc/adt/oo/classes/zcl_demo")  # one entry per usage with its code line
+usages = client.where_used("/sap/bc/adt/oo/classes/zcl_demo/source/main", line=3, column=12)  # e.g. one method
+proposals = client.code_completion(source_uri, source, line=6, column=17)
 
 # create report object
 client.create(

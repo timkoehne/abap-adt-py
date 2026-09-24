@@ -3,6 +3,14 @@ from requests.auth import HTTPBasicAuth
 
 from .compat_typing import Literal, List, Dict, Optional, Union
 from .api.syntax import SyntaxCheckResult, syntax_check
+from .api.navigation import (
+    CompletionProposal,
+    SourceLocation,
+    Usage,
+    code_completion,
+    find_definition,
+    where_used,
+)
 from .api.objectstructure import object_structure
 from .api.prettyprint import (
     PrettyPrintSettings,
@@ -318,5 +326,33 @@ class AdtClient:
         http_request_parameters = self.build_request_parameters()
         response = atc_documentation(
             http_request_parameters, documentation_uri, as_html
+        )
+        return response
+
+    def find_definition(
+        self, source_uri: str, source: str, line: int, column: int
+    ) -> Optional[SourceLocation]:
+        http_request_parameters = self.build_request_parameters()
+        response = find_definition(
+            http_request_parameters, source_uri, source, line, column
+        )
+        return response
+
+    def where_used(
+        self,
+        object_uri: str,
+        line: Optional[int] = None,
+        column: Optional[int] = None,
+    ) -> List[Usage]:
+        http_request_parameters = self.build_request_parameters()
+        response = where_used(http_request_parameters, object_uri, line, column)
+        return response
+
+    def code_completion(
+        self, source_uri: str, source: str, line: int, column: int
+    ) -> List[CompletionProposal]:
+        http_request_parameters = self.build_request_parameters()
+        response = code_completion(
+            http_request_parameters, source_uri, source, line, column
         )
         return response

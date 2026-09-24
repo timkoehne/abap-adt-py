@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<usagereferences:usageReferenceResult xmlns:usagereferences="http://www.sap.com/adt/ris/usageReferences" numberOfResults="2" resultDescription="[A4H] Where-Used List: ZCL_ADTPY_NAV (Class)" referencedObjectIdentifier="">
+  <usagereferences:scope>
+    <usagereferences:objectIdentifier displayName="ZCL_ADTPY_NAV (Class)" globalType="CLAS/OC"/>
+    <usagereferences:grade definitions="false" elements="false" indirectReferences="false"/>
+  </usagereferences:scope>
+  <usagereferences:referencedObjects>
+    <usagereferences:referencedObject uri="/sap/bc/adt/oo/classes/zcl_adtpy_nav" parentUri="/sap/bc/adt/packages/%24tmp" isResult="false" canHaveChildren="false">
+      <usagereferences:adtObject xmlns:adtcore="http://www.sap.com/adt/core" adtcore:responsible="DEVELOPER" adtcore:name="ZCL_ADTPY_NAV" adtcore:type="CLAS/OC">
+        <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP"/>
+      </usagereferences:adtObject>
+    </usagereferences:referencedObject>
+    <usagereferences:referencedObject uri="/sap/bc/adt/oo/classes/zcl_adtpy_nav/source/main#type=CLAS%2FOM;name=ADD" parentUri="/sap/bc/adt/oo/classes/zcl_adtpy_nav" isResult="false" canHaveChildren="true" usageInformation="gradeElement,includeProductive">
+      <usagereferences:adtObject xmlns:adtcore="http://www.sap.com/adt/core" adtcore:name="ADD">
+        <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP"/>
+      </usagereferences:adtObject>
+      <objectIdentifier>ABAPFullName;ZCL_ADTPY_NAV=================CP;ZCL_ADTPY_NAV=================CM001;\TY:ZCL_ADTPY_NAV</objectIdentifier>
+    </usagereferences:referencedObject>
+    <usagereferences:referencedObject uri="/sap/bc/adt/oo/classes/zcl_adtpy_nav/source/main#type=CLAS%2FOSU;name=ZCL_ADTPY_NAV" parentUri="/sap/bc/adt/oo/classes/zcl_adtpy_nav" isResult="false" canHaveChildren="true" usageInformation="gradeElement,includeProductive">
+      <usagereferences:adtObject xmlns:adtcore="http://www.sap.com/adt/core" adtcore:name="Public Section">
+        <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP"/>
+      </usagereferences:adtObject>
+      <objectIdentifier>ABAPFullName;ZCL_ADTPY_NAV=================CP;ZCL_ADTPY_NAV=================CU;\TY:ZCL_ADTPY_NAV</objectIdentifier>
+    </usagereferences:referencedObject>
+    <usagereferences:referencedObject uri="/sap/bc/adt/packages/%24tmp" isResult="false" canHaveChildren="true">
+      <usagereferences:adtObject xmlns:adtcore="http://www.sap.com/adt/core" adtcore:responsible="DEVELOPER" adtcore:name="$TMP" adtcore:type="DEVC/K">
+        <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP"/>
+      </usagereferences:adtObject>
+    </usagereferences:referencedObject>
+    <usagereferences:referencedObject uri="/sap/bc/adt/programs/programs/z_adtpy_nav" parentUri="/sap/bc/adt/packages/%24tmp" isResult="false" canHaveChildren="true" usageInformation="gradeDirect,includeProductive">
+      <usagereferences:adtObject xmlns:adtcore="http://www.sap.com/adt/core" adtcore:responsible="DEVELOPER" adtcore:name="Z_ADTPY_NAV" adtcore:type="PROG/P">
+        <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP"/>
+      </usagereferences:adtObject>
+      <objectIdentifier>ABAPFullName;Z_ADTPY_NAV;Z_ADTPY_NAV;\TY:ZCL_ADTPY_NAV</objectIdentifier>
+    </usagereferences:referencedObject>
+  </usagereferences:referencedObjects>
+</usagereferences:usageReferenceResult>

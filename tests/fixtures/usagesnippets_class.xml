@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8'?>
+<usageReferences:usageSnippetResult xmlns:usageReferences="http://www.sap.com/adt/ris/usageReferences">
+  <usageReferences:codeSnippetObjects>
+    <usageReferences:codeSnippetObject>
+      <objectIdentifier>ABAPFullName;ZCL_ADTPY_NAV=================CP;ZCL_ADTPY_NAV=================CM001;\TY:ZCL_ADTPY_NAV</objectIdentifier>
+      <usageReferences:codeSnippets>
+        <usageReferences:codeSnippet uri="/sap/bc/adt/oo/classes/zcl_adtpy_nav/source/main#type=CLAS%2FOM;name=ADD;start=1,9;end=1,12" matches="9-12,accessUnknown,gradeElement">
+          <content>  METHOD add.</content>
+          <description>Usage Kind: element usage
+
+  METHOD add.</description>
+        </usageReferences:codeSnippet>
+      </usageReferences:codeSnippets>
+    </usageReferences:codeSnippetObject>
+    <usageReferences:codeSnippetObject>
+      <objectIdentifier>ABAPFullName;ZCL_ADTPY_NAV=================CP;ZCL_ADTPY_NAV=================CU;\TY:ZCL_ADTPY_NAV</objectIdentifier>
+      <usageReferences:codeSnippets>
+        <usageReferences:codeSnippet uri="/sap/bc/adt/oo/classes/zcl_adtpy_nav/source/main#start=3,12;end=3,15" matches="12-15,accessUnknown,gradeElement">
+          <content>    METHODS add IMPORTING a TYPE i b TYPE i RETURNING VALUE(result) TYPE i.</content>
+          <description>Usage Kind: element usage
+
+    METHODS add IMPORTING a TYPE i b TYPE i RETURNING VALUE(result) TYPE i.</description>
+        </usageReferences:codeSnippet>
+      </usageReferences:codeSnippets>
+    </usageReferences:codeSnippetObject>
+    <usageReferences:codeSnippetObject>
+      <objectIdentifier>ABAPFullName;Z_ADTPY_NAV;Z_ADTPY_NAV;\TY:ZCL_ADTPY_NAV</objectIdentifier>
+      <usageReferences:codeSnippets>
+        <usageReferences:codeSnippet uri="/sap/bc/adt/programs/programs/z_adtpy_nav/source/main#start=2,5;end=2,9" matches="5-9,accessWrite,gradeComponent, indirect;13-16,accessUnknown,gradeDirect;17-30,accessUnknown,gradeDirect">
+          <content>DATA(calc) = NEW zcl_adtpy_nav( ).</content>
+          <description>Usage Kinds: 1 direct usage, 1 indirect usage
+
+DATA(calc) = NEW zcl_adtpy_nav( ).</description>
+        </usageReferences:codeSnippet>
+        <usageReferences:codeSnippet uri="/sap/bc/adt/programs/programs/z_adtpy_nav/source/main#start=3,12;end=3,16" matches="12-16,accessRead,gradeComponent, indirect;18-21,accessRead,gradeElement">
+          <content>DATA(sum) = calc-&gt;add( a = 1 b = 2 ).</content>
+          <description>Usage Kinds: 1 element usage, 1 indirect usage, read access
+
+DATA(sum) = calc-&gt;add( a = 1 b = 2 ).</description>
+        </usageReferences:codeSnippet>
+      </usageReferences:codeSnippets>
+    </usageReferences:codeSnippetObject>
+  </usageReferences:codeSnippetObjects>
+</usageReferences:usageSnippetResult>

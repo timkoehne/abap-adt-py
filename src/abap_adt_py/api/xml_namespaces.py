@@ -14,4 +14,5 @@ XML_NAMESPACES = {
     "atcinfo": "http://www.sap.com/adt/atc/info",
     "atcobject": "http://www.sap.com/adt/atc/object",
     "atcfinding": "http://www.sap.com/adt/atc/finding",
+    "usagereferences": "http://www.sap.com/adt/ris/usageReferences",
 }

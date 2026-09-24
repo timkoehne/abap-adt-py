@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<usageReferences:usageSnippetResult xmlns:usageReferences="http://www.sap.com/adt/ris/usageReferences">
+  <usageReferences:codeSnippetObjects>
+    <usageReferences:codeSnippetObject>
+      <objectIdentifier>ABAPFullName;Z_ADTPY_NAV;Z_ADTPY_NAV;\TY:ZCL_ADTPY_NAV\ME:ADD</objectIdentifier>
+      <usageReferences:codeSnippets>
+        <usageReferences:codeSnippet uri="/sap/bc/adt/programs/programs/z_adtpy_nav/source/main#start=3,18;end=3,21" matches="18-21,accessRead,gradeDirect">
+          <content>DATA(sum) = calc-&gt;add( a = 1 b = 2 ).</content>
+          <description>Usage Kind: direct usage, read access
+
+DATA(sum) = calc-&gt;add( a = 1 b = 2 ).</description>
+        </usageReferences:codeSnippet>
+      </usageReferences:codeSnippets>
+    </usageReferences:codeSnippetObject>
+  </usageReferences:codeSnippetObjects>
+</usageReferences:usageSnippetResult>

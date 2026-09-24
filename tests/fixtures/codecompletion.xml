@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+    <DATA>
+      <SCC_COMPLETION>
+        <KIND>3</KIND>
+        <IDENTIFIER>ADD</IDENTIFIER>
+        <ICON>11</ICON>
+        <SUBICON>2</SUBICON>
+        <BOLD>1</BOLD>
+        <COLOR>0</COLOR>
+        <QUICKINFO_EVENT>1</QUICKINFO_EVENT>
+        <INSERT_EVENT>1</INSERT_EVENT>
+        <IS_META>0</IS_META>
+        <PREFIXLENGTH>1</PREFIXLENGTH>
+        <ROLE>80</ROLE>
+        <LOCATION>4</LOCATION>
+        <GRADE>0</GRADE>
+        <VISIBILITY>1</VISIBILITY>
+        <IS_INHERITED>0</IS_INHERITED>
+        <PROP1>2</PROP1>
+        <PROP2>0</PROP2>
+        <PROP3>0</PROP3>
+        <SYNTCNTXT>4</SYNTCNTXT>
+      </SCC_COMPLETION>
+    </DATA>
+  </asx:values>
+</asx:abap>
