@@ -21,6 +21,7 @@ from .api.delete import delete
 from .api.lock import lock, unlock
 from .api.login import login
 from .api.content import get_object_source, set_object_source
+from .api.datapreview import QueryResult, run_query
 from .api.search import search_object
 from .api.transport import (
     TransportInfo,
@@ -268,4 +269,9 @@ class AdtClient:
     def delete_transport(self, transport: str) -> bool:
         http_request_parameters = self.build_request_parameters()
         response = delete_transport(http_request_parameters, transport)
+        return response
+
+    def run_query(self, query: str, max_rows: int = 100) -> QueryResult:
+        http_request_parameters = self.build_request_parameters()
+        response = run_query(http_request_parameters, query, max_rows)
         return response

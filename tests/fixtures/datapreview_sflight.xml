@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<dataPreview:tableData xmlns:dataPreview="http://www.sap.com/adt/dataPreview">
+  <dataPreview:totalRows>94</dataPreview:totalRows>
+  <dataPreview:isHanaAnalyticalView>false</dataPreview:isHanaAnalyticalView>
+  <dataPreview:executedQueryString>SELECT CARRID, CONNID, FLDATE, PRICE, CURRENCY FROM SFLIGHT   INTO     TABLE @DATA(LT_RESULT)   UP TO 3  ROWS   .</dataPreview:executedQueryString>
+  <dataPreview:queryExecutionTime>0.9430000</dataPreview:queryExecutionTime>
+  <dataPreview:columns>
+    <dataPreview:metadata dataPreview:name="CARRID" dataPreview:type="C" dataPreview:description="CARRID" dataPreview:keyAttribute="false" dataPreview:colType="" dataPreview:isKeyFigure="false"/>
+    <dataPreview:dataSet>
+      <dataPreview:data>AA</dataPreview:data>
+      <dataPreview:data>AA</dataPreview:data>
+      <dataPreview:data>AA</dataPreview:data>
+    </dataPreview:dataSet>
+  </dataPreview:columns>
+  <dataPreview:columns>
+    <dataPreview:metadata dataPreview:name="CONNID" dataPreview:type="N" dataPreview:description="CONNID" dataPreview:keyAttribute="false" dataPreview:colType="" dataPreview:isKeyFigure="false"/>
+    <dataPreview:dataSet>
+      <dataPreview:data>0017</dataPreview:data>
+      <dataPreview:data>0017</dataPreview:data>
+      <dataPreview:data>0017</dataPreview:data>
+    </dataPreview:dataSet>
+  </dataPreview:columns>
+  <dataPreview:columns>
+    <dataPreview:metadata dataPreview:name="FLDATE" dataPreview:type="D" dataPreview:description="FLDATE" dataPreview:keyAttribute="false" dataPreview:colType="" dataPreview:isKeyFigure="false"/>
+    <dataPreview:dataSet>
+      <dataPreview:data>20161115</dataPreview:data>
+      <dataPreview:data>20170203</dataPreview:data>
+      <dataPreview:data>20170424</dataPreview:data>
+    </dataPreview:dataSet>
+  </dataPreview:columns>
+  <dataPreview:columns>
+    <dataPreview:metadata dataPreview:name="PRICE" dataPreview:type="P" dataPreview:description="PRICE" dataPreview:keyAttribute="false" dataPreview:colType="" dataPreview:isKeyFigure="false"/>
+    <dataPreview:dataSet>
+      <dataPreview:data>422.94 </dataPreview:data>
+      <dataPreview:data>422.94 </dataPreview:data>
+      <dataPreview:data>422.94 </dataPreview:data>
+    </dataPreview:dataSet>
+  </dataPreview:columns>
+  <dataPreview:columns>
+    <dataPreview:metadata dataPreview:name="CURRENCY" dataPreview:type="C" dataPreview:description="CURRENCY" dataPreview:keyAttribute="false" dataPreview:colType="" dataPreview:isKeyFigure="false"/>
+    <dataPreview:dataSet>
+      <dataPreview:data>USD</dataPreview:data>
+      <dataPreview:data>USD</dataPreview:data>
+      <dataPreview:data>USD</dataPreview:data>
+    </dataPreview:dataSet>
+  </dataPreview:columns>
+</dataPreview:tableData>

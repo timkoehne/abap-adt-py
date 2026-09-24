@@ -8,6 +8,7 @@
 - Create, read, edit, and activate ABAP objects
 - Search ABAP repositories and metadata
 - Browse packages and the repository tree
+- Run ABAP SQL queries (data preview)
 - Run ABAP unit tests and retrieve results
 - Create, list, and release transport requests
 - Seamless integration with Python for automation and scripting
@@ -58,6 +59,10 @@ all_objects: list = client.package_contents("$TMP", recursive=True)
 
 # package hierarchy of an object, top-level package first
 packages: list = client.object_package_path(report_uri)
+
+# run an ABAP SQL query, rows come back as dicts keyed by column name
+result = client.run_query("SELECT carrid, connid, price FROM sflight", max_rows=10)
+print(result["total_rows"], result["rows"])
 
 # create report object
 client.create(

@@ -9,4 +9,5 @@ XML_NAMESPACES = {
     "abapsource": "http://www.sap.com/adt/abapsource",
     "opr": "http://www.sap.com/adt/ris/objectProperties",
     "tm": "http://www.sap.com/cts/adt/tm",
+    "dataPreview": "http://www.sap.com/adt/dataPreview",
 }

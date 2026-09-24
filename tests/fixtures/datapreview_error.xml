@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<exc:exception xmlns:exc="http://www.sap.com/abapxml/types/communicationframework">
+  <namespace id="http://www.sap.com/adt/wda/dataPreview"/>
+  <type id="ExceptionDataPreviewGeneral"/>
+  <message lang="EN">Cannot find 'DOES_NOT_EXIST'</message>
+  <localizedMessage lang="EN">Cannot find 'DOES_NOT_EXIST'</localizedMessage>
+  <properties>
+    <entry key="T100KEY-ID">ADT_DATAPREVIEW_MSG</entry>
+    <entry key="T100KEY-NO">022</entry>
+    <entry key="T100KEY-V1">DOES_NOT_EXIST</entry>
+    <entry key="LONGTEXT">&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Conversion of SAPscript Text SV029 to HTML&lt;/TITLE&gt;&lt;META http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;P&gt;&lt;STRONG&gt;Error accessing DDIC: DOES_NOT_EXIST&lt;/STRONG&gt;&lt;/P&gt;&lt;P&gt;Message No. SV029&lt;/P&gt;&lt;P&gt;&lt;STRONG&gt;Diagnosis&lt;/STRONG&gt;&lt;/P&gt;&lt;P&gt;An error occurred when the Data Dictionary was accessed.&lt;/P&gt;&lt;P&gt;&lt;STRONG&gt;System Response&lt;/STRONG&gt;&lt;/P&gt;&lt;P&gt;Processing was cancelled.&lt;/P&gt;&lt;P&gt;&lt;STRONG&gt;Procedure&lt;/STRONG&gt;&lt;/P&gt;&lt;P&gt;Ensurethat the Data Dictionary is maintained correctly. If you cannot find any errors here, contact your system administrator.&lt;/P&gt;&lt;/BODY&gt;&lt;/HTML&gt;</entry>
+  </properties>
+</exc:exception>
