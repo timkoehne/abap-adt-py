@@ -23,13 +23,11 @@ jobs:
       - run: pip install ".[test]"
       - run: pytest
 
-  # GitHub's runners no longer provide Python 3.7, so it runs in the official image.
-  # Building the package needs newer setuptools than 3.7 has, so only the dependencies
-  # are installed; the tests import the code from src/.
+  # GitHub's runners no longer provide Python 3.7, so it runs in the official image
   test-python-37:
     runs-on: ubuntu-latest
     container: python:3.7-slim
     steps:
       - uses: actions/checkout@v4
-      - run: pip install pytest requests "typing-extensions>=4.7.1"
+      - run: pip install ".[test]"
       - run: pytest

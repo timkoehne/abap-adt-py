@@ -7,7 +7,8 @@ name = "abap-adt-py"
 version = "0.1.4"
 description = "A Python library for interacting with SAP systems using the ADT (ABAP Development Tools) protocol."
 readme = "README.md"
-license = "MIT"
+# the table form instead of license = "MIT", which setuptools on Python 3.7 cannot read
+license = {text = "MIT"}
 authors = [
   { name = "Tim Köhne", email = "20153452+timkoehne@users.noreply.github.com" }
 ]
