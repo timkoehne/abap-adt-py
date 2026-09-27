@@ -1,0 +1,35 @@
+# Runs the offline tests. The integration tests need a SAP system and skip themselves here.
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # lets the publish workflow run the tests before releasing
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install ".[test]"
+      - run: pytest
+
+  # GitHub's runners no longer provide Python 3.7, so it runs in the official image.
+  # Building the package needs newer setuptools than 3.7 has, so only the dependencies
+  # are installed; the tests import the code from src/.
+  test-python-37:
+    runs-on: ubuntu-latest
+    container: python:3.7-slim
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install pytest requests "typing-extensions>=4.7.1"
+      - run: pytest

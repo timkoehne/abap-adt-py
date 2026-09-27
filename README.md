@@ -1,5 +1,7 @@
 # abap-adt-py
 
+[![tests](https://github.com/timkoehne/abap-adt-py/actions/workflows/tests.yml/badge.svg)](https://github.com/timkoehne/abap-adt-py/actions/workflows/tests.yml)
+
 **abap-adt-py** is a Python client library to interact with SAP systems via the ABAP Development Tools (ADT) REST API. It allows you to programmatically manage ABAP artifacts and workflows directly from Python.
 
 ## Features
@@ -27,7 +29,7 @@ pip install abap-adt-py
 
 Or install from source:
 ```bash
-git clone https://github.com/yourusername/abap-adt-py.git
+git clone https://github.com/timkoehne/abap-adt-py.git
 cd abap-adt-py
 pip install .
 ```
@@ -187,3 +189,11 @@ pytest -m integration
 ```
 They create objects with unique names in `$TMP` and delete them again. The test run stops after a failed login so a wrong password cannot lock the user.
 Tests that create and release transport requests only run with `ABAP_ADT_TEST_TRANSPORTS=1`, because released requests stay in the system.
+
+# Releasing
+GitHub Actions runs the offline tests on Python 3.7 to 3.13 for every push and pull request.
+To publish a new version to PyPI:
+1. Set the new `version` in `pyproject.toml`, commit and push.
+2. Create a GitHub release with the tag `v<version>`, e.g. `v0.2.0`.
+
+The publish workflow then runs the tests, checks that the tag matches the version, builds the package and uploads it to PyPI.
