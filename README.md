@@ -121,6 +121,12 @@ print(client.get_data_element("Z_DEMO_STATUS"))
 client.create_table_type("Z_DEMO_TT", "$TMP", "Demo table type", row_type="SCARR")  # or data_type/length
 client.create_service_binding("Z_DEMO_SB", "$TMP", "Demo binding", service_definition="Z_DEMO_SD")  # OData V4 UI
 
+# message classes
+client.create_message_class("Z_DEMO", "$TMP", "Demo messages", messages=[{"number": "001", "text": "Bin &1 is blocked"}])
+client.set_messages("Z_DEMO", [{"number": "002", "text": "Quantity &1 is invalid", "self_explanatory": False}])
+client.delete_messages("Z_DEMO", ["002"])
+print(client.get_messages("Z_DEMO"))
+
 # read source code
 src: str = client.get_object_source(f"{report_uri}/source/main")
 print(src)

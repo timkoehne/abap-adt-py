@@ -41,6 +41,14 @@ from .api.ddic import (
     update_data_element,
     update_domain,
 )
+from .api.messageclass import (
+    Message,
+    MessageClass,
+    create_message_class,
+    delete_messages,
+    get_message_class,
+    set_messages,
+)
 from .api.activate import InactiveObject, activate, activate_objects, inactive_objects
 from .api.create import ObjectTypes
 from .api.delete import delete, delete_objects
@@ -641,6 +649,74 @@ class AdtClient:
             parameter_id=parameter_id,
             default_component_name=default_component_name,
             change_document=change_document,
+        )
+        return response
+
+    def create_message_class(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        messages: Optional[List[Message]] = None,
+        transport: Optional[str] = None,
+    ) -> bool:
+        """Create a message class, optionally with messages (see set_messages)."""
+        http_request_parameters = self.build_request_parameters()
+        response = create_message_class(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            messages,
+            self.language,
+            transport,
+        )
+        return response
+
+    def get_message_class(self, name: str) -> MessageClass:
+        http_request_parameters = self.build_request_parameters()
+        response = get_message_class(http_request_parameters, name)
+        return response
+
+    def get_messages(self, message_class: str) -> List[Message]:
+        return self.get_message_class(message_class)["messages"]
+
+    def set_messages(
+        self,
+        message_class: str,
+        messages: List[Message],
+        transport: Optional[str] = None,
+        delete_others: bool = False,
+    ) -> bool:
+        """Add or change messages, e.g. [{"number": "001", "text": "Bin &1 is blocked"}].
+
+        A message can also set "self_explanatory": False. Messages not in the list
+        are kept, unless delete_others is True.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = set_messages(
+            http_request_parameters,
+            message_class,
+            messages,
+            self.username,
+            self.language,
+            transport,
+            delete_others,
+        )
+        return response
+
+    def delete_messages(
+        self, message_class: str, numbers: List[str], transport: Optional[str] = None
+    ) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = delete_messages(
+            http_request_parameters,
+            message_class,
+            numbers,
+            self.username,
+            self.language,
+            transport,
         )
         return response
 

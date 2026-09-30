@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<mc:messageClass xmlns:mc="http://www.sap.com/adt/MessageClass" xmlns:adtcore="http://www.sap.com/adt/core" adtcore:responsible="DEVELOPER" adtcore:masterLanguage="EN" adtcore:masterSystem="A4H" adtcore:name="ZADTPY_MSG" adtcore:type="MSAG/N" adtcore:changedAt="2026-09-30T20:27:20Z" adtcore:version="active" adtcore:createdAt="2026-09-29T22:00:00Z" adtcore:changedBy="DEVELOPER" adtcore:createdBy="DEVELOPER" adtcore:description="adt-py messages" adtcore:language="EN">
+  <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP"/>
+  <mc:messages mc:msgno="001" mc:msgtext="Bin &amp;1 is blocked" mc:selfexplainatory="true" mc:documented="false" mc:lastchangedby="DEVELOPER" mc:lastmodified="2026-09-30" adtcore:name=""/>
+  <mc:messages mc:msgno="002" mc:msgtext="Quantity &amp;1 is invalid" mc:selfexplainatory="true" mc:documented="false" mc:lastchangedby="DEVELOPER" mc:lastmodified="2026-09-30" adtcore:name=""/>
+  <mc:messages mc:msgno="003" mc:msgtext="Needs a long text" mc:selfexplainatory="false" mc:documented="true" mc:lastchangedby="DEVELOPER" mc:lastmodified="2026-09-30" adtcore:name=""/>
+</mc:messageClass>

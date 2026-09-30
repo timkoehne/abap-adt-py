@@ -1,6 +1,6 @@
 from xml.sax.saxutils import escape, quoteattr
 
-from ..compat_typing import Literal, TypeAlias, Dict, TypedDict, Optional
+from ..compat_typing import Callable, Literal, TypeAlias, Dict, TypedDict, Optional, Union
 from ..http_request import HttpRequestParameters, request, with_transport
 from ..exceptions import error_from_response
 from .activate import activate_objects
@@ -286,12 +286,15 @@ def _post_object(
 def _put_locked(
     http_request_parameters: HttpRequestParameters,
     uri: str,
-    body: str,
+    body: Union[str, Callable[[str], str]],
     content_type: str,
     name: str,
     transport: Optional[str],
 ) -> bool:
-    """Lock an object, save its definition and unlock it again."""
+    """Lock an object, save its definition and unlock it again.
+
+    body can be a function that builds the body from the lock handle.
+    """
     # the lock needs a stateful session, which must not be replaced by a reconnect
     stateful: HttpRequestParameters = {
         **http_request_parameters,
@@ -304,7 +307,7 @@ def _put_locked(
             http_request_parameters=stateful,
             uri=uri,
             method="PUT",
-            body=body,
+            body=body(lock_handle) if callable(body) else body,
             params=with_transport({"lockHandle": lock_handle}, transport),
             content_type=content_type,
         )
