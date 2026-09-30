@@ -146,6 +146,9 @@ client.create_enhancement_implementation("Z_DEMO_IMPL", "$TMP", "Demo implementa
 ])
 print(client.get_enhancement_implementation("Z_DEMO_IMPL"))
 
+# number range objects (intervals have to be maintained in ABAP, e.g. CL_NUMBERRANGE_INTERVALS)
+client.create_number_range_object("Z_DEMO_NR", "$TMP", "Demo numbers", number_length_domain="NUM10")
+
 # read source code
 src: str = client.get_object_source(f"{report_uri}/source/main")
 print(src)

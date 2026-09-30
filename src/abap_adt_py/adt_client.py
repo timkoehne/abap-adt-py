@@ -72,6 +72,7 @@ from .api.servicebinding import (
     publish_service_binding,
     unpublish_service_binding,
 )
+from .api.numberrange import Buffering, create_number_range_object
 from .api.activate import InactiveObject, activate, activate_objects, inactive_objects
 from .api.create import ObjectTypes
 from .api.delete import delete, delete_objects
@@ -980,4 +981,42 @@ class AdtClient:
     def unpublish_service_binding(self, name: str) -> bool:
         http_request_parameters = self.build_request_parameters()
         response = unpublish_service_binding(http_request_parameters, name)
+        return response
+
+    def create_number_range_object(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        number_length_domain: str,
+        percent_warning: float = 10.0,
+        buffering: Buffering = "none",
+        buffered_numbers: int = 0,
+        subobject_data_element: str = "",
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Create a number range object and activate it.
+
+        number_length_domain is a NUMC or CHAR domain that sets the length of the
+        numbers, e.g. NUM10. ADT can't maintain intervals, they have to be created in
+        ABAP (CL_NUMBERRANGE_INTERVALS). An object with intervals can't be deleted.
+        Its uri is /sap/bc/adt/numberranges/objects/<name in lower case>.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_number_range_object(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            number_length_domain,
+            percent_warning,
+            buffering,
+            buffered_numbers,
+            subobject_data_element,
+            self.language,
+            transport,
+            activate,
+        )
         return response

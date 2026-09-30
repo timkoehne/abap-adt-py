@@ -290,10 +290,12 @@ def _put_locked(
     content_type: str,
     name: str,
     transport: Optional[str],
+    lock_uri: Optional[str] = None,
 ) -> bool:
     """Lock an object, save its definition and unlock it again.
 
     body can be a function that builds the body from the lock handle.
+    lock_uri is the object to lock if uri is a part of it, e.g. its source.
     """
     # the lock needs a stateful session, which must not be replaced by a reconnect
     stateful: HttpRequestParameters = {
@@ -301,7 +303,8 @@ def _put_locked(
         "statefulness": "stateful",
         "refresh_csrf_token": None,
     }
-    lock_handle = lock(stateful, uri)
+    lock_uri = lock_uri or uri
+    lock_handle = lock(stateful, lock_uri)
     try:
         response = request(
             http_request_parameters=stateful,
@@ -314,7 +317,7 @@ def _put_locked(
         if response.status_code != 200:
             raise error_from_response(response, f"Failed to save {name}")
     finally:
-        unlock(stateful, uri, lock_handle)
+        unlock(stateful, lock_uri, lock_handle)
     return True
 
 
