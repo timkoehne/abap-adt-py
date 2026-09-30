@@ -8,6 +8,8 @@
 
 - Authenticate and log in to SAP systems securely
 - Create, read, edit, and activate ABAP objects, including dictionary and RAP objects
+- Domains with fixed values, data elements, message classes, authorization objects, BAdIs (enhancement spots and implementations) and number range objects
+- Publish OData service bindings
 - Search ABAP repositories and metadata
 - Browse packages and the repository tree
 - Run ABAP SQL queries (data preview)

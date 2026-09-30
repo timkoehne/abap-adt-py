@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "abap-adt-py"
-version = "0.2.0"
+version = "0.3.0"
 description = "A Python library for interacting with SAP systems using the ADT (ABAP Development Tools) protocol."
 readme = "README.md"
 # the table form instead of license = "MIT", which setuptools on Python 3.7 cannot read

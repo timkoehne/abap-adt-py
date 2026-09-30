@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.0
+
+### Changes that can affect existing code
+- `activate` raises `ActivationError` when the object is still inactive afterwards. SAP reports a successful activation for tables and CDS views that fail to activate (e.g. a field named like a reserved word), which `activate` used to return as success.
+- `create_domain` and `create_table_type` activate the new object (`activate=False` to skip). Table types used to stay inactive.
+
+### Added
+- Mass activation and deletion: `activate_objects`, `delete_objects`, and `inactive_objects`
+- Domains: fixed values (single values and intervals), output length, conversion exit, sign, lowercase and value table in `create_domain`; `get_domain`, `update_domain`
+- Data elements: `create_data_element` (typed by a domain, a built-in type or as a reference, with field labels, search help and parameter ID), `get_data_element`, `update_data_element`
+- Message classes: `create_message_class`, `get_message_class`, `get_messages`, `set_messages`, `delete_messages`
+- Authorization objects: `create_authorization_object`, `get_authorization_object`, `update_authorization_object`
+- BAdIs: `create_enhancement_spot` and `get_enhancement_spot` for BAdI definitions; `create_enhancement_implementation`, `get_enhancement_implementation`, `update_enhancement_implementation` for BAdI implementations with filter conditions
+- OData service bindings: `publish_service_binding` (returns the service URLs), `unpublish_service_binding`, `get_service_binding`
+- Number range objects: `create_number_range_object`
+
 ## 0.2.0
 
 ### Changes that can affect existing code
