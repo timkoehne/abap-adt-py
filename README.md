@@ -127,6 +127,9 @@ client.set_messages("Z_DEMO", [{"number": "002", "text": "Quantity &1 is invalid
 client.delete_messages("Z_DEMO", ["002"])
 print(client.get_messages("Z_DEMO"))
 
+# authorization objects (the activities are the allowed values of ACTVT)
+client.create_authorization_object("Z_DEMO_AO", "$TMP", "Demo", "AAAB", ["BUKRS", "ACTVT"], ["02", "03"])
+
 # read source code
 src: str = client.get_object_source(f"{report_uri}/source/main")
 print(src)

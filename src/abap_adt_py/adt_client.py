@@ -49,6 +49,12 @@ from .api.messageclass import (
     get_message_class,
     set_messages,
 )
+from .api.authorization import (
+    AuthorizationObject,
+    create_authorization_object,
+    get_authorization_object,
+    update_authorization_object,
+)
 from .api.activate import InactiveObject, activate, activate_objects, inactive_objects
 from .api.create import ObjectTypes
 from .api.delete import delete, delete_objects
@@ -717,6 +723,65 @@ class AdtClient:
             self.username,
             self.language,
             transport,
+        )
+        return response
+
+    def create_authorization_object(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        object_class: str,
+        fields: List[str],
+        activities: Optional[List[str]] = None,
+        transport: Optional[str] = None,
+    ) -> bool:
+        """Create an authorization object, e.g. object_class="AAAB",
+        fields=["BUKRS", "ACTVT"], activities=["02", "03"] (the allowed ACTVT values).
+
+        Its uri is /sap/bc/adt/aps/iam/suso/<name in lower case>, e.g. for delete.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_authorization_object(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            object_class,
+            fields,
+            activities,
+            self.language,
+            transport,
+        )
+        return response
+
+    def get_authorization_object(self, name: str) -> AuthorizationObject:
+        http_request_parameters = self.build_request_parameters()
+        response = get_authorization_object(http_request_parameters, name)
+        return response
+
+    def update_authorization_object(
+        self,
+        name: str,
+        description: Optional[str] = None,
+        object_class: Optional[str] = None,
+        fields: Optional[List[str]] = None,
+        activities: Optional[List[str]] = None,
+        transport: Optional[str] = None,
+    ) -> bool:
+        """Change an authorization object. Arguments left at None keep their value."""
+        http_request_parameters = self.build_request_parameters()
+        response = update_authorization_object(
+            http_request_parameters,
+            name,
+            self.username,
+            self.language,
+            transport,
+            description,
+            object_class,
+            fields,
+            activities,
         )
         return response
 

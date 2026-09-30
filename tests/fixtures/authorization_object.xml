@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<suso:suso xmlns:suso="http://www.sap.com/iam/suso" xmlns:adtcore="http://www.sap.com/adt/core" adtcore:responsible="DEVELOPER" adtcore:masterLanguage="EN" adtcore:masterSystem="A4H" adtcore:abapLanguageVersion="standard" adtcore:name="ZADTPY_AO1" adtcore:type="SUSO/B" adtcore:changedAt="2026-09-30T20:29:32Z" adtcore:createdAt="2026-09-30T00:00:00Z" adtcore:changedBy="DEVELOPER" adtcore:createdBy="DEVELOPER" adtcore:description="adt-py company code" adtcore:descriptionTextLimit="60" adtcore:language="EN">
+  <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP" adtcore:description="Temporary Objects (never transported!)"/>
+  <suso:content>
+    <suso:objectClassName>AAAB</suso:objectClassName>
+    <suso:objectClassDescription>Cross-application Authorization Objects</suso:objectClassDescription>
+    <suso:abapLanguageVersion/>
+    <suso:sapNewFlag>false</suso:sapNewFlag>
+    <suso:su22TraceFlag/>
+    <suso:criticality>N</suso:criticality>
+    <suso:privileged>A</suso:privileged>
+    <suso:ownContext>A</suso:ownContext>
+    <suso:objectVisibility>
+      <suso:isActivityFieldVisible>false</suso:isActivityFieldVisible>
+      <suso:isActivityFieldEditable>false</suso:isActivityFieldEditable>
+      <suso:isAccessCategoryVisible>false</suso:isAccessCategoryVisible>
+      <suso:isAccessCategoryEditable>false</suso:isAccessCategoryEditable>
+      <suso:isAuthFieldEditable>false</suso:isAuthFieldEditable>
+      <suso:isCreateRestrictionTypeVisible>false</suso:isCreateRestrictionTypeVisible>
+      <suso:isAssignToRestrictionTypeVisible>false</suso:isAssignToRestrictionTypeVisible>
+      <suso:isSAPSys>false</suso:isSAPSys>
+      <suso:isSearchHelpVisible>true</suso:isSearchHelpVisible>
+    </suso:objectVisibility>
+    <suso:authFields>
+      <suso:authField>
+        <suso:name>BUKRS</suso:name>
+        <suso:description>Company Code</suso:description>
+        <suso:activityField>false</suso:activityField>
+        <suso:searchHelp/>
+        <suso:disable>false</suso:disable>
+      </suso:authField>
+      <suso:authField>
+        <suso:name>ACTVT</suso:name>
+        <suso:description>Activity</suso:description>
+        <suso:activityField>false</suso:activityField>
+        <suso:searchHelp/>
+        <suso:disable>false</suso:disable>
+      </suso:authField>
+    </suso:authFields>
+    <suso:activities>
+      <suso:activity>
+        <suso:code>02</suso:code>
+        <suso:text>Change</suso:text>
+        <suso:accessCategory/>
+      </suso:activity>
+      <suso:activity>
+        <suso:code>03</suso:code>
+        <suso:text>Display</suso:text>
+        <suso:accessCategory/>
+      </suso:activity>
+    </suso:activities>
+    <suso:activitiesExtensions/>
+    <suso:sia2References/>
+    <suso:sapnewrel/>
+    <suso:searchHelps/>
+  </suso:content>
+</suso:suso>
