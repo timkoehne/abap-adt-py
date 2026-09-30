@@ -23,7 +23,9 @@ def test_table_type_of_dictionary_type(client, uid, cleanup):
 
     assert client.create_table_type(name, "$TMP", "adt-py table type", row_type="scarr")
     cleanup(uri)
-    assert client.activate(name, uri)
+    # SAP leaves a saved table type inactive, so it is activated
+    active = client.run_query(f"SELECT as4local FROM dd40l WHERE typename = '{name}'")
+    assert active["rows"] == [{"AS4LOCAL": "A"}]
 
     stored = client.run_query(f"SELECT rowtype FROM dd40l WHERE typename = '{name}'")
     assert stored["rows"] == [{"ROWTYPE": "SCARR"}]
@@ -38,7 +40,6 @@ def test_table_type_of_built_in_type(client, uid, cleanup):
 
     assert client.create_table_type(name, "$TMP", "adt-py table type", data_type="CHAR", length=20)
     cleanup(uri)
-    assert client.activate(name, uri)
 
     stored = client.run_query(f"SELECT datatype, leng FROM dd40l WHERE typename = '{name}'")
     assert stored["rows"] == [{"DATATYPE": "CHAR", "LENG": "000020"}]

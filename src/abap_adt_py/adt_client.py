@@ -462,7 +462,9 @@ class AdtClient:
         length: int = 0,
         decimals: int = 0,
         transport: Optional[str] = None,
+        activate: bool = True,
     ) -> bool:
+        """Create a standard table type and activate it."""
         http_request_parameters = self.build_request_parameters()
         response = create_table_type(
             http_request_parameters,
@@ -476,6 +478,7 @@ class AdtClient:
             decimals,
             self.language,
             transport,
+            activate,
         )
         return response
 

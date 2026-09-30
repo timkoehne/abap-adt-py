@@ -2,7 +2,7 @@ import xml.etree.ElementTree as et
 
 import pytest
 
-from abap_adt_py.api import create, lock
+from abap_adt_py.api import activate, create, lock
 from abap_adt_py.exceptions import AdtError
 from helpers import PARAMS, FakeResponse, fixture
 
@@ -62,6 +62,12 @@ def test_create_table_type_saves_the_row_type_after_creating(fake_sap):
     create_calls = fake_sap(create, FakeResponse(201), FakeResponse(200))
     lock_calls = fake_sap(lock, FakeResponse(200, fixture("lock.xml")), FakeResponse(200))
 
+    activate_calls = fake_sap(
+        activate,
+        FakeResponse(200, fixture("activation_success.xml")),
+        FakeResponse(200, "<ioc:inactiveObjects xmlns:ioc='http://www.sap.com/abapxml/inactiveCtsObjects'/>"),
+    )
+
     assert create.create_table_type(
         PARAMS, "ZADTPY_TT", "$TMP", "desc", "DEVELOPER", row_type="scarr"
     )
@@ -75,13 +81,16 @@ def test_create_table_type_saves_the_row_type_after_creating(fake_sap):
     assert row.findtext(f"{TTYP}typeName") == "SCARR"
     assert parse(put["body"]).get(f"{ADTCORE}description") == "desc"
     assert [c["params"]["_action"] for c in lock_calls] == ["LOCK", "UNLOCK"]
+    # SAP leaves a saved table type inactive
+    assert 'adtcore:uri="/sap/bc/adt/ddic/tabletypes/zadtpy_tt"' in activate_calls[0]["body"]
 
 
 def test_create_table_type_of_built_in_type(fake_sap):
     create_calls = fake_sap(create, FakeResponse(201), FakeResponse(200))
     fake_sap(lock, FakeResponse(200, fixture("lock.xml")), FakeResponse(200))
     create.create_table_type(
-        PARAMS, "ZADTPY_TT", "$TMP", "desc", "DEVELOPER", data_type="char", length=20
+        PARAMS, "ZADTPY_TT", "$TMP", "desc", "DEVELOPER", data_type="char", length=20,
+        activate=False,
     )
 
     row = parse(create_calls[1]["body"]).find(f"{TTYP}rowType")
@@ -94,7 +103,7 @@ def test_create_table_type_unlocks_when_saving_fails(fake_sap):
     fake_sap(create, FakeResponse(201), FakeResponse(400, "invalid row type"))
     lock_calls = fake_sap(lock, FakeResponse(200, fixture("lock.xml")), FakeResponse(200))
 
-    with pytest.raises(AdtError, match="Failed to save table type ZADTPY_TT"):
+    with pytest.raises(AdtError, match="Failed to save ZADTPY_TT"):
         create.create_table_type(
             PARAMS, "ZADTPY_TT", "$TMP", "desc", "DEVELOPER", row_type="NOPE"
         )

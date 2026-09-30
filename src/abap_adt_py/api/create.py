@@ -3,6 +3,7 @@ from xml.sax.saxutils import escape, quoteattr
 from ..compat_typing import Literal, TypeAlias, Dict, TypedDict, Optional
 from ..http_request import HttpRequestParameters, request, with_transport
 from ..exceptions import error_from_response
+from .activate import activate_objects
 from .lock import lock, unlock
 
 
@@ -282,6 +283,38 @@ def _post_object(
     raise error_from_response(response, f"Failed to create {name}")
 
 
+def _put_locked(
+    http_request_parameters: HttpRequestParameters,
+    uri: str,
+    body: str,
+    content_type: str,
+    name: str,
+    transport: Optional[str],
+) -> bool:
+    """Lock an object, save its definition and unlock it again."""
+    # the lock needs a stateful session, which must not be replaced by a reconnect
+    stateful: HttpRequestParameters = {
+        **http_request_parameters,
+        "statefulness": "stateful",
+        "refresh_csrf_token": None,
+    }
+    lock_handle = lock(stateful, uri)
+    try:
+        response = request(
+            http_request_parameters=stateful,
+            uri=uri,
+            method="PUT",
+            body=body,
+            params=with_transport({"lockHandle": lock_handle}, transport),
+            content_type=content_type,
+        )
+        if response.status_code != 200:
+            raise error_from_response(response, f"Failed to save {name}")
+    finally:
+        unlock(stateful, uri, lock_handle)
+    return True
+
+
 def _header(
     name: str, description: str, owner: str, object_type: str, language: str
 ) -> str:
@@ -356,8 +389,9 @@ def create_table_type(
     decimals: int = 0,
     language: str = "EN",
     transport: Optional[str] = None,
+    activate: bool = True,
 ) -> bool:
-    """Create a standard table type.
+    """Create a standard table type and activate it.
 
     The rows are either a dictionary type (row_type, e.g. a structure or data element)
     or a built-in type (data_type and length, e.g. "CHAR", 20).
@@ -412,26 +446,9 @@ def create_table_type(
     </ttyp:tableType>"""
 
     uri = f"/sap/bc/adt/ddic/tabletypes/{name.lower()}"
-    # the lock needs a stateful session, which must not be replaced by a reconnect
-    stateful: HttpRequestParameters = {
-        **http_request_parameters,
-        "statefulness": "stateful",
-        "refresh_csrf_token": None,
-    }
-    lock_handle = lock(stateful, uri)
-    try:
-        response = request(
-            http_request_parameters=stateful,
-            uri=uri,
-            method="PUT",
-            body=definition,
-            params=with_transport({"lockHandle": lock_handle}, transport),
-            content_type=content_type,
-        )
-        if response.status_code != 200:
-            raise error_from_response(response, f"Failed to save table type {name}")
-    finally:
-        unlock(stateful, uri, lock_handle)
+    _put_locked(http_request_parameters, uri, definition, content_type, name, transport)
+    if activate:
+        activate_objects(http_request_parameters, [(name.upper(), uri)])
     return True
 
 
