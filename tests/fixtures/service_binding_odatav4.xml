@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<odatav4:serviceGroup xmlns:odatav4="http://www.sap.com/categories/odatav4" xmlns:adtcore="http://www.sap.com/adt/core" odatav4:published="true" odatav4:serviceUrlPrefix="/sap/opu/odata4/sap/zadtpy_pub_sb/srvd/" adtcore:name="ZADTPY_PUB_SB">
+  <odatav4:services odatav4:repositoryId="SRVD" odatav4:serviceId="ZADTPY_PUB_SB" odatav4:serviceVersion="0001" odatav4:serviceUrl="/sap/opu/odata4/sap/zadtpy_pub_sb/srvd/sap/zadtpy_pub_sb/0001/" odatav4:annotationUrl="" odatav4:created="true">
+    <serviceInfo:serviceInformation xmlns:serviceInfo="http://www.sap.com/categories/serviceinformation" serviceInfo:name="ZADTPY_PUB_SB" serviceInfo:version="0001">
+      <serviceInfo:collection serviceInfo:name="ZADTPY_PUB_V" serviceInfo:isLeading="false" serviceInfo:isRoot="false"/>
+    </serviceInfo:serviceInformation>
+    <odatav4:applicationDetails odatav4:applicationState="NOT_DEPLOYED" odatav4:applicationDescription="Not deployed" odatav4:applicationId=""/>
+  </odatav4:services>
+</odatav4:serviceGroup>

@@ -120,6 +120,9 @@ client.update_data_element("Z_DEMO_STATUS", labels={"short": "St."}, parameter_i
 print(client.get_data_element("Z_DEMO_STATUS"))
 client.create_table_type("Z_DEMO_TT", "$TMP", "Demo table type", row_type="SCARR")  # or data_type/length
 client.create_service_binding("Z_DEMO_SB", "$TMP", "Demo binding", service_definition="Z_DEMO_SD")  # OData V4 UI
+client.activate("Z_DEMO_SB", "/sap/bc/adt/businessservices/bindings/z_demo_sb")
+urls = client.publish_service_binding("Z_DEMO_SB")  # ["/sap/opu/odata4/sap/z_demo_sb/srvd/..."]
+client.unpublish_service_binding("Z_DEMO_SB")
 
 # message classes
 client.create_message_class("Z_DEMO", "$TMP", "Demo messages", messages=[{"number": "001", "text": "Bin &1 is blocked"}])

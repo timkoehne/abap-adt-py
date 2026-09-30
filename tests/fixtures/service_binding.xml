@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<srvb:serviceBinding xmlns:srvb="http://www.sap.com/adt/ddic/ServiceBindings" xmlns:adtcore="http://www.sap.com/adt/core" srvb:contract="C1" srvb:releaseSupported="true" srvb:published="true" srvb:bindingCreated="true" srvb:allowedAction="UNPUBLISH" adtcore:responsible="DEVELOPER" adtcore:masterLanguage="EN" adtcore:masterSystem="A4H" adtcore:abapLanguageVersion="standard" adtcore:name="ZADTPY_PUB_SB" adtcore:type="SRVB/SVB" adtcore:changedAt="2026-09-30T20:42:17Z" adtcore:version="active" adtcore:createdAt="2026-09-30T00:00:00Z" adtcore:changedBy="DEVELOPER" adtcore:createdBy="DEVELOPER" adtcore:description="adt-py binding" adtcore:language="EN">
+  <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP" adtcore:description="Temporary Objects (never transported!)"/>
+  <srvb:services srvb:name="ZADTPY_PUB_SB">
+    <srvb:content srvb:version="0001" srvb:minorVersion="0" srvb:patchVersion="0" srvb:buildVersion="" srvb:releaseState="NOT_RELEASED">
+      <srvb:serviceDefinition adtcore:uri="/sap/bc/adt/ddic/srvd/sources/zadtpy_pub_sd" adtcore:type="SRVD/SRV" adtcore:name="ZADTPY_PUB_SD"/>
+      <srvb:bindingTypeData>
+        <adtcore:content adtcore:encoding="base64"/>
+      </srvb:bindingTypeData>
+    </srvb:content>
+  </srvb:services>
+  <srvb:binding srvb:type="ODATA" srvb:version="V4" srvb:category="0">
+    <srvb:implementation adtcore:name="ZADTPY_PUB_SB"/>
+  </srvb:binding>
+</srvb:serviceBinding>

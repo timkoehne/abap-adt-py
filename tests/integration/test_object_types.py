@@ -200,3 +200,12 @@ define service {service} {{
     [found] = client.search_object(binding, 1)
     assert found["type"] == "SRVB/SVB"
     assert found["description"] == "adt-py rap binding"
+
+    [url] = client.publish_service_binding(binding)
+    try:
+        assert client.get_service_binding(binding)["published"] is True
+        metadata = client.session.get(f"{client.sap_host}{url}$metadata")
+        assert metadata.status_code == 200
+    finally:
+        client.unpublish_service_binding(binding)
+    assert client.get_service_binding(binding)["published"] is False

@@ -66,6 +66,12 @@ from .api.enhancements import (
     get_enhancement_spot,
     update_enhancement_implementation,
 )
+from .api.servicebinding import (
+    ServiceBinding,
+    get_service_binding,
+    publish_service_binding,
+    unpublish_service_binding,
+)
 from .api.activate import InactiveObject, activate, activate_objects, inactive_objects
 from .api.create import ObjectTypes
 from .api.delete import delete, delete_objects
@@ -953,4 +959,25 @@ class AdtClient:
             self.language,
             transport,
         )
+        return response
+
+    def get_service_binding(self, name: str) -> ServiceBinding:
+        """Read a service binding, with the URLs of its services if it is published."""
+        http_request_parameters = self.build_request_parameters()
+        response = get_service_binding(http_request_parameters, name)
+        return response
+
+    def publish_service_binding(self, name: str) -> List[str]:
+        """Publish an activated OData V2 or V4 service binding locally.
+
+        Returns the service URLs, e.g.
+        ["/sap/opu/odata4/sap/zui_travel/srvd/sap/ztravel/0001/"]
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = publish_service_binding(http_request_parameters, name)
+        return response
+
+    def unpublish_service_binding(self, name: str) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = unpublish_service_binding(http_request_parameters, name)
         return response
