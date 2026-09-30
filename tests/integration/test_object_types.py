@@ -7,7 +7,6 @@ def test_domain(client, uid, cleanup):
 
     assert client.create_domain(name, "$TMP", "adt-py domain", data_type="char", length=10)
     cleanup(uri)
-    assert client.activate(name, uri)
 
     stored = client.run_query(
         f"SELECT datatype, leng FROM dd01l WHERE domname = '{name}' AND as4local = 'A'"
@@ -15,6 +14,59 @@ def test_domain(client, uid, cleanup):
     assert stored["rows"] == [{"DATATYPE": "CHAR", "LENG": "000010"}]
     text = client.run_query(f"SELECT ddtext FROM dd01t WHERE domname = '{name}'")
     assert text["rows"] == [{"DDTEXT": "adt-py domain"}]
+
+
+def test_domain_with_fixed_values(client, uid, cleanup):
+    name = f"ZADTPY_{uid}_STAT"
+    uri = f"/sap/bc/adt/ddic/domains/{name.lower()}"
+
+    client.create_domain(
+        name, "$TMP", "adt-py status", "CHAR", 1,
+        fixed_values=[{"low": "N", "text": "New"}, {"low": "R", "text": "Released"}],
+    )
+    cleanup(uri)
+    client.update_domain(
+        name,
+        lowercase=True,
+        fixed_values=[{"low": "N", "text": "New"}, {"low": "C", "text": "Completed"}],
+    )
+
+    domain = client.get_domain(name)
+    assert domain["lowercase"] is True
+    assert domain["fixed_values"] == [
+        {"low": "N", "high": "", "text": "New"},
+        {"low": "C", "high": "", "text": "Completed"},
+    ]
+    values = client.run_query(
+        f"SELECT domvalue_l FROM dd07l WHERE domname = '{name}' AND as4local = 'A' ORDER BY valpos"
+    )
+    assert values["rows"] == [{"DOMVALUE_L": "N"}, {"DOMVALUE_L": "C"}]
+
+
+def test_data_element(client, uid, cleanup):
+    domain, name = f"ZADTPY_{uid}_DDOM", f"ZADTPY_{uid}_DTEL"
+    client.create_domain(domain, "$TMP", "adt-py domain", "NUMC", 4)
+    cleanup(f"/sap/bc/adt/ddic/domains/{domain.lower()}")
+
+    client.create_data_element(
+        name, "$TMP", "adt-py data element", domain=domain,
+        labels={"short": "Short", "medium": "Medium", "long": "Long label", "heading": "Head"},
+    )
+    cleanup(f"/sap/bc/adt/ddic/dataelements/{name.lower()}")
+    client.update_data_element(name, labels={"short": "Changed"})
+
+    data_element = client.get_data_element(name)
+    assert (data_element["type_kind"], data_element["type_name"]) == ("domain", domain)
+    assert data_element["labels"] == {
+        "short": "Changed", "medium": "Medium", "long": "Long label", "heading": "Head"
+    }
+    stored = client.run_query(
+        f"SELECT domname, as4local FROM dd04l WHERE rollname = '{name}'"
+    )
+    assert stored["rows"] == [{"DOMNAME": domain, "AS4LOCAL": "A"}]
+
+    client.update_data_element(name, reference_to="STRING", reference_kind="built_in")
+    assert client.get_data_element(name)["type_kind"] == "refToPredefinedAbapType"
 
 
 def test_table_type_of_dictionary_type(client, uid, cleanup):

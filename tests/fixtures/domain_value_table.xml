@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<doma:domain xmlns:doma="http://www.sap.com/dictionary/domain" xmlns:adtcore="http://www.sap.com/adt/core" adtcore:responsible="DEVELOPER" adtcore:masterLanguage="EN" adtcore:masterSystem="A4H" adtcore:abapLanguageVersion="standard" adtcore:name="ZADTPY_D2" adtcore:type="DOMA/DD" adtcore:changedAt="2026-09-30T20:22:57Z" adtcore:version="active" adtcore:createdAt="2026-09-30T00:00:00Z" adtcore:changedBy="DEVELOPER" adtcore:createdBy="DEVELOPER" adtcore:description="misc" adtcore:language="EN">
+  <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP" adtcore:description="Temporary Objects (never transported!)"/>
+  <doma:content>
+    <doma:typeInformation>
+      <doma:datatype>CHAR</doma:datatype>
+      <doma:length>000010</doma:length>
+      <doma:decimals>000000</doma:decimals>
+    </doma:typeInformation>
+    <doma:outputInformation>
+      <doma:length>000010</doma:length>
+      <doma:style>00</doma:style>
+      <doma:conversionExit>ALPHA</doma:conversionExit>
+      <doma:signExists>false</doma:signExists>
+      <doma:lowercase>true</doma:lowercase>
+      <doma:ampmFormat>false</doma:ampmFormat>
+    </doma:outputInformation>
+    <doma:valueInformation>
+      <doma:valueTableRef adtcore:uri="/sap/bc/adt/ddic/tables/t001" adtcore:type="TABL/DT" adtcore:name="T001"/>
+      <doma:appendExists>false</doma:appendExists>
+      <doma:fixValues/>
+    </doma:valueInformation>
+  </doma:content>
+</doma:domain>

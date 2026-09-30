@@ -2,7 +2,7 @@ import xml.etree.ElementTree as et
 
 import pytest
 
-from abap_adt_py.api import activate, create, lock
+from abap_adt_py.api import activate, create, ddic, lock
 from abap_adt_py.exceptions import AdtError
 from helpers import PARAMS, FakeResponse, fixture
 
@@ -37,24 +37,6 @@ def test_create_source_based_types(fake_sap, object_type, path):
 def test_create_service_definition_is_a_definition():
     body = create._build_body("desc", "ZADTPY_SD", "$TMP", "DEVELOPER", "SRVD/SRV")
     assert parse(body).get("{http://www.sap.com/adt/ddic/srvdsources}srvdSourceType") == "S"
-
-
-def test_create_domain(fake_sap):
-    calls = fake_sap(create, FakeResponse(201))
-    assert create.create_domain(
-        PARAMS, "ZADTPY_D", "$TMP", "A & B", "DEVELOPER", "char", 10, transport="A4HK900001"
-    )
-
-    call = calls[0]
-    assert call["uri"] == "/sap/bc/adt/ddic/domains"
-    assert call["params"] == {"corrNr": "A4HK900001"}
-    assert call["content_type"] == "application/vnd.sap.adt.domains.v2+xml"
-    root = parse(call["body"])
-    assert root.get(f"{ADTCORE}description") == "A & B"
-    info = root.find(f"{DOMA}content/{DOMA}typeInformation")
-    assert info.findtext(f"{DOMA}datatype") == "CHAR"
-    assert info.findtext(f"{DOMA}length") == "000010"
-    assert info.findtext(f"{DOMA}decimals") == "000000"
 
 
 def test_create_table_type_saves_the_row_type_after_creating(fake_sap):
@@ -135,7 +117,9 @@ def test_create_service_binding(fake_sap):
 def test_descriptions_carry_the_language(fake_sap):
     # without the language SAP silently drops the description
     calls = fake_sap(create, FakeResponse(201))
-    create.create_domain(PARAMS, "ZADTPY_D", "$TMP", "desc", "DEVELOPER", "CHAR", 1, language="de")
+    ddic.create_domain(
+        PARAMS, "ZADTPY_D", "$TMP", "desc", "DEVELOPER", "CHAR", 1, language="de", activate=False
+    )
     root = parse(calls[0]["body"])
     assert root.get(f"{ADTCORE}language") == "DE"
     assert root.get(f"{ADTCORE}masterLanguage") == "DE"

@@ -104,8 +104,20 @@ client.create(
 
 # more object types: structures (TABL/DS), service definitions (SRVD/SRV) and behavior
 # definitions (BDEF/BDO, named after their root CDS entity) are created with create()
-# and filled with set_object_source like a class. These are created with their settings:
-client.create_domain("Z_DEMO_DOMAIN", "$TMP", "Demo domain", data_type="CHAR", length=10)
+# and filled with set_object_source like a class. These are created with their settings
+# (dictionary objects are activated right away, pass activate=False to skip that):
+client.create_domain(
+    "Z_DEMO_STATUS", "$TMP", "Order status", data_type="CHAR", length=1,
+    fixed_values=[{"low": "N", "text": "New"}, {"low": "C", "text": "Completed"}],  # intervals: "high"
+)
+client.update_domain("Z_DEMO_STATUS", fixed_values=[...])  # arguments left out keep their value
+print(client.get_domain("Z_DEMO_STATUS"))
+client.create_data_element(
+    "Z_DEMO_STATUS", "$TMP", "Order status", domain="Z_DEMO_STATUS",  # or data_type/length, reference_to
+    labels={"short": "Status", "medium": "Order status", "long": "Order status", "heading": "Status"},
+)
+client.update_data_element("Z_DEMO_STATUS", labels={"short": "St."}, parameter_id="ZST")
+print(client.get_data_element("Z_DEMO_STATUS"))
 client.create_table_type("Z_DEMO_TT", "$TMP", "Demo table type", row_type="SCARR")  # or data_type/length
 client.create_service_binding("Z_DEMO_SB", "$TMP", "Demo binding", service_definition="Z_DEMO_SD")  # OData V4 UI
 

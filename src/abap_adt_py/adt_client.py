@@ -23,11 +23,23 @@ from .api.create import (
     PackageTypes,
     ServiceBindingCategories,
     create,
-    create_domain,
     create_package,
     create_service_binding,
     create_table_type,
     create_test_class_include,
+)
+from .api.ddic import (
+    DataElement,
+    Domain,
+    FieldLabels,
+    FixedValue,
+    ReferenceKinds,
+    create_data_element,
+    create_domain,
+    get_data_element,
+    get_domain,
+    update_data_element,
+    update_domain,
 )
 from .api.activate import InactiveObject, activate, activate_objects, inactive_objects
 from .api.create import ObjectTypes
@@ -436,7 +448,19 @@ class AdtClient:
         length: int,
         decimals: int = 0,
         transport: Optional[str] = None,
+        output_length: int = 0,
+        conversion_exit: str = "",
+        sign: bool = False,
+        lowercase: bool = False,
+        value_table: str = "",
+        fixed_values: Optional[List[FixedValue]] = None,
+        activate: bool = True,
     ) -> bool:
+        """Create a domain and activate it.
+
+        output_length 0 lets SAP calculate it. fixed_values are single values
+        ({"low": "N", "text": "New"}) or intervals ({"low": "1", "high": "9", "text": ...}).
+        """
         http_request_parameters = self.build_request_parameters()
         response = create_domain(
             http_request_parameters,
@@ -449,6 +473,174 @@ class AdtClient:
             decimals,
             self.language,
             transport,
+            output_length,
+            conversion_exit,
+            sign,
+            lowercase,
+            value_table,
+            fixed_values,
+            activate,
+        )
+        return response
+
+    def get_domain(
+        self, name: str, version: Optional[Literal["active", "inactive"]] = None
+    ) -> Domain:
+        http_request_parameters = self.build_request_parameters()
+        response = get_domain(http_request_parameters, name, version)
+        return response
+
+    def update_domain(
+        self,
+        name: str,
+        description: Optional[str] = None,
+        data_type: Optional[str] = None,
+        length: Optional[int] = None,
+        decimals: Optional[int] = None,
+        output_length: Optional[int] = None,
+        conversion_exit: Optional[str] = None,
+        sign: Optional[bool] = None,
+        lowercase: Optional[bool] = None,
+        value_table: Optional[str] = None,
+        fixed_values: Optional[List[FixedValue]] = None,
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Change a domain and activate it. Arguments left at None keep their value.
+
+        fixed_values replaces all fixed values, [] removes them.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = update_domain(
+            http_request_parameters,
+            name,
+            self.username,
+            self.language,
+            transport,
+            activate,
+            description=description,
+            data_type=data_type,
+            length=length,
+            decimals=decimals,
+            output_length=output_length,
+            conversion_exit=conversion_exit,
+            sign=sign,
+            lowercase=lowercase,
+            value_table=value_table,
+            fixed_values=fixed_values,
+        )
+        return response
+
+    def create_data_element(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        domain: Optional[str] = None,
+        data_type: Optional[str] = None,
+        length: int = 0,
+        decimals: int = 0,
+        reference_to: Optional[str] = None,
+        reference_kind: ReferenceKinds = "class",
+        labels: Optional[FieldLabels] = None,
+        label_lengths: Optional[Dict[str, int]] = None,
+        search_help: str = "",
+        search_help_parameter: str = "",
+        parameter_id: str = "",
+        default_component_name: str = "",
+        change_document: bool = False,
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Create a data element and activate it.
+
+        Typed by a domain (domain="ZSTATUS"), a built-in type (data_type="CHAR",
+        length=10) or as a reference: TYPE REF TO a class or interface
+        (reference_to="ZCL_FOO"), a dictionary type (reference_kind="dictionary") or a
+        built-in type (reference_to="STRING", reference_kind="built_in").
+        labels: {"short": ..., "medium": ..., "long": ..., "heading": ...} with at most
+        10, 20, 40 and 55 characters.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_data_element(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            domain=domain,
+            data_type=data_type,
+            length=length,
+            decimals=decimals,
+            reference_to=reference_to,
+            reference_kind=reference_kind,
+            labels=labels,
+            label_lengths=label_lengths,
+            search_help=search_help,
+            search_help_parameter=search_help_parameter,
+            parameter_id=parameter_id,
+            default_component_name=default_component_name,
+            change_document=change_document,
+            language=self.language,
+            transport=transport,
+            activate=activate,
+        )
+        return response
+
+    def get_data_element(
+        self, name: str, version: Optional[Literal["active", "inactive"]] = None
+    ) -> DataElement:
+        http_request_parameters = self.build_request_parameters()
+        response = get_data_element(http_request_parameters, name, version)
+        return response
+
+    def update_data_element(
+        self,
+        name: str,
+        description: Optional[str] = None,
+        domain: Optional[str] = None,
+        data_type: Optional[str] = None,
+        length: Optional[int] = None,
+        decimals: Optional[int] = None,
+        reference_to: Optional[str] = None,
+        reference_kind: ReferenceKinds = "class",
+        labels: Optional[FieldLabels] = None,
+        label_lengths: Optional[Dict[str, int]] = None,
+        search_help: Optional[str] = None,
+        search_help_parameter: Optional[str] = None,
+        parameter_id: Optional[str] = None,
+        default_component_name: Optional[str] = None,
+        change_document: Optional[bool] = None,
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Change a data element and activate it. Arguments left at None keep their value.
+
+        Passing domain, data_type or reference_to changes the type; labels only
+        changes the labels it contains.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = update_data_element(
+            http_request_parameters,
+            name,
+            self.username,
+            self.language,
+            transport,
+            activate,
+            description=description,
+            domain=domain,
+            data_type=data_type,
+            length=length,
+            decimals=decimals,
+            reference_to=reference_to,
+            reference_kind=reference_kind,
+            labels=labels,
+            label_lengths=label_lengths,
+            search_help=search_help,
+            search_help_parameter=search_help_parameter,
+            parameter_id=parameter_id,
+            default_component_name=default_component_name,
+            change_document=change_document,
         )
         return response
 

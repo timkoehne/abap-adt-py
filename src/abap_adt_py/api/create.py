@@ -328,55 +328,6 @@ def _header(
     )
 
 
-def create_domain(
-    http_request_parameters: HttpRequestParameters,
-    name: str,
-    package: str,
-    description: str,
-    owner: str,
-    data_type: str,
-    length: int,
-    decimals: int = 0,
-    language: str = "EN",
-    transport: Optional[str] = None,
-) -> bool:
-    """Create a domain with a built-in data type, e.g. data_type="CHAR", length=10."""
-
-    body = f"""<?xml version="1.0" encoding="UTF-8"?>
-    <doma:domain xmlns:doma="http://www.sap.com/dictionary/domain" {_header(name, description, owner, "DOMA/DD", language)}>
-        <adtcore:packageRef adtcore:name={quoteattr(package)}/>
-        <doma:content>
-            <doma:typeInformation>
-                <doma:datatype>{escape(data_type.upper())}</doma:datatype>
-                <doma:length>{int(length):06d}</doma:length>
-                <doma:decimals>{int(decimals):06d}</doma:decimals>
-            </doma:typeInformation>
-            <doma:outputInformation>
-                <doma:length>{int(length):06d}</doma:length>
-                <doma:style>00</doma:style>
-                <doma:conversionExit/>
-                <doma:signExists>false</doma:signExists>
-                <doma:lowercase>false</doma:lowercase>
-                <doma:ampmFormat>false</doma:ampmFormat>
-            </doma:outputInformation>
-            <doma:valueInformation>
-                <doma:valueTableRef/>
-                <doma:appendExists>false</doma:appendExists>
-                <doma:fixValues/>
-            </doma:valueInformation>
-        </doma:content>
-    </doma:domain>"""
-
-    return _post_object(
-        http_request_parameters,
-        "/sap/bc/adt/ddic/domains",
-        body,
-        "application/vnd.sap.adt.domains.v2+xml",
-        name,
-        transport,
-    )
-
-
 def create_table_type(
     http_request_parameters: HttpRequestParameters,
     name: str,
