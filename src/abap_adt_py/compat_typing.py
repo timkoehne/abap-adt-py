@@ -3,6 +3,8 @@ from typing import (
     Optional,
     Dict,
     List,
+    Sequence,
+    Tuple,
     Union,
 )  # Always available since Python 3.5
 

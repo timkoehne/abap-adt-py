@@ -3,6 +3,7 @@ import pytest
 from abap_adt_py.api import activate, content, delete, lock, prettyprint, search
 from abap_adt_py.exceptions import (
     ActivationError,
+    AdtError,
     InvalidLockHandleError,
     NotFoundError,
     ObjectLockedError,
@@ -11,6 +12,7 @@ from abap_adt_py.exceptions import (
 from helpers import PARAMS, FakeResponse, fixture
 
 PROGRAM = "/sap/bc/adt/programs/programs/z_test"
+TABLE = "/sap/bc/adt/ddic/tables/zadtpy_act1"
 
 
 def test_lock_returns_handle(fake_sap):
@@ -86,6 +88,28 @@ def test_delete_with_transport(fake_sap):
     calls = fake_sap(delete, FakeResponse(200))
     delete.delete(PARAMS, PROGRAM, "HANDLE", "A4HK900001")
     assert calls[0]["params"] == {"lockHandle": "HANDLE", "corrNr": "A4HK900001"}
+
+
+def test_delete_objects(fake_sap):
+    calls = fake_sap(delete, FakeResponse(200, fixture("deletion_success.xml")))
+    view = "/sap/bc/adt/ddic/ddl/sources/zadtpy_del1_v"
+    assert delete.delete_objects(PARAMS, [view, TABLE], "A4HK900001")
+
+    call = calls[0]
+    assert call["uri"] == "/sap/bc/adt/deletion/delete"
+    assert call["content_type"] == "application/vnd.sap.adt.deletion.request.v1+xml"
+    assert f'<del:object adtcore:uri="{view}">' in call["body"]
+    assert call["body"].count("<del:transportNumber>A4HK900001</del:transportNumber>") == 2
+
+
+def test_delete_objects_reports_the_failed_ones(fake_sap):
+    fake_sap(delete, FakeResponse(200, fixture("deletion_failed.xml")))
+    with pytest.raises(AdtError) as error:
+        delete.delete_objects(PARAMS, [TABLE, "/sap/bc/adt/programs/programs/zadtpy_nonexist"])
+    assert str(error.value) == (
+        "200 - Failed to delete ZADTPY_DEL1: Used by 1 other DDIC object, "
+        "ZADTPY_NONEXIST: Object does not exist"
+    )
 
 
 def test_activate_success(fake_sap):

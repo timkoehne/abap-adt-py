@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<del:deletionResult xmlns:del="http://www.sap.com/adt/deletion">
+  <del:object xmlns:adtcore="http://www.sap.com/adt/core" del:isDeleted="false" adtcore:uri="/sap/bc/adt/ddic/tables/zadtpy_del1" adtcore:type="TABL/DT" adtcore:name="ZADTPY_DEL1">
+    <del:message del:priority="0" del:type="E">
+      <del:text>Used by 1 other DDIC object</del:text>
+    </del:message>
+  </del:object>
+  <del:object xmlns:adtcore="http://www.sap.com/adt/core" del:isDeleted="false" adtcore:uri="/sap/bc/adt/programs/programs/zadtpy_nonexist" adtcore:type="PROG/P" adtcore:name="ZADTPY_NONEXIST">
+    <del:message del:priority="0" del:type="E">
+      <del:text>Object does not exist</del:text>
+    </del:message>
+  </del:object>
+</del:deletionResult>

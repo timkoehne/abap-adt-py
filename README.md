@@ -141,6 +141,9 @@ client.release_transport(transport)  # releases the tasks first, then the reques
 lock_handle: str = client.lock(report_uri)
 client.delete(report_uri, lock_handle)
 client.unlock(report_uri, lock_handle)
+
+# delete several objects at once, without locking; needed for objects that use each other
+client.delete_objects(["/sap/bc/adt/ddic/ddl/sources/z_root", "/sap/bc/adt/ddic/ddl/sources/z_child"])
 ```
 # Errors
 All errors derive from `AdtError` (an `Exception`) and carry `status_code`, `sap_type`, `sap_message` and the raw `response_text`:

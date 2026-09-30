@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<del:deletionResult xmlns:del="http://www.sap.com/adt/deletion">
+  <del:object xmlns:adtcore="http://www.sap.com/adt/core" del:isDeleted="true" adtcore:uri="/sap/bc/adt/ddic/db/settings/zadtpy_del1" adtcore:type="TABT/DTT" adtcore:name="ZADTPY_DEL1">
+    <del:message del:priority="0" del:type="S">
+      <del:text/>
+    </del:message>
+  </del:object>
+  <del:object xmlns:adtcore="http://www.sap.com/adt/core" del:isDeleted="true" adtcore:uri="/sap/bc/adt/ddic/db/settings/zadtpy_del1_v" adtcore:type="TABT/DTT" adtcore:name="ZADTPY_DEL1_V">
+    <del:message del:priority="0" del:type="S">
+      <del:text/>
+    </del:message>
+  </del:object>
+  <del:object xmlns:adtcore="http://www.sap.com/adt/core" del:isDeleted="true" adtcore:uri="/sap/bc/adt/ddic/ddl/sources/zadtpy_del1_v" adtcore:type="DDLS/DF" adtcore:name="ZADTPY_DEL1_V" adtcore:packageName="$TMP">
+    <del:message del:priority="0" del:type="">
+      <del:text>S::000</del:text>
+      <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/messageclass//messages/000/longtext?language=E" rel="http://www.sap.com/adt/relations/longtext" type="text/html"/>
+      <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/ddic/logs/db/DEVELOPER20260930201639" rel="http://www.sap.com/adt/relations/ddic/deletionlog" type="application/vnd.sap.adt.logs+xml" title="Deletion Log"/>
+    </del:message>
+  </del:object>
+  <del:object xmlns:adtcore="http://www.sap.com/adt/core" del:isDeleted="true" adtcore:uri="/sap/bc/adt/ddic/tables/zadtpy_del1" adtcore:type="TABL/DT" adtcore:name="ZADTPY_DEL1" adtcore:packageName="$TMP">
+    <del:message del:priority="0" del:type="S">
+      <del:text/>
+    </del:message>
+  </del:object>
+</del:deletionResult>

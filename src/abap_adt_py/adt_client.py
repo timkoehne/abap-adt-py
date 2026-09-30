@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 from requests.auth import HTTPBasicAuth
 
-from .compat_typing import Literal, List, Dict, Optional, Union
+from .compat_typing import Literal, List, Dict, Optional, Sequence, Tuple, Union
 from .api.syntax import SyntaxCheckResult, syntax_check
 from .api.navigation import (
     CompletionProposal,
@@ -31,7 +31,7 @@ from .api.create import (
 )
 from .api.activate import activate
 from .api.create import ObjectTypes
-from .api.delete import delete
+from .api.delete import delete, delete_objects
 from .api.dumps import Dump, DumpSummary, get_dump, list_dumps
 from .api.lock import lock, unlock
 from .api.login import login
@@ -177,6 +177,18 @@ class AdtClient:
     ) -> bool:
         http_request_parameters = self.build_request_parameters()
         response = delete(http_request_parameters, object_uri, lock_handle, transport)
+        return response
+
+    def delete_objects(
+        self, object_uris: Sequence[str], transport: Optional[str] = None
+    ) -> bool:
+        """Delete several objects together, without locking them.
+
+        Needed for objects that use each other, e.g. a CDS root view and its child.
+        Raises AdtError if any object wasn't deleted.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = delete_objects(http_request_parameters, object_uris, transport)
         return response
 
     def create(
