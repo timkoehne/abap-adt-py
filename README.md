@@ -130,6 +130,19 @@ print(client.get_messages("Z_DEMO"))
 # authorization objects (the activities are the allowed values of ACTVT)
 client.create_authorization_object("Z_DEMO_AO", "$TMP", "Demo", "AAAB", ["BUKRS", "ACTVT"], ["02", "03"])
 
+# BAdIs: an enhancement spot with a BAdI definition (the interface includes IF_BADI_INTERFACE) ...
+client.create_enhancement_spot("Z_DEMO_SPOT", "$TMP", "Demo spot", [
+    {"name": "Z_DEMO_BADI", "interface": "ZIF_DEMO_BADI", "single_use": False,
+     "filters": [{"name": "PLANT", "type": "C", "data_element": "WERKS_D"}]},
+])
+print(client.get_enhancement_spot("Z_DEMO_SPOT"))
+# ... and an enhancement implementation for it
+client.create_enhancement_implementation("Z_DEMO_IMPL", "$TMP", "Demo implementation", "Z_DEMO_SPOT", [
+    {"name": "Z_DEMO_BADI_1000", "badi": "Z_DEMO_BADI", "implementing_class": "ZCL_DEMO_BADI",
+     "filters": [{"filter": "PLANT", "value": "1000"}]},  # all must match; a list of lists are alternatives
+])
+print(client.get_enhancement_implementation("Z_DEMO_IMPL"))
+
 # read source code
 src: str = client.get_object_source(f"{report_uri}/source/main")
 print(src)

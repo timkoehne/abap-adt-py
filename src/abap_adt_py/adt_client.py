@@ -55,6 +55,17 @@ from .api.authorization import (
     get_authorization_object,
     update_authorization_object,
 )
+from .api.enhancements import (
+    BadiDefinition,
+    BadiImplementation,
+    EnhancementImplementation,
+    EnhancementSpot,
+    create_enhancement_implementation,
+    create_enhancement_spot,
+    get_enhancement_implementation,
+    get_enhancement_spot,
+    update_enhancement_implementation,
+)
 from .api.activate import InactiveObject, activate, activate_objects, inactive_objects
 from .api.create import ObjectTypes
 from .api.delete import delete, delete_objects
@@ -782,6 +793,108 @@ class AdtClient:
             object_class,
             fields,
             activities,
+        )
+        return response
+
+    def create_enhancement_spot(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        badis: List[BadiDefinition],
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Create an enhancement spot with BAdI definitions and activate it.
+
+        e.g. badis=[{"name": "ZBADI_CHECK", "interface": "ZIF_CHECK",
+        "single_use": False, "fallback_class": "",
+        "filters": [{"name": "PLANT", "type": "C", "data_element": "WERKS_D"}]}]
+        The interfaces have to exist and include IF_BADI_INTERFACE.
+        Its uri is /sap/bc/adt/enhancements/enhsxsb/<name in lower case>.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_enhancement_spot(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            badis,
+            self.language,
+            transport,
+            activate,
+        )
+        return response
+
+    def get_enhancement_spot(self, name: str) -> EnhancementSpot:
+        """Read an enhancement spot with its BAdI definitions (interface, filters, ...)."""
+        http_request_parameters = self.build_request_parameters()
+        response = get_enhancement_spot(http_request_parameters, name)
+        return response
+
+    def create_enhancement_implementation(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        spot: str,
+        implementations: List[BadiImplementation],
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Create an enhancement implementation with BAdI implementations and activate it.
+
+        e.g. implementations=[{"name": "ZBADI_CHECK_1000", "badi": "ZBADI_CHECK",
+        "implementing_class": "ZCL_CHECK_1000", "active": True,
+        "filters": [{"filter": "PLANT", "value": "1000"}]}]
+        A flat list of filter conditions must all match; a list of lists is a list of
+        alternatives. A condition is {"filter", "comparator" (default =), "value"} or
+        a range {"filter", "low", "high"}.
+        Its uri is /sap/bc/adt/enhancements/enhoxhb/<name in lower case>.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_enhancement_implementation(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            spot,
+            implementations,
+            self.language,
+            transport,
+            activate,
+        )
+        return response
+
+    def get_enhancement_implementation(self, name: str) -> EnhancementImplementation:
+        http_request_parameters = self.build_request_parameters()
+        response = get_enhancement_implementation(http_request_parameters, name)
+        return response
+
+    def update_enhancement_implementation(
+        self,
+        name: str,
+        implementations: Optional[List[BadiImplementation]] = None,
+        description: Optional[str] = None,
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Change an enhancement implementation and activate it.
+
+        implementations replaces all BAdI implementations; None keeps them.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = update_enhancement_implementation(
+            http_request_parameters,
+            name,
+            self.username,
+            implementations,
+            description,
+            self.language,
+            transport,
+            activate,
         )
         return response
 

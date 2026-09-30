@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<enho:objectData xmlns:enho="http://www.sap.com/adt/enhancements/enho" xmlns:adtcore="http://www.sap.com/adt/core" adtcore:responsible="DEVELOPER" adtcore:masterLanguage="EN" adtcore:masterSystem="A4H" adtcore:abapLanguageVersion="standard" adtcore:name="ZEI_ADTPY" adtcore:type="ENHO/XHB" adtcore:changedAt="2026-09-30T20:40:11Z" adtcore:version="active" adtcore:createdAt="2026-09-30T20:40:01Z" adtcore:changedBy="DEVELOPER" adtcore:createdBy="DEVELOPER" adtcore:description="adt-py implementation" adtcore:language="EN">
+  <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP" adtcore:description="Temporary Objects (never transported!)"/>
+  <enho:contentCommon enho:toolType="BADI_IMPL" enho:adjustmentStatus="" enho:upgradeFlag="false" enho:switchSupported="true">
+    <enho:usages>
+      <enhcore:referencedObject xmlns:enhcore="http://www.sap.com/abapsource/enhancementscore" enhcore:program_id="R3TR" enhcore:element_usage="USEO" enhcore:upgrade="false" enhcore:automatic_transport="false">
+        <enhcore:objectReference adtcore:uri="/sap/bc/adt/oo/classes/zcl_adtpy_badi_impl" adtcore:type="CLAS/OC" adtcore:name="ZCL_ADTPY_BADI_IMPL"/>
+        <enhcore:mainObjectReference adtcore:uri="/sap/bc/adt/oo/classes/zcl_adtpy_badi_impl" adtcore:type="CLAS/OC" adtcore:name="ZCL_ADTPY_BADI_IMPL"/>
+      </enhcore:referencedObject>
+      <enhcore:referencedObject xmlns:enhcore="http://www.sap.com/abapsource/enhancementscore" enhcore:program_id="R3TR" enhcore:element_usage="EXTO" enhcore:upgrade="false" enhcore:automatic_transport="false">
+        <enhcore:objectReference adtcore:uri="/sap/bc/adt/enhancements/enhsxsb/zes_adtpy" adtcore:type="ENHS/XSB" adtcore:name="ZES_ADTPY"/>
+        <enhcore:mainObjectReference adtcore:uri="/sap/bc/adt/enhancements/enhsxsb/zes_adtpy" adtcore:type="ENHS/XSB" adtcore:name="ZES_ADTPY"/>
+      </enhcore:referencedObject>
+      <enhcore:referencedObject xmlns:enhcore="http://www.sap.com/abapsource/enhancementscore" enhcore:program_id="R3TR" enhcore:element_usage="USEO" enhcore:upgrade="false" enhcore:automatic_transport="false">
+        <enhcore:objectReference adtcore:uri="/sap/bc/adt/oo/interfaces/zif_adtpy_badi" adtcore:type="INTF/OI" adtcore:name="ZIF_ADTPY_BADI"/>
+        <enhcore:mainObjectReference adtcore:uri="/sap/bc/adt/oo/interfaces/zif_adtpy_badi" adtcore:type="INTF/OI" adtcore:name="ZIF_ADTPY_BADI"/>
+      </enhcore:referencedObject>
+    </enho:usages>
+  </enho:contentCommon>
+  <enho:contentSpecific>
+    <enho:badiTechnology>
+      <enho:badiImplementations>
+        <enho:badiImplementation enho:name="ZBADI_ADTPY_IMPL" enho:shortText="" enho:example="false" enho:default="false" enho:active="true" enho:customizingLock="" enho:runtimeBehaviorShorttext="Execution depends on runtime filter values">
+          <enho:enhancementSpot adtcore:uri="/sap/bc/adt/enhancements/enhsxsb/zes_adtpy" adtcore:type="ENHS/XSB" adtcore:name="ZES_ADTPY"/>
+          <enho:badiDefinition adtcore:uri="/sap/bc/adt/enhancements/enhsxsb/zes_adtpy#type=enhs%2fxb;name=zbadi_adtpy" adtcore:type="ENHS/XB" adtcore:name="ZBADI_ADTPY"/>
+          <enho:implementingClass adtcore:uri="/sap/bc/adt/oo/classes/zcl_adtpy_badi_impl" adtcore:type="CLAS/OC" adtcore:name="ZCL_ADTPY_BADI_IMPL"/>
+          <enho:filterTree>
+            <enho:filterToken xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="enho:Or">
+              <enho:filterToken xsi:type="enho:Filter" enho:filterName="PLANT" enho:comparator="=" enho:value="2000" enho:filterProperty="#//badi/contentSpecific///ZBADI_ADTPY_IMPL/filterTree/filterProperty.PLANT"/>
+              <enho:filterToken xsi:type="enho:RangeFilter" enho:filterName="PLANT" enho:comparatorLeft="&lt;=" enho:valueLeft="3000" enho:comparatorRight="&lt;=" enho:valueRight="3999" enho:filterProperty="#//badi/contentSpecific///ZBADI_ADTPY_IMPL/filterTree/filterProperty.PLANT"/>
+            </enho:filterToken>
+            <enho:filterProperty enho:filterName="PLANT" enho:filterType="C">
+              <enho:filterCheck xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:enhcore="http://www.sap.com/abapsource/enhancementscore" xsi:type="enhcore:DictionaryCheck">
+                <enhcore:checkObject adtcore:uri="/sap/bc/adt/ddic/dataelements/werks_d" adtcore:type="DTEL/DE" adtcore:name="WERKS_D"/>
+              </enho:filterCheck>
+            </enho:filterProperty>
+          </enho:filterTree>
+        </enho:badiImplementation>
+      </enho:badiImplementations>
+    </enho:badiTechnology>
+  </enho:contentSpecific>
+</enho:objectData>

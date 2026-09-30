@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<enhs:objectData xmlns:enhs="http://www.sap.com/adt/enhancements/enhs" xmlns:adtcore="http://www.sap.com/adt/core" adtcore:responsible="DEVELOPER" adtcore:masterLanguage="EN" adtcore:masterSystem="A4H" adtcore:abapLanguageVersion="standard" adtcore:name="ZES_ADTPY" adtcore:type="ENHS/XSB" adtcore:changedAt="2026-09-30T00:00:00Z" adtcore:version="active" adtcore:createdAt="2026-09-30T00:00:00Z" adtcore:changedBy="DEVELOPER" adtcore:createdBy="DEVELOPER" adtcore:description="adt-py spot" adtcore:language="EN">
+  <adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP" adtcore:description="Temporary Objects (never transported!)"/>
+  <enhs:contentCommon enhs:toolType="BADI_DEF" enhs:internal="false" enhs:internalFlagEditable="false">
+    <enhs:usages>
+      <enhcore:referencedObject xmlns:enhcore="http://www.sap.com/abapsource/enhancementscore" enhcore:program_id="R3TR" enhcore:element_usage="USEO" enhcore:upgrade="false" enhcore:automatic_transport="false">
+        <enhcore:objectReference adtcore:uri="/sap/bc/adt/oo/interfaces/zif_adtpy_badi" adtcore:type="INTF/OI" adtcore:name="ZIF_ADTPY_BADI"/>
+        <enhcore:mainObjectReference adtcore:uri="/sap/bc/adt/oo/interfaces/zif_adtpy_badi" adtcore:type="INTF/OI" adtcore:name="ZIF_ADTPY_BADI"/>
+      </enhcore:referencedObject>
+    </enhs:usages>
+  </enhs:contentCommon>
+  <enhs:contentSpecific>
+    <enhs:badiTechnology>
+      <enhs:badiDefinitions>
+        <enhs:badiDefinition enhs:name="ZBADI_ADTPY" enhs:shorttext="adt-py badi" enhs:singleUse="false" enhs:useFallbackClass="false" enhs:filterLimitation="false" enhs:documentationId="" enhs:contextMode="N" enhs:amdp="false" enhs:internalUse="false" enhs:customLogicRegistered="false">
+          <enhs:interface adtcore:uri="/sap/bc/adt/oo/interfaces/zif_adtpy_badi" adtcore:type="INTF/OI" adtcore:name="ZIF_ADTPY_BADI"/>
+          <enhs:filters>
+            <enhs:filter enhs:filterName="PLANT" enhs:filterType="C" enhs:shorttext="Plant">
+              <enhs:filterCheck xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:enhcore="http://www.sap.com/abapsource/enhancementscore" xsi:type="enhcore:DictionaryCheck">
+                <enhcore:checkObject adtcore:uri="/sap/bc/adt/ddic/dataelements/werks_d" adtcore:type="DTEL/DE" adtcore:name="WERKS_D"/>
+              </enhs:filterCheck>
+            </enhs:filter>
+          </enhs:filters>
+        </enhs:badiDefinition>
+      </enhs:badiDefinitions>
+    </enhs:badiTechnology>
+  </enhs:contentSpecific>
+</enhs:objectData>
