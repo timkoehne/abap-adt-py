@@ -19,7 +19,7 @@ import uuid
 import pytest
 
 from abap_adt_py.adt_client import AdtClient
-from helpers import delete_object
+from helpers import delete_object, write_source
 
 HERE = pathlib.Path(__file__).parent
 
@@ -78,3 +78,33 @@ def cleanup(client):
         except Exception as error:
             if "404" not in str(error)[:10]:
                 print(f"cleanup of {object_uri} failed: {str(error)[:200]}")
+
+
+CLASS_SOURCE = """CLASS {name} DEFINITION PUBLIC FINAL CREATE PUBLIC.
+  PUBLIC SECTION.
+    INTERFACES if_oo_adt_classrun.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+CLASS {name} IMPLEMENTATION.
+  METHOD if_oo_adt_classrun~main.
+{body}
+  ENDMETHOD.
+ENDCLASS."""
+
+
+@pytest.fixture
+def runnable_class(client, uid, cleanup):
+    """Create and activate a class whose main method runs the given ABAP statements."""
+
+    def create(suffix, body):
+        name = f"ZCL_ADTPY_{uid}_{suffix}"
+        uri = f"/sap/bc/adt/oo/classes/{name.lower()}"
+        client.create("CLAS/OC", name, "$TMP", "adt-py class run test")
+        cleanup(uri)
+        write_source(client, uri, CLASS_SOURCE.format(name=name.lower(), body=body))
+        assert client.activate(name, uri)
+        return name
+
+    return create

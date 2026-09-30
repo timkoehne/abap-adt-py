@@ -1,36 +1,5 @@
 import pytest
 
-from helpers import write_source
-
-CLASS_SOURCE = """CLASS {name} DEFINITION PUBLIC FINAL CREATE PUBLIC.
-  PUBLIC SECTION.
-    INTERFACES if_oo_adt_classrun.
-  PROTECTED SECTION.
-  PRIVATE SECTION.
-ENDCLASS.
-
-CLASS {name} IMPLEMENTATION.
-  METHOD if_oo_adt_classrun~main.
-{body}
-  ENDMETHOD.
-ENDCLASS."""
-
-
-@pytest.fixture
-def runnable_class(client, uid, cleanup):
-    """Create and activate a class whose main method runs the given ABAP statements."""
-
-    def create(suffix, body):
-        name = f"ZCL_ADTPY_{uid}_{suffix}"
-        uri = f"/sap/bc/adt/oo/classes/{name.lower()}"
-        client.create("CLAS/OC", name, "$TMP", "adt-py class run test")
-        cleanup(uri)
-        write_source(client, uri, CLASS_SOURCE.format(name=name.lower(), body=body))
-        assert client.activate(name, uri)
-        return name
-
-    return create
-
 
 def test_run_class(client, runnable_class):
     name = runnable_class("RUN", "    out->write( |Hello from { sy-uname }| ).\n    out->write( 42 ).")
