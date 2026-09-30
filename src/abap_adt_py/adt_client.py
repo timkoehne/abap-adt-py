@@ -29,7 +29,7 @@ from .api.create import (
     create_table_type,
     create_test_class_include,
 )
-from .api.activate import activate
+from .api.activate import InactiveObject, activate, activate_objects, inactive_objects
 from .api.create import ObjectTypes
 from .api.delete import delete, delete_objects
 from .api.dumps import Dump, DumpSummary, get_dump, list_dumps
@@ -134,8 +134,24 @@ class AdtClient:
         return response
 
     def activate(self, object_name: str, object_uri: str) -> bool:
+        """Raises ActivationError if the object is still inactive afterwards."""
         http_request_parameters = self.build_request_parameters()
         response = activate(http_request_parameters, object_name, object_uri)
+        return response
+
+    def activate_objects(self, objects: Sequence[Tuple[str, str]]) -> bool:
+        """Activate several objects together, as (name, uri) pairs.
+
+        Needed for objects that depend on each other, e.g. a CDS root view with a
+        composition and its child. Raises ActivationError if any is still inactive.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = activate_objects(http_request_parameters, objects)
+        return response
+
+    def inactive_objects(self) -> List[InactiveObject]:
+        http_request_parameters = self.build_request_parameters()
+        response = inactive_objects(http_request_parameters)
         return response
 
     def lock(self, object_uri: str) -> str:

@@ -16,4 +16,5 @@ XML_NAMESPACES = {
     "atcfinding": "http://www.sap.com/adt/atc/finding",
     "usagereferences": "http://www.sap.com/adt/ris/usageReferences",
     "dump": "http://www.sap.com/adt/categories/dump",
+    "ioc": "http://www.sap.com/abapxml/inactiveCtsObjects",
 }

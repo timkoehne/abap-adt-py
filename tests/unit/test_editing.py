@@ -112,14 +112,23 @@ def test_delete_objects_reports_the_failed_ones(fake_sap):
     )
 
 
+NO_INACTIVE = FakeResponse(
+    200, '<ioc:inactiveObjects xmlns:ioc="http://www.sap.com/abapxml/inactiveCtsObjects"/>'
+)
 def test_activate_success(fake_sap):
-    calls = fake_sap(activate, FakeResponse(200, fixture("activation_success.xml")))
+    calls = fake_sap(
+        activate, FakeResponse(200, fixture("activation_success.xml")), NO_INACTIVE
+    )
     assert activate.activate(PARAMS, "Z_TEST", PROGRAM)
     assert 'adtcore:name="Z_TEST"' in calls[0]["body"]
+    # the activation is confirmed with the list of inactive objects
+    assert calls[1]["uri"] == "/sap/bc/adt/activation/inactiveobjects"
 
 
 def test_activate_escapes_values(fake_sap):
-    calls = fake_sap(activate, FakeResponse(200, fixture("activation_success.xml")))
+    calls = fake_sap(
+        activate, FakeResponse(200, fixture("activation_success.xml")), NO_INACTIVE
+    )
     activate.activate(PARAMS, "Z_A&B", PROGRAM)
     assert 'adtcore:name="Z_A&amp;B"' in calls[0]["body"]
 
@@ -138,6 +147,76 @@ def test_activate_error_reports_messages(fake_sap):
         "uri": "/sap/bc/adt/programs/programs/z_adtpy_fixture/source/main#start=2,6;end=2,19",
         "object": "Program Z_ADTPY_FIXTURE",
     }
+
+
+def test_activate_executed_but_still_inactive(fake_sap):
+    """Tables and CDS views report activationExecuted="true" also when they fail."""
+    fake_sap(
+        activate,
+        FakeResponse(200, fixture("activation_still_inactive.xml")),
+        FakeResponse(200, fixture("inactive_objects.xml")),
+    )
+    with pytest.raises(ActivationError) as error:
+        activate.activate(PARAMS, "ZADTPY_ACT1", TABLE)
+
+    assert "HOURS is a reserved word (choose another field name)" in str(error.value)
+    assert "TABL ZADTPY_ACT1 was not activated" in str(error.value)
+
+
+def test_activate_ignores_other_inactive_objects(fake_sap):
+    fake_sap(
+        activate,
+        FakeResponse(200, fixture("activation_success.xml")),
+        FakeResponse(200, fixture("inactive_objects.xml")),
+    )
+    assert activate.activate(PARAMS, "Z_TEST", PROGRAM)
+
+
+def test_activate_objects_in_one_request(fake_sap):
+    view = "/sap/bc/adt/ddic/ddl/sources/"
+    calls = fake_sap(
+        activate, FakeResponse(200, fixture("activation_success.xml")), NO_INACTIVE
+    )
+    assert activate.activate_objects(
+        PARAMS, [("Z_ROOT", view + "z_root"), ("Z_CHILD", view + "z_child")]
+    )
+    body = calls[0]["body"]
+    assert body.count("<adtcore:objectReference ") == 2
+    assert 'adtcore:uri="/sap/bc/adt/ddic/ddl/sources/z_child" adtcore:name="Z_CHILD"' in body
+
+
+def test_activate_objects_names_the_failed_ones(fake_sap):
+    fake_sap(
+        activate,
+        FakeResponse(200, fixture("activation_still_inactive.xml")),
+        FakeResponse(200, fixture("inactive_objects.xml")),
+    )
+    with pytest.raises(ActivationError, match="Activation of ZADTPY_ACT1 failed"):
+        activate.activate_objects(PARAMS, [("Z_TEST", PROGRAM), ("ZADTPY_ACT1", TABLE)])
+
+
+def test_inactive_objects(fake_sap):
+    fake_sap(activate, FakeResponse(200, fixture("inactive_objects.xml")))
+    assert activate.inactive_objects(PARAMS) == [
+        {
+            "name": "ZADTPY_ACT1",
+            "type": "TABL/DT",
+            "uri": TABLE,
+            "user": "DEVELOPER",
+            "deleted": False,
+            "transport": "",
+        }
+    ]
+
+
+def test_inactive_class_part_counts_for_the_class():
+    assert activate._same_object(
+        "/sap/bc/adt/oo/classes/zcl_x",
+        "/sap/bc/adt/oo/classes/zcl_x/source/main#type=CLAS%2FOM;name=M",
+    )
+    assert not activate._same_object(
+        "/sap/bc/adt/oo/classes/zcl_x", "/sap/bc/adt/oo/classes/zcl_x2"
+    )
 
 
 def test_activate_http_error(fake_sap):

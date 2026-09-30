@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<chkl:messages xmlns:chkl="http://www.sap.com/abapxml/checklist">
+  <chkl:properties checkExecuted="true" activationExecuted="true" generationExecuted="false"/>
+  <msg objDescr="" type="E" line="0" href="">
+    <shortText>
+      <txt>Activation was cancelled.</txt>
+    </shortText>
+  </msg>
+  <msg objDescr="DDLS ZADTPY_ACT1_V" type="E" line="1" href="/sap/bc/adt/ddic/ddl/sources/zadtpy_act1_v" code="SDDL_PARSER_MSG(532)">
+    <shortText>
+      <txt>Unexpected keyword "left"</txt>
+    </shortText>
+    <t100Key msgid="SDDL_PARSER_MSG" msgno="532" msgv1="left"/>
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/vit/ddic/logs/db/ACTDDLSZADTPY_ACT1_V" rel="http://www.sap.com/adt/relations/ddic/activationlog" type="application/vnd.sap.sapgui"/>
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/ddic/logs/db/ACTDDLSZADTPY_ACT1_V" rel="http://www.sap.com/adt/relations/ddic/activationlog" type="application/vnd.sap.adt.logs+xml"/>
+  </msg>
+  <msg objDescr="DDLS ZADTPY_ACT1_V was not activated" type="E" line="2" href="/sap/bc/adt/ddic/ddl/sources/zadtpy_act1_v" code="D0(408)">
+    <shortText>
+      <txt>DDLS ZADTPY_ACT1_V was not activated</txt>
+    </shortText>
+    <t100Key msgid="D0" msgno="408" msgv1="DDLS" msgv2="ZADTPY_ACT1_V"/>
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/vit/ddic/logs/db/ACTDDLSZADTPY_ACT1_V" rel="http://www.sap.com/adt/relations/ddic/activationlog" type="application/vnd.sap.sapgui"/>
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/ddic/logs/db/ACTDDLSZADTPY_ACT1_V" rel="http://www.sap.com/adt/relations/ddic/activationlog" type="application/vnd.sap.adt.logs+xml"/>
+  </msg>
+  <msg objDescr="Data Definition ZADTPY_ACT1_V" type="E" line="3" href="/sap/bc/adt/ddic/ddl/sources/zadtpy_act1_v/source/main#start=9,22" code="SDDL_PARSER_MSG(532)">
+    <shortText>
+      <txt>Unexpected keyword "left"</txt>
+    </shortText>
+    <t100Key msgid="SDDL_PARSER_MSG" msgno="532" msgv1="left"/>
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/vit/ddic/logs/db/ACTDDLSZADTPY_ACT1_V" rel="http://www.sap.com/adt/relations/ddic/activationlog" type="application/vnd.sap.sapgui"/>
+    <atom:link xmlns:atom="http://www.w3.org/2005/Atom" href="/sap/bc/adt/ddic/logs/db/ACTDDLSZADTPY_ACT1_V" rel="http://www.sap.com/adt/relations/ddic/activationlog" type="application/vnd.sap.adt.logs+xml"/>
+  </msg>
+</chkl:messages>

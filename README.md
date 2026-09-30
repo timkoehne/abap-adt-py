@@ -126,8 +126,11 @@ lock_handle: str = client.lock(report_uri)
 client.set_object_source(f"{report_uri}/source/main", pretty_src, lock_handle)
 client.unlock(report_uri, lock_handle)
 
-# activate object
+# activate object, raises ActivationError if it is still inactive afterwards
 client.activate(report_name, report_uri)
+# objects that depend on each other, e.g. a CDS root view with a composition and its child
+client.activate_objects([("Z_ROOT", "/sap/bc/adt/ddic/ddl/sources/z_root"), ("Z_CHILD", "/sap/bc/adt/ddic/ddl/sources/z_child")])
+print(client.inactive_objects())
 
 # transportable objects: create a transport request and pass it along
 transport: str = client.create_transport("/sap/bc/adt/packages/z_demo", "Demo changes", "Z_DEMO")
