@@ -1,6 +1,6 @@
 import pytest
 
-from abap_adt_py.exceptions import ActivationError
+from abap_adt_py.exceptions import ActivationError, AdtError
 from helpers import write_source
 
 
@@ -74,3 +74,37 @@ define role {view} {{
     write_source(client, role_uri, role("ZADTPY_NO"))
     with pytest.raises(ActivationError, match="ZADTPY_NO does not exist"):
         client.activate(view, role_uri)
+
+
+def test_authorization_field(client, uid, cleanup):
+    # authorization fields have at most 10 characters
+    field, authorization_object = f"ZF{uid}", f"ZB{uid}"
+    field_uri = f"/sap/bc/adt/aps/iam/auth/{field.lower()}"
+
+    client.create_authorization_field(field, "$TMP", "S_CARR_ID", "SCARR")
+    cleanup(field_uri)
+    assert client.get_authorization_field(field) == {
+        "name": field,
+        "description": "Airline Code",
+        "package": "$TMP",
+        "data_element": "S_CARR_ID",
+        "check_table": "SCARR",
+    }
+
+    with pytest.raises(AdtError, match="Check table ZADTPY_NO does not actively exist"):
+        client.update_authorization_field(field, check_table="ZADTPY_NO")
+    client.update_authorization_field(field, check_table="")
+    assert client.get_authorization_field(field)["check_table"] == ""
+
+    # a failed create leaves nothing behind
+    with pytest.raises(AdtError, match="Data element ZADTPY_NO does not exist"):
+        client.create_authorization_field(f"ZG{uid}", "$TMP", "ZADTPY_NO")
+    assert client.run_query(f"SELECT fieldname FROM authx WHERE fieldname = 'ZG{uid}'")["rows"] == []
+
+    client.create_authorization_object(
+        authorization_object, "$TMP", "adt-py authorization", "AAAB", [field, "ACTVT"], ["03"]
+    )
+    cleanup(f"/sap/bc/adt/aps/iam/suso/{authorization_object.lower()}")
+    assert client.get_authorization_object(authorization_object)["fields"] == [field, "ACTVT"]
+    with pytest.raises(AdtError, match="still being used"):
+        client.delete_objects([field_uri])

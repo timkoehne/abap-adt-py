@@ -50,9 +50,13 @@ from .api.messageclass import (
     set_messages,
 )
 from .api.authorization import (
+    AuthorizationField,
     AuthorizationObject,
+    create_authorization_field,
     create_authorization_object,
+    get_authorization_field,
     get_authorization_object,
+    update_authorization_field,
     update_authorization_object,
 )
 from .api.enhancements import (
@@ -800,6 +804,61 @@ class AdtClient:
             object_class,
             fields,
             activities,
+        )
+        return response
+
+    def create_authorization_field(
+        self,
+        name: str,
+        package: str,
+        data_element: str,
+        check_table: str = "",
+        transport: Optional[str] = None,
+    ) -> bool:
+        """Create an authorization field typed by an existing data element, e.g.
+        data_element="S_CARR_ID", check_table="SCARR".
+
+        The field is active right away and takes its description from the data element.
+        Its uri is /sap/bc/adt/aps/iam/auth/<name in lower case>, e.g. for delete.
+        A field can only be deleted when no authorization object uses it anymore.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_authorization_field(
+            http_request_parameters,
+            name,
+            package,
+            self.username,
+            data_element,
+            check_table,
+            self.language,
+            transport,
+        )
+        return response
+
+    def get_authorization_field(self, name: str) -> AuthorizationField:
+        http_request_parameters = self.build_request_parameters()
+        response = get_authorization_field(http_request_parameters, name)
+        return response
+
+    def update_authorization_field(
+        self,
+        name: str,
+        data_element: Optional[str] = None,
+        check_table: Optional[str] = None,
+        transport: Optional[str] = None,
+    ) -> bool:
+        """Change an authorization field. Arguments left at None keep their value,
+        check_table="" removes the check table.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = update_authorization_field(
+            http_request_parameters,
+            name,
+            self.username,
+            self.language,
+            transport,
+            data_element,
+            check_table,
         )
         return response
 

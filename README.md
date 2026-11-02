@@ -132,8 +132,12 @@ client.set_messages("Z_DEMO", [{"number": "002", "text": "Quantity &1 is invalid
 client.delete_messages("Z_DEMO", ["002"])
 print(client.get_messages("Z_DEMO"))
 
+# authorization fields (typed by a data element, optionally with a check table)
+client.create_authorization_field("Z_DEMO_AF", "$TMP", "S_CARR_ID", "SCARR")
+print(client.get_authorization_field("Z_DEMO_AF"))
+
 # authorization objects (the activities are the allowed values of ACTVT)
-client.create_authorization_object("Z_DEMO_AO", "$TMP", "Demo", "AAAB", ["BUKRS", "ACTVT"], ["02", "03"])
+client.create_authorization_object("Z_DEMO_AO", "$TMP", "Demo", "AAAB", ["Z_DEMO_AF", "ACTVT"], ["02", "03"])
 
 # BAdIs: an enhancement spot with a BAdI definition (the interface includes IF_BADI_INTERFACE) ...
 client.create_enhancement_spot("Z_DEMO_SPOT", "$TMP", "Demo spot", [

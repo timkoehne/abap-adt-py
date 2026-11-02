@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<exc:exception xmlns:exc="http://www.sap.com/abapxml/types/communicationframework">
+  <namespace id="com.sap.adt"/>
+  <type id="ExceptionResourceBadRequest"/>
+  <message lang="EN">Authorization Field ZADTPY_AF1 contains errors and therefore cannot be saved</message>
+  <localizedMessage lang="EN">Authorization Field ZADTPY_AF1 contains errors and therefore cannot be saved</localizedMessage>
+  <properties>
+    <entry key="T100KEY-ID">SWB_TOOL</entry>
+    <entry key="T100KEY-NO">036</entry>
+    <entry key="T100KEY-V1">Authorization Field</entry>
+    <entry key="T100KEY-V2">ZADTPY_AF1</entry>
+    <entry key="LONGTEXT">&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;Conversion of SAPscript Text SWB_TOOL036 to HTML&lt;/TITLE&gt;&lt;META http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;&lt;/HEAD&gt;&lt;BODY&gt;&lt;P&gt;&lt;STRONG&gt;Authorization Field ZADTPY_AF1 contains errors and therefore cannot be saved&lt;/STRONG&gt;&lt;/P&gt;&lt;P&gt;Message No. SWB_TOOL036&lt;/P&gt;&lt;P&gt;&lt;STRONG&gt;Diagnosis&lt;/STRONG&gt;&lt;/P&gt;&lt;P&gt;This is an object which can only be saved in active state.&lt;/P&gt;&lt;P&gt;It must be free of errors before it can be saved.&lt;/P&gt;&lt;P&gt;&lt;STRONG&gt;System Response&lt;/STRONG&gt;&lt;/P&gt;&lt;P&gt;&lt;/P&gt;&lt;P&gt;&lt;STRONG&gt;Procedure&lt;/STRONG&gt;&lt;/P&gt;&lt;P&gt;Call the ‘Check’ function to see which syntax errors exist.&lt;/P&gt;&lt;P&gt;Remove these errors and try to save again.&lt;/P&gt;&lt;P&gt;&lt;STRONG&gt;Procedure for System Administration&lt;/STRONG&gt;&lt;/P&gt;&lt;P&gt;&lt;/P&gt;&lt;/BODY&gt;&lt;/HTML&gt;</entry>
+  </properties>
+</exc:exception>

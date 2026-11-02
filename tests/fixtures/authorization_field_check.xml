@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<chkrun:checkRunReports xmlns:chkrun="http://www.sap.com/adt/checkrun">
+  <chkrun:checkReport chkrun:reporter="abapCheckRun" chkrun:triggeringUri="/sap/bc/adt/aps/iam/auth/zadtpy_af1" chkrun:status="processed" chkrun:statusText="Object ZADTPY_AF1 has been checked">
+    <chkrun:checkMessageList>
+      <chkrun:checkMessage chkrun:uri="/sap/bc/adt/aps/iam/auth/zadtpy_af1" chkrun:type="E" chkrun:shortText="Object T001 does not exist in TADIR" chkrun:code="CM_SUSR_WBO(006)">
+        <chkrun:t100Key chkrun:msgid="CM_SUSR_WBO" chkrun:msgno="006" chkrun:msgv1="T001" chkrun:msgv2="0"/>
+      </chkrun:checkMessage>
+      <chkrun:checkMessage chkrun:uri="/sap/bc/adt/aps/iam/auth/zadtpy_af1" chkrun:type="E" chkrun:shortText="Check table T001 does not actively exist." chkrun:code="UE(324)">
+        <chkrun:t100Key chkrun:msgid="UE" chkrun:msgno="324" chkrun:msgv1="T001"/>
+      </chkrun:checkMessage>
+      <chkrun:checkMessage chkrun:uri="/sap/bc/adt/aps/iam/auth/zadtpy_af1" chkrun:type="W" chkrun:shortText="Authorization field ZADTPY_AF1 is not used in any objects." chkrun:code="UE(301)">
+        <chkrun:t100Key chkrun:msgid="UE" chkrun:msgno="301" chkrun:msgv1="ZADTPY_AF1"/>
+      </chkrun:checkMessage>
+      <chkrun:checkMessage chkrun:uri="/sap/bc/adt/aps/iam/auth/zadtpy_af1" chkrun:type="I" chkrun:shortText="0 roles contain the authorization field ZADTPY_AF1." chkrun:code="UE(304)">
+        <chkrun:t100Key chkrun:msgid="UE" chkrun:msgno="304" chkrun:msgv1="ZADTPY_AF1" chkrun:msgv2="0"/>
+      </chkrun:checkMessage>
+    </chkrun:checkMessageList>
+  </chkrun:checkReport>
+</chkrun:checkRunReports>
