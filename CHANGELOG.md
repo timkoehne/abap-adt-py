@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.1
 
 ### Added
 - Authorization fields: `create_authorization_field`, `get_authorization_field`, `update_authorization_field`. Failed saves report SAP's check messages (e.g. a missing check table) instead of a generic error.
