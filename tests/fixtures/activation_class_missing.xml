@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<chkl:messages xmlns:chkl="http://www.sap.com/abapxml/checklist">
+  <chkl:properties checkExecuted="false" activationExecuted="false" generationExecuted="true"/>
+  <msg objDescr="CLAS ZCL_ADTPY_NOPE" type="E" line="1" href="/sap/bc/adt/oo/classes/zcl_adtpy_nope" code="OO(045)">
+    <shortText>
+      <txt>Class ZCL_ADTPY_NOPE does not have a TMDIR entry</txt>
+    </shortText>
+    <t100Key msgid="OO" msgno="045" msgv1="Class" msgv2="ZCL_ADTPY_NOPE"/>
+  </msg>
+  <msg objDescr="" type="I" line="2" href="" code="EU(239)">
+    <shortText>
+      <txt>Errors occurred during generation</txt>
+    </shortText>
+    <t100Key msgid="EU" msgno="239"/>
+  </msg>
+</chkl:messages>

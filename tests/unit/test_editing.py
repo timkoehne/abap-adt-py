@@ -195,6 +195,40 @@ def test_activate_objects_names_the_failed_ones(fake_sap):
         activate.activate_objects(PARAMS, [("Z_TEST", PROGRAM), ("ZADTPY_ACT1", TABLE)])
 
 
+def test_activate_missing_object_reports_generation_errors(fake_sap):
+    """SAP only generates objects that don't exist and reports success."""
+    fake_sap(activate, FakeResponse(200, fixture("activation_class_missing.xml")))
+    with pytest.raises(ActivationError) as error:
+        activate.activate(PARAMS, "ZCL_ADTPY_NOPE", "/sap/bc/adt/oo/classes/zcl_adtpy_nope")
+    assert str(error.value) == (
+        "200 - Activation of ZCL_ADTPY_NOPE failed: "
+        "Class ZCL_ADTPY_NOPE does not have a TMDIR entry"
+    )
+
+
+def test_activate_generated_checks_that_the_objects_exist(fake_sap):
+    field = "/sap/bc/adt/aps/iam/auth/zadtpy_af1"
+    calls = fake_sap(
+        activate,
+        FakeResponse(200, fixture("activation_generated.xml")),
+        FakeResponse(200),
+        FakeResponse(422, fixture("objectproperties_missing.xml")),
+    )
+    with pytest.raises(ActivationError) as error:
+        activate.activate_objects(PARAMS, [("Z_TEST", PROGRAM), ("ZADTPY_AF1", field)])
+    assert str(error.value) == (
+        "200 - Activation of ZADTPY_AF1 failed: ZADTPY_AF1 does not exist"
+    )
+    assert calls[2]["params"] == {"uri": field}
+
+
+def test_activate_generated_existing_object(fake_sap):
+    fake_sap(
+        activate, FakeResponse(200, fixture("activation_generated.xml")), FakeResponse(200)
+    )
+    assert activate.activate(PARAMS, "ZADTPY_AF1", "/sap/bc/adt/aps/iam/auth/zadtpy_af1")
+
+
 def test_inactive_objects(fake_sap):
     fake_sap(activate, FakeResponse(200, fixture("inactive_objects.xml")))
     assert activate.inactive_objects(PARAMS) == [

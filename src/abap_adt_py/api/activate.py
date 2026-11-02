@@ -68,6 +68,18 @@ def _same_object(requested_uri: str, inactive_uri: str) -> bool:
     )
 
 
+def _exists(http_request_parameters: HttpRequestParameters, uri: str) -> bool:
+    response = request(
+        http_request_parameters,
+        uri="/sap/bc/adt/repository/informationsystem/objectproperties/values",
+        method="GET",
+        body="",
+        params={"uri": uri},
+    )
+    # anything else, e.g. an unsupported object type, doesn't tell that it is missing
+    return response.status_code != 422
+
+
 def activate_objects(
     http_request_parameters: HttpRequestParameters,
     objects: Sequence[Tuple[str, str]],
@@ -114,12 +126,8 @@ def activate_objects(
             for msg in et.fromstring(response.text).iter("msg")
         ]
 
-    executed = (
-        properties.get("activationExecuted") == "true"
-        or properties.get("generationExecuted") == "true"
-    )
-    failed = [] if executed else [name for name, _ in objects]
-    if executed:
+    errors = [m for m in messages if m["type"] in ("E", "A")]
+    if properties.get("activationExecuted") == "true":
         # SAP reports an executed activation also when dictionary objects (tables, CDS
         # views, ...) fail to activate, so check what is still inactive
         inactive = inactive_objects(http_request_parameters)
@@ -127,6 +135,25 @@ def activate_objects(
             name
             for name, uri in objects
             if any(_same_object(uri, obj["uri"]) for obj in inactive)
+        ]
+    elif properties.get("generationExecuted") != "true":
+        failed = [name for name, _ in objects]
+    elif errors:
+        # only generated, e.g. an object that doesn't exist: "... has no TMDIR entry"
+        failed = [
+            name
+            for name, uri in objects
+            if any(m["uri"] and _same_object(uri, m["uri"]) for m in errors)
+        ] or [name for name, _ in objects]
+    else:
+        # SAP answers the same without any message for some objects that don't exist,
+        # e.g. authorization fields
+        failed = [
+            name for name, uri in objects if not _exists(http_request_parameters, uri)
+        ]
+        messages += [
+            {"type": "E", "text": f"{name} does not exist", "uri": "", "object": ""}
+            for name in failed
         ]
     if not failed:
         return True

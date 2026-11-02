@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<exc:exception xmlns:exc="http://www.sap.com/abapxml/types/communicationframework">
+  <namespace id="com.sap.adt"/>
+  <type id="ExceptionUnprocessableEntity"/>
+  <message lang="EN">Request was well formed but contained semantic errors</message>
+  <localizedMessage lang="EN">Request was well formed but contained semantic errors</localizedMessage>
+  <properties>
+    <entry key="T100KEY-ID">SADT_RESOURCE</entry>
+    <entry key="T100KEY-NO">042</entry>
+  </properties>
+</exc:exception>

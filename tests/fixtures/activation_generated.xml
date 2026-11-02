@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<chkl:messages xmlns:chkl="http://www.sap.com/abapxml/checklist">
+  <chkl:properties checkExecuted="false" activationExecuted="false" generationExecuted="true"/>
+</chkl:messages>
