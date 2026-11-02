@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.2
 
 ### Fixed
 - `activate` and `activate_objects` raise `ActivationError` for objects that don't exist. SAP reports a successful activation for them, e.g. for authorization fields and objects without any message, for classes and programs with only an error message.
