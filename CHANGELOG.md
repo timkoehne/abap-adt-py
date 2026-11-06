@@ -5,6 +5,7 @@
 ### Fixed
 - An expired session is also noticed on reads: a 401 logs in again and repeats the request once, like the 403 of a write.
 - `search_object` raises an error for a failed response instead of parsing the error page as XML.
+- `run_class` raises `ClassRunError` for a class that does not exist, is not active or does not implement `IF_OO_ADT_CLASSRUN`. SAP answers these with a normal output.
 
 ## 0.3.2
 
