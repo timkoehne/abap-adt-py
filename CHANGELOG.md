@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.3
 
 ### Fixed
 - An expired session is also noticed on reads: a 401 logs in again and repeats the request once, like the 403 of a write.
