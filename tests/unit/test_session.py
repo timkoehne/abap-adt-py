@@ -37,6 +37,29 @@ def test_expired_session_is_refreshed_and_retried_once():
     assert refreshed == [1]
 
 
+def test_session_expired_on_a_read_is_refreshed_and_retried():
+    session = ScriptedSession(FakeResponse(401, "<html>Logon failed</html>"), FakeResponse(200, "ok"))
+    refreshed = []
+    response = send(session, lambda: refreshed.append(1) or "new")
+
+    assert response.text == "ok"
+    assert session.tokens == ["old", "new"]
+    assert refreshed == [1]
+
+
+def test_a_401_is_retried_only_once():
+    session = ScriptedSession(FakeResponse(401), FakeResponse(401))
+    response = send(session, lambda: "new")
+    assert response.status_code == 401
+    assert session.tokens == ["old", "new"]
+
+
+def test_a_401_is_not_retried_without_refresh_callback():
+    session = ScriptedSession(FakeResponse(401))
+    assert send(session).status_code == 401
+    assert session.tokens == ["old"]
+
+
 def test_retry_happens_only_once():
     session = ScriptedSession(EXPIRED, EXPIRED)
     response = send(session, lambda: "new")

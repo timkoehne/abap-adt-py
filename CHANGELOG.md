@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- An expired session is also noticed on reads: a 401 logs in again and repeats the request once, like the 403 of a write.
+- `search_object` raises an error for a failed response instead of parsing the error page as XML.
+
 ## 0.3.2
 
 ### Fixed

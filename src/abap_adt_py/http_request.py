@@ -64,8 +64,8 @@ def request(
     response = send(**config)
 
     refresh_csrf_token = http_request_parameters.get("refresh_csrf_token")
-    if refresh_csrf_token and csrf_token_rejected(response):
-        # the session expired: log in again and repeat the request once
+    # the session expired (a read gets a 401, a write a 403): log in again and repeat the request once
+    if refresh_csrf_token and (response.status_code == 401 or csrf_token_rejected(response)):
         config["headers"]["x-csrf-token"] = refresh_csrf_token()
         response = send(**config)
     return response

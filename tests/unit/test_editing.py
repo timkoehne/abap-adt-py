@@ -293,3 +293,10 @@ def test_search(fake_sap):
         }
     ]
     assert calls[0]["params"]["maxResults"] == 3
+
+
+def test_search_failure_raises_an_error_instead_of_parsing_the_page(fake_sap):
+    fake_sap(search, FakeResponse(500, "<html><body><p>Server error</body></html>"))
+    with pytest.raises(AdtError, match="Failed to search for ZCL"):
+        search.search_object(PARAMS, "ZCL*")
+
