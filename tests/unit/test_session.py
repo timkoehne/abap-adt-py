@@ -1,3 +1,5 @@
+import pytest
+
 from abap_adt_py import http_request
 from abap_adt_py.adt_client import AdtClient
 from abap_adt_py.api import login
@@ -126,3 +128,33 @@ def test_lock_request_can_still_reconnect(monkeypatch):
     assert seen[0]["statefulness"] == "stateful"
     assert "refresh_csrf_token" in seen[0]
     assert c.statefulness == "stateful"
+
+
+def test_a_failed_lock_leaves_the_client_stateless(monkeypatch):
+    import abap_adt_py.adt_client as adt_client
+
+    def refuse(params, uri):
+        assert params["statefulness"] == "stateful"
+        raise RuntimeError("404 - Failed to lock")
+
+    monkeypatch.setattr(adt_client, "lock", refuse)
+    c = client()
+    with pytest.raises(RuntimeError):
+        c.lock("/sap/bc/adt/fugr/f/z_missing")
+    assert c.statefulness == "stateless"
+    assert c.build_request_parameters()["statefulness"] == "stateless"
+
+
+def test_a_failed_unlock_leaves_the_client_stateless(monkeypatch):
+    import abap_adt_py.adt_client as adt_client
+
+    def refuse(params, uri, handle):
+        raise RuntimeError("500 - Failed to unlock")
+
+    monkeypatch.setattr(adt_client, "lock", lambda params, uri: "HANDLE")
+    monkeypatch.setattr(adt_client, "unlock", refuse)
+    c = client()
+    c.lock("/sap/bc/adt/programs/programs/z_x")
+    with pytest.raises(RuntimeError):
+        c.unlock("/sap/bc/adt/programs/programs/z_x", "HANDLE")
+    assert c.statefulness == "stateless"

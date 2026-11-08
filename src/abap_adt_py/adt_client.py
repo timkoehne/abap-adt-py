@@ -205,16 +205,19 @@ class AdtClient:
     def lock(self, object_uri: str) -> str:
         # built before switching to stateful, so an expired session can still reconnect
         http_request_parameters = self.build_request_parameters()
-        self.statefulness = "stateful"
         http_request_parameters["statefulness"] = "stateful"
         response = lock(http_request_parameters, object_uri)
+        # only a granted lock makes the client stateful: after a failed lock nobody unlocks, and a client left
+        # stateful sends every later request stateful (SAP then pairs the nodestructure descriptions wrongly)
+        self.statefulness = "stateful"
         return response
 
     def unlock(self, object_uri: str, lock_handle: str) -> bool:
         http_request_parameters = self.build_request_parameters()
-        response = unlock(http_request_parameters, object_uri, lock_handle)
-        self.statefulness = "stateless"
-        return response
+        try:
+            return unlock(http_request_parameters, object_uri, lock_handle)
+        finally:
+            self.statefulness = "stateless"
 
     def set_object_source(
         self,

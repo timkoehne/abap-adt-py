@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.4
+
+### Fixed
+- A failed `lock` (e.g. a 404 for an object that does not exist) no longer leaves the client stateful. Until the next successful unlock every request went out stateful, and SAP then paired the short descriptions of `node_contents`/`package_contents` with the wrong objects. A failed `unlock` also leaves the client stateless.
+
 ## 0.3.3
 
 ### Fixed
