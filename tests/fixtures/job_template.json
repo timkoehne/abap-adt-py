@@ -1,0 +1,31 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "adt test",
+    "originalLanguage": "en"
+  },
+  "generalInformation": {
+    "catalogName": "ZADTPJC_R"
+  },
+  "parameters": {
+    "singleValueParameters": [
+      {
+        "name": "P_ID",
+        "value": "A1"
+      }
+    ],
+    "valueRangesParameters": [
+      {
+        "name": "S_DATE",
+        "valueRanges": [
+          {
+            "sign": "include",
+            "option": "between",
+            "low": "20250101",
+            "high": "20251231"
+          }
+        ]
+      }
+    ]
+  }
+}

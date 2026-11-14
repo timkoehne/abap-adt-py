@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 from requests.auth import HTTPBasicAuth
 
-from .compat_typing import Literal, List, Dict, Optional, Sequence, Tuple, Union
+from .compat_typing import Any, Literal, List, Dict, Optional, Sequence, Tuple, Union
 from .api.syntax import SyntaxCheckResult, syntax_check
 from .api.navigation import (
     CompletionProposal,
@@ -77,6 +77,32 @@ from .api.servicebinding import (
     unpublish_service_binding,
 )
 from .api.numberrange import Buffering, create_number_range_object
+from .api.languageversion import LanguageVersion, get_language_version, set_language_version
+from .api.apirelease import ApiReleaseState, get_api_release_state
+from .api.lockobject import LockObject, LockTable, create_lock_object, get_lock_object
+from .api.applicationjob import (
+    ApplicationLogObject,
+    JobCatalogEntry,
+    JobTemplate,
+    LogSubobject,
+    ParameterValue,
+    create_application_log_object,
+    create_job_catalog_entry,
+    create_job_template,
+    get_application_log_object,
+    get_job_catalog_entry,
+    get_job_template,
+)
+from .api.checkvariant import (
+    AtcCheck,
+    AtcCheckDetails,
+    CheckVariant,
+    delete_check_variant,
+    get_atc_check,
+    get_check_variant,
+    list_atc_checks,
+    save_check_variant,
+)
 from .api.activate import InactiveObject, activate, activate_objects, inactive_objects
 from .api.create import ObjectTypes
 from .api.delete import delete, delete_objects
@@ -265,7 +291,12 @@ class AdtClient:
         parent: str,
         description: str,
         transport: Optional[str] = None,
+        language_version: Optional[str] = None,
     ) -> bool:
+        """language_version: standard (default), cloudDevelopment or keyUser (also X, 5, 2).
+
+        An object SAP refuses the version for, e.g. a report in cloudDevelopment, is deleted again.
+        """
         http_request_parameters = self.build_request_parameters()
         response = create(
             http_request_parameters,
@@ -275,6 +306,44 @@ class AdtClient:
             description,
             self.username,
             transport,
+            language_version,
+        )
+        return response
+
+    def get_language_version(self, object_uri: str) -> LanguageVersion:
+        """The object's ABAP language version (standard, cloudDevelopment, keyUser) and the versions it may have.
+
+        version is "" for objects without one, e.g. message classes and includes.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = get_language_version(http_request_parameters, object_uri)
+        return response
+
+    def get_api_release_state(self, object_uri: str) -> ApiReleaseState:
+        """Release state of an API, e.g. /sap/bc/adt/ddic/tables/tcurx: its contracts (C1 = use in cloud
+        development and key user apps), whether it can be used in ABAP for Cloud Development, and the
+        successors SAP names for it.
+
+        SAP answers the same for an object that doesn't exist as for one that is not released.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = get_api_release_state(http_request_parameters, object_uri)
+        return response
+
+    def set_language_version(
+        self,
+        object_uri: str,
+        version: str,
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Change an object's ABAP language version (standard, cloudDevelopment, keyUser) and activate it.
+
+        Raises ActivationError if its code is not valid in the new version; the active version stays as it was.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = set_language_version(
+            http_request_parameters, object_uri, version, transport, activate
         )
         return response
 
@@ -423,6 +492,61 @@ class AdtClient:
     ) -> List[AtcVariant]:
         http_request_parameters = self.build_request_parameters()
         response = list_check_variants(http_request_parameters, pattern, max_results)
+        return response
+
+    def list_atc_checks(self) -> List[AtcCheck]:
+        """The checks a check variant can contain, with their categories."""
+        http_request_parameters = self.build_request_parameters()
+        response = list_atc_checks(http_request_parameters)
+        return response
+
+    def get_atc_check(self, check: str) -> AtcCheckDetails:
+        """A check's description, category and parameters with their descriptions and default values."""
+        http_request_parameters = self.build_request_parameters()
+        response = get_atc_check(http_request_parameters, check)
+        return response
+
+    def get_check_variant(self, name: str) -> CheckVariant:
+        """A check variant (object kind CHKV) with its checks and their parameter values.
+
+        Old Code Inspector variants such as DEFAULT are not CHKV objects (NotFoundError).
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = get_check_variant(http_request_parameters, name)
+        return response
+
+    def save_check_variant(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        checks: List[Dict[str, Any]],
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Create a check variant, or overwrite it, with these checks and activate it.
+
+        checks: [{"name": "CI_SYSUBRC", "parameters": {"ReadDB": True}}, {"name": "CI_NO_ORDER_BY"}];
+        parameters left out keep the check's defaults (see get_atc_check). Raises ActivationError if a check
+        refuses its parameters. Its uri is /sap/bc/adt/atc/checkvariants/<name in lower case>.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = save_check_variant(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            checks,
+            self.language,
+            transport,
+            activate,
+        )
+        return response
+
+    def delete_check_variant(self, name: str, transport: Optional[str] = None) -> bool:
+        http_request_parameters = self.build_request_parameters()
+        response = delete_check_variant(http_request_parameters, name, transport)
         return response
 
     def atc_documentation(self, documentation_uri: str, as_html: bool = False) -> str:
@@ -1081,4 +1205,155 @@ class AdtClient:
             transport,
             activate,
         )
+        return response
+
+    def create_lock_object(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        primary_table: str,
+        lock_mode: str = "E",
+        secondary_tables: Optional[List[LockTable]] = None,
+        parameters: Optional[List[Union[str, Dict[str, Any]]]] = None,
+        allow_rfc: bool = False,
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Create a lock object and activate it, which generates ENQUEUE_<name> and DEQUEUE_<name>.
+
+        The name starts with E (EZ... for customer objects). lock_mode: E write, S shared, X exclusive.
+        secondary_tables: tables linked to the primary table by a foreign key, e.g.
+        [{"table": "ZITEM", "lock_mode": "S"}]. parameters: the lock arguments, field names of the primary
+        table or {"name", "table", "field"}; left out, SAP takes the primary table's key fields.
+        Its uri is /sap/bc/adt/ddic/lockobjects/sources/<name in lower case>.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_lock_object(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            primary_table,
+            lock_mode,
+            secondary_tables,
+            parameters,
+            allow_rfc,
+            self.language,
+            transport,
+            activate,
+        )
+        return response
+
+    def get_lock_object(self, name: str) -> LockObject:
+        """A lock object's tables, lock modes, lock parameters and generated function modules."""
+        http_request_parameters = self.build_request_parameters()
+        response = get_lock_object(http_request_parameters, name)
+        return response
+
+    def create_job_catalog_entry(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        class_name: str,
+        parameters: Optional[List[Dict[str, Any]]] = None,
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Create an application job catalog entry for a class implementing IF_APJ_DT_EXEC_OBJECT and
+        IF_APJ_RT_EXEC_OBJECT, and activate it.
+
+        SAP adds the class's parameters; parameters sets their screen settings, e.g.
+        [{"name": "P_ID", "mandatory": True}] (the titles come from the class).
+        Its uri is /sap/bc/adt/applicationjob/catalogs/<name in lower case>.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_job_catalog_entry(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            class_name,
+            parameters,
+            self.language,
+            transport,
+            activate,
+        )
+        return response
+
+    def get_job_catalog_entry(self, name: str) -> JobCatalogEntry:
+        http_request_parameters = self.build_request_parameters()
+        response = get_job_catalog_entry(http_request_parameters, name)
+        return response
+
+    def create_job_template(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        catalog_entry: str,
+        parameters: Optional[Dict[str, ParameterValue]] = None,
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Create an application job template for an active job catalog entry and activate it.
+
+        parameters: values of the entry's parameters, a single value ({"P_ID": "A1"}) or a list of ranges
+        ({"S_ID": [{"sign": "I", "option": "BT", "low": "A", "high": "C"}]}).
+        CL_APJ_RT_API=>SCHEDULE_JOB schedules a job from the template.
+        Its uri is /sap/bc/adt/applicationjob/templates/<name in lower case>.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_job_template(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            catalog_entry,
+            parameters,
+            self.language,
+            transport,
+            activate,
+        )
+        return response
+
+    def get_job_template(self, name: str) -> JobTemplate:
+        http_request_parameters = self.build_request_parameters()
+        response = get_job_template(http_request_parameters, name)
+        return response
+
+    def create_application_log_object(
+        self,
+        name: str,
+        package: str,
+        description: str,
+        subobjects: Optional[List[LogSubobject]] = None,
+        transport: Optional[str] = None,
+        activate: bool = True,
+    ) -> bool:
+        """Create an application log object with subobjects, e.g. [{"name": "RUN", "description": "Runs"}],
+        and activate it. CL_BALI_LOG writes logs for it.
+        Its uri is /sap/bc/adt/applicationlog/objects/<name in lower case>.
+        """
+        http_request_parameters = self.build_request_parameters()
+        response = create_application_log_object(
+            http_request_parameters,
+            name,
+            package,
+            description,
+            self.username,
+            subobjects,
+            self.language,
+            transport,
+            activate,
+        )
+        return response
+
+    def get_application_log_object(self, name: str) -> ApplicationLogObject:
+        http_request_parameters = self.build_request_parameters()
+        response = get_application_log_object(http_request_parameters, name)
         return response

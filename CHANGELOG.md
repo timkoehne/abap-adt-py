@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.5
+
+### Added
+- ABAP language version: `get_language_version` (the object's version and the versions it may have), `set_language_version` (changes and activates it; activation errors such as APIs not released for cloud development are raised as `ActivationError`, the active version stays), and a `language_version` argument on `create` (`standard`, `cloudDevelopment`, `keyUser`; also `X`, `5`, `2`). Works for classes, interfaces, function groups, tables, structures, CDS views, service definitions, access controls, metadata extensions, data elements, domains, lock objects, job catalog entries and templates, and more. Reports are refused by SAP ("ABAP language version 5 is not allowed in this software component") and deleted again by `create`.
+- Release state of APIs: `get_api_release_state` returns the contracts (C0 to C4) with their states, whether the object can be used in ABAP for Cloud Development and by key users, and the successors SAP names, e.g. `I_CURRENCY` for table `TCURX`.
+- ATC check variants (object kind CHKV): `get_check_variant`, `save_check_variant` (create or overwrite with checks and parameter overrides, activate), `delete_check_variant`, `list_atc_checks` and `get_atc_check` (a check's parameters with their descriptions and defaults). Unknown checks and parameters are refused before saving: SAP accepts an unknown check and dumps on activation.
+- Lock objects: `create_lock_object` (primary and secondary tables, lock modes, lock parameters; activation generates `ENQUEUE_`/`DEQUEUE_<name>`), `get_lock_object`.
+- Application jobs: `create_job_catalog_entry`, `get_job_catalog_entry`, `create_job_template`, `get_job_template`.
+- Application log objects: `create_application_log_object`, `get_application_log_object`.
+
+### Fixed
+- A session that SAP dropped after being idle for too long (`400 Session Timed Out or Not Found`) logs in again and repeats the request once, like a 401 or a rejected CSRF token. Until now every client that sat idle longer than the session timeout failed its next request.
+
 ## 0.3.4
 
 ### Fixed

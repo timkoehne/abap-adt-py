@@ -1,9 +1,11 @@
+from urllib.parse import quote
 from xml.sax.saxutils import escape, quoteattr
 
 from ..compat_typing import Callable, Literal, TypeAlias, Dict, TypedDict, Optional, Union
 from ..http_request import HttpRequestParameters, request, with_transport
-from ..exceptions import error_from_response
+from ..exceptions import AdtError, error_from_response
 from .activate import activate_objects
+from .delete import delete_objects
 from .lock import lock, unlock
 
 
@@ -140,6 +142,10 @@ def _build_body(
     """
 
 
+# objects without a language version of their own; a function module has the version of its function group
+WITHOUT_LANGUAGE_VERSION = ("FUGR/FF", "PROG/I", "MSAG/N")
+
+
 def create(
     http_request_parameters: HttpRequestParameters,
     object_type: ObjectTypes,
@@ -148,7 +154,20 @@ def create(
     description: str,
     owner: str,
     transport: Optional[str] = None,
+    language_version: Optional[str] = None,
 ) -> bool:
+    """Create an empty object.
+
+    language_version: standard (default), cloudDevelopment or keyUser. An object SAP refuses it for (e.g. a
+    report: "ABAP language version 5 is not allowed in this software component") is deleted again.
+    """
+    # imported here: languageversion uses this module's helpers
+    from .languageversion import language_version as normalized_version, set_language_version
+
+    if language_version is not None:
+        language_version = normalized_version(language_version)
+        if language_version != "standard" and object_type in WITHOUT_LANGUAGE_VERSION:
+            raise ValueError(f"{object_type} objects have no ABAP language version of their own")
 
     object_uri = CREATEABLE_TYPES[object_type]["path"]
 
@@ -172,10 +191,24 @@ def create(
         content_type="application/*",
     )
 
-    if 200 <= response.status_code <= 300:
-        return True
-    else:
+    if not 200 <= response.status_code <= 300:
         raise error_from_response(response, f"Failed to create object {name}")
+
+    if language_version and language_version != "standard":
+        # SAP ignores the version when creating some kinds (function groups) and refuses it for others
+        # (interfaces), so it is set afterwards like in the object's properties
+        uri = f"{object_uri}/{quote(name.lower(), safe='')}"
+        try:
+            set_language_version(
+                http_request_parameters, uri, language_version, transport, activate=False
+            )
+        except Exception:
+            try:
+                delete_objects(http_request_parameters, [uri], transport)
+            except AdtError:
+                pass
+            raise
+    return True
 
 
 def create_test_class_include(

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><chkv:checkvariant abapsource:fixPointArithmetic="false" abapsource:activeUnicodeCheck="false" adtcore:responsible="DEVELOPER" adtcore:masterLanguage="EN" adtcore:masterSystem="A4H" adtcore:abapLanguageVersion="standard" adtcore:name="ZADT_CHKV1" adtcore:type="CHKV/TYP" adtcore:changedAt="2026-11-13T14:33:35Z" adtcore:version="active" adtcore:createdAt="2026-11-13T00:00:00Z" adtcore:changedBy="DEVELOPER" adtcore:createdBy="DEVELOPER" adtcore:description="adt test" adtcore:language="EN" xmlns:chkv="http://www.sap.com/wbobj/atc/chkv" xmlns:abapsource="http://www.sap.com/adt/abapsource" xmlns:adtcore="http://www.sap.com/adt/core"><atom:link href="versions" rel="http://www.sap.com/adt/relations/versions" title="Historic versions" xmlns:atom="http://www.w3.org/2005/Atom"/><atom:link href="/sap/bc/adt/repository/informationsystem/abaplanguageversions?uri=%2Fsap%2Fbc%2Fadt%2Fatc%2Fcheckvariants%2Fzadt_chkv1" rel="http://www.sap.com/adt/relations/informationsystem/abaplanguageversions" type="application/vnd.sap.adt.nameditems.v1+xml" title="Allowed ABAP language versions" xmlns:atom="http://www.w3.org/2005/Atom"/><atom:link href="./zadt_chkv1/versions" rel="http://www.sap.com/adt/relations/versions" title="Historic versions" xmlns:atom="http://www.w3.org/2005/Atom"/><atom:link href="./zadt_chkv1" rel="http://www.sap.com/adt/relations/source" type="text/html" title="Landing Page (HTML)" xmlns:atom="http://www.w3.org/2005/Atom"/><adtcore:packageRef adtcore:uri="/sap/bc/adt/packages/%24tmp" adtcore:type="DEVC/K" adtcore:name="$TMP" adtcore:description="Temporary Objects (never transported!)"/><abapsource:syntaxConfiguration><abapsource:language><abapsource:version/><atom:link href="/sap/bc/adt/abapsource/parsers/rnd/grammar" rel="http://www.sap.com/adt/relations/abapsource/parser" type="text/plain" etag="816" xmlns:atom="http://www.w3.org/2005/Atom"/></abapsource:language></abapsource:syntaxConfiguration><chkv:content><chkv:name>ZADT_CHKV1</chkv:name><chkv:remoteEnabled>false</chkv:remoteEnabled><chkv:referencedVariant/><chkvcheck:check xmlns:chkvcheck="http://www.sap.com/wbobj/atc/chkvCheck"><chko:checkObject adtcore:name="CI_SYSUBRC" xmlns:chko="http://www.sap.com/wbobj/atc/chko"><chko:content/></chko:checkObject><chkvcheck:parameterValueXml>{
+  "checkName": "CI_SYSUBRC",
+  "parameters": [
+    {
+      "name": "ReadDB",
+      "value": "true"
+    },
+    {
+      "name": "WriteDB",
+      "value": "false"
+    },
+    {
+      "name": "AuthorityCheck",
+      "value": "false"
+    },
+    {
+      "name": "CallFunction",
+      "value": "false"
+    },
+    {
+      "name": "CallMethod",
+      "value": "false"
+    },
+    {
+      "name": "Enqueue",
+      "value": "false"
+    },
+    {
+      "name": "Catch",
+      "value": "false"
+    },
+    {
+      "name": "DynAssign",
+      "value": "false"
+    },
+    {
+      "name": "AnyStatement",
+      "valueList": []
+    }
+  ]
+}</chkvcheck:parameterValueXml></chkvcheck:check><chkvcheck:check xmlns:chkvcheck="http://www.sap.com/wbobj/atc/chkvCheck"><chko:checkObject adtcore:name="CI_NO_ORDER_BY" xmlns:chko="http://www.sap.com/wbobj/atc/chko"><chko:content/></chko:checkObject><chkvcheck:parameterValueXml>{
+  "checkName": "CI_NO_ORDER_BY"
+}</chkvcheck:parameterValueXml></chkvcheck:check></chkv:content></chkv:checkvariant>

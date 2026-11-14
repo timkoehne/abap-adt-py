@@ -1,0 +1,19 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "adt test",
+    "originalLanguage": "en"
+  },
+  "generalInformation": {
+    "className": "ZCL_ADTPJOB_R"
+  },
+  "parameters": [
+    {
+      "name": "P_ID",
+      "mandatory": true
+    },
+    {
+      "name": "S_DATE"
+    }
+  ]
+}

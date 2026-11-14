@@ -14,7 +14,9 @@
 - Browse packages and the repository tree
 - Run ABAP SQL queries (data preview)
 - Run classes and capture their console output
-- Run ATC checks and read the findings' documentation
+- Run ATC checks and read the findings' documentation; maintain ATC check variants
+- ABAP for Cloud Development: read and change an object's ABAP language version, read the release state of APIs and their successors
+- Lock objects, application job catalog entries and templates, application log objects
 - Navigate code: go to definition, where-used list, code completion
 - Read runtime errors (short dumps)
 - Run ABAP unit tests and retrieve results
@@ -154,6 +156,36 @@ print(client.get_enhancement_implementation("Z_DEMO_IMPL"))
 
 # number range objects (intervals have to be maintained in ABAP, e.g. CL_NUMBERRANGE_INTERVALS)
 client.create_number_range_object("Z_DEMO_NR", "$TMP", "Demo numbers", number_length_domain="NUM10")
+
+# ABAP language version: standard, cloudDevelopment (ABAP for Cloud Development) or keyUser
+client.create("CLAS/OC", "ZCL_DEMO_CLOUD", "$TMP", "Cloud class", language_version="cloudDevelopment")
+print(client.get_language_version("/sap/bc/adt/oo/classes/zcl_demo_cloud"))  # {"version", "allowed", ...}
+client.set_language_version("/sap/bc/adt/ddic/tables/z_demo", "cloudDevelopment")  # activates, ActivationError if not valid
+
+# release state of an API: usable in cloud development? successors?
+state = client.get_api_release_state("/sap/bc/adt/ddic/tables/tcurx")
+print(state["state"], state["cloud_development"], state["successors"])  # NOT_TO_BE_RELEASED False [{"name": "I_CURRENCY", ...}]
+
+# ATC check variants (object kind CHKV)
+print(client.list_atc_checks())  # name, description, category
+print(client.get_atc_check("CI_SYSUBRC"))  # parameters with description, kind and default
+client.save_check_variant("Z_DEMO_CHECKS", "$TMP", "Demo checks", [
+    {"name": "CI_SYSUBRC", "parameters": {"ReadDB": True}},  # parameters left out keep their defaults
+    {"name": "CI_NO_ORDER_BY"},
+])
+print(client.get_check_variant("Z_DEMO_CHECKS"))
+client.delete_check_variant("Z_DEMO_CHECKS")
+
+# lock objects, activation generates ENQUEUE_EZ_DEMO and DEQUEUE_EZ_DEMO
+client.create_lock_object("EZ_DEMO", "$TMP", "Demo lock", "ZDEMO_HEAD", lock_mode="E",
+                          secondary_tables=[{"table": "ZDEMO_ITEM", "lock_mode": "E"}])  # parameters: key fields
+print(client.get_lock_object("EZ_DEMO"))
+
+# application jobs: a catalog entry for a class implementing IF_APJ_DT_EXEC_OBJECT and IF_APJ_RT_EXEC_OBJECT,
+# and a template with parameter values (CL_APJ_RT_API=>SCHEDULE_JOB schedules it)
+client.create_job_catalog_entry("Z_DEMO_JC", "$TMP", "Demo job", "ZCL_DEMO_JOB")
+client.create_job_template("Z_DEMO_JT", "$TMP", "Demo job", "Z_DEMO_JC", parameters={"P_ID": "A1"})
+client.create_application_log_object("Z_DEMO_LOG", "$TMP", "Demo log", [{"name": "RUN", "description": "Runs"}])
 
 # read source code
 src: str = client.get_object_source(f"{report_uri}/source/main")

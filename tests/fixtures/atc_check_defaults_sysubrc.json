@@ -1,0 +1,41 @@
+{
+  "checkName": "CI_SYSUBRC",
+  "parameters": [
+    {
+      "name": "ReadDB",
+      "value": "false"
+    },
+    {
+      "name": "WriteDB",
+      "value": "false"
+    },
+    {
+      "name": "AuthorityCheck",
+      "value": "false"
+    },
+    {
+      "name": "CallFunction",
+      "value": "false"
+    },
+    {
+      "name": "CallMethod",
+      "value": "false"
+    },
+    {
+      "name": "Enqueue",
+      "value": "false"
+    },
+    {
+      "name": "Catch",
+      "value": "false"
+    },
+    {
+      "name": "DynAssign",
+      "value": "false"
+    },
+    {
+      "name": "AnyStatement",
+      "valueList": []
+    }
+  ]
+}
