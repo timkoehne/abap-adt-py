@@ -1,5 +1,7 @@
 import pytest
 
+from abap_adt_py.exceptions import ClassRunError
+
 
 def test_run_class(client, runnable_class):
     name = runnable_class("RUN", "    out->write( |Hello from { sy-uname }| ).\n    out->write( 42 ).")
@@ -15,7 +17,7 @@ def test_run_class_runtime_error(client, runnable_class):
         client.run_class(name)
 
 
-def test_run_missing_class_returns_explanation(client):
-    # SAP reports this as normal output, not as an error
-    output = client.run_class("ZCL_ADTPY_DOES_NOT_EXIST")
-    assert "ZCL_ADTPY_DOES_NOT_EXIST" in output
+def test_run_missing_class_raises(client):
+    # SAP reports this as normal output, run_class turns it into an error
+    with pytest.raises(ClassRunError, match="ZCL_ADTPY_DOES_NOT_EXIST failed: the class does not exist"):
+        client.run_class("ZCL_ADTPY_DOES_NOT_EXIST")
