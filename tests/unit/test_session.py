@@ -49,6 +49,24 @@ def test_session_expired_on_a_read_is_refreshed_and_retried():
     assert refreshed == [1]
 
 
+def test_a_timed_out_session_is_refreshed_and_retried():
+    timed_out = FakeResponse(400, "Query failed: 400 Session Timed Out or Not Found")
+    session = ScriptedSession(timed_out, FakeResponse(200, "ok"))
+    refreshed = []
+    response = send(session, lambda: refreshed.append(1) or "new")
+
+    assert response.text == "ok"
+    assert session.tokens == ["old", "new"]
+    assert refreshed == [1]
+
+
+def test_another_400_is_not_retried():
+    bad = FakeResponse(400, "Query failed: SQL syntax error")
+    session = ScriptedSession(bad)
+    assert send(session, lambda: "new") is bad
+    assert session.tokens == ["old"]
+
+
 def test_a_401_is_retried_only_once():
     session = ScriptedSession(FakeResponse(401), FakeResponse(401))
     response = send(session, lambda: "new")

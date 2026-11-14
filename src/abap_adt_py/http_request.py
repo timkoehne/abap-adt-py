@@ -21,6 +21,13 @@ def csrf_token_rejected(response) -> bool:
     )
 
 
+def session_timed_out(response) -> bool:
+    """True if SAP no longer knows the request's session: the ICM answers 400 "Session Timed Out or Not Found" when a
+    session was idle for longer than its timeout."""
+    text = getattr(response, "text", "") or ""
+    return response.status_code == 400 and "session timed out or not found" in text.lower()
+
+
 def with_transport(params: dict, transport: Optional[str]) -> dict:
     """Add the transport request (corrNr) to the query parameters if one is given."""
     if transport:
@@ -64,8 +71,11 @@ def request(
     response = send(**config)
 
     refresh_csrf_token = http_request_parameters.get("refresh_csrf_token")
-    # the session expired (a read gets a 401, a write a 403): log in again and repeat the request once
-    if refresh_csrf_token and (response.status_code == 401 or csrf_token_rejected(response)):
+    # the session expired (a read gets a 401, a write a 403, an idle session a 400): log in again and repeat the
+    # request once
+    if refresh_csrf_token and (
+        response.status_code == 401 or csrf_token_rejected(response) or session_timed_out(response)
+    ):
         config["headers"]["x-csrf-token"] = refresh_csrf_token()
         response = send(**config)
     return response
